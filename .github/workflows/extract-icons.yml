@@ -3,15 +3,15 @@ name: Extract WinGet icons
 on:
   workflow_dispatch:
     inputs:
-      package_count:
-        description: 'Limit candidate list to first N entries (0 = all)'
+      max_packages_per_shard:
+        description: 'Cap candidate slice per shard (0 = all). Use small value (e.g., 50) for smoke tests.'
         required: false
         default: '0'
         type: string
-      max_new:
-        description: 'Cap NEW packages per run after registry skips (0 = no cap)'
+      max_new_per_shard:
+        description: 'Cap NEW packages per shard after registry skips (0 = no cap)'
         required: false
-        default: '100'
+        default: '500'
         type: string
       uninstall_after:
         description: 'Uninstall each package after icon extraction'
@@ -28,6 +28,16 @@ on:
         required: false
         default: false
         type: boolean
+      shard_count:
+        description: 'Number of parallel extract shards'
+        required: false
+        default: '10'
+        type: string
+      skip_publish:
+        description: 'Skip the publish job (no GitHub Release upload, no commit)'
+        required: false
+        default: false
+        type: boolean
   schedule:
     # Mondays at 06:00 UTC.
     - cron: '0 6 * * 1'
@@ -35,40 +45,125 @@ on:
 permissions:
   contents: write
 
+# Don't cancel an in-flight extraction sweep when a new run is queued; the
+# winget-pkgs catalog only changes slowly, and shards already running waste
+# install/uninstall cycles if killed.
 concurrency:
   group: extract-icons-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
+
+env:
+  SHARD_COUNT: ${{ inputs.shard_count || '10' }}
+  RELEASE_TAG: icons-latest
 
 jobs:
-  extract:
-    name: Install + extract icons
-    runs-on: windows-latest
-    timeout-minutes: 350
-
+  # ---------------------------------------------------------------------------
+  # 1) DISCOVER: walk the winget-pkgs manifests, build candidates.json
+  # ---------------------------------------------------------------------------
+  discover:
+    name: Discover candidates
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      shard_count: ${{ env.SHARD_COUNT }}
+      shard_matrix: ${{ steps.matrix.outputs.json }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Install Yayaml PowerShell module
+        shell: pwsh
+        run: |
+          if (-not (Get-Module -ListAvailable -Name Yayaml)) {
+              Install-Module -Name Yayaml -Scope CurrentUser -Force -AcceptLicense -Repository PSGallery
+          }
+          Import-Module Yayaml
+
+      - name: Build candidate list
+        shell: pwsh
+        run: |
+          $PSNativeCommandUseErrorActionPreference = $false
+          & ./scripts/Update-CandidateList.ps1 `
+              -OutputPath data/candidates.json `
+              -WorkDir $env:RUNNER_TEMP/winget-pkgs
+
+      - name: Summarize candidates
+        shell: pwsh
+        run: |
+          $payload = Get-Content -LiteralPath data/candidates.json -Raw | ConvertFrom-Json
+          "## Candidate discovery"               | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          ""                                      | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "- Generated: ``$($payload.generated)``" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "- Source: ``$($payload.source)``"       | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "- Total: **$($payload.count)**"         | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "- Eligible: **$($payload.eligibleCount)**" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "- Denied installer types: ``$($payload.deniedInstallerTypes -join ', ')``" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+
+      - name: Build shard matrix
+        id: matrix
+        shell: pwsh
+        run: |
+          $count = [int]$env:SHARD_COUNT
+          $arr = @(0..($count - 1))
+          # Force array form for ConvertTo-Json even when single-element.
+          $json = ConvertTo-Json -InputObject $arr -Compress
+          if ($count -eq 1) { $json = "[0]" }
+          "json=$json" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Upload candidates artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: candidates-${{ github.run_id }}
+          path: data/candidates.json
+          retention-days: 14
+
+      - name: Commit candidates if changed
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+        shell: pwsh
+        run: |
+          $PSNativeCommandUseErrorActionPreference = $false
+          git config user.name  'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/candidates.json
+          $cached = git diff --cached --name-only
+          if (-not $cached) {
+              Write-Host 'Candidates unchanged; nothing to commit.'
+              return
+          }
+          git commit -m "chore: refresh winget-pkgs candidate list (run $env:GITHUB_RUN_ID) [skip ci]"
+          git pull --rebase --autostash
+          git push
+
+  # ---------------------------------------------------------------------------
+  # 2) EXTRACT: parallel matrix of windows shards
+  # ---------------------------------------------------------------------------
+  extract:
+    name: Extract shard ${{ matrix.shard }}
+    needs: discover
+    runs-on: windows-latest
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      max-parallel: 10
+      matrix:
+        shard: ${{ fromJson(needs.discover.outputs.shard_matrix) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download candidates
+        uses: actions/download-artifact@v4
+        with:
+          name: candidates-${{ github.run_id }}
+          path: data
 
       - name: Verify winget
         shell: pwsh
         run: |
           $PSNativeCommandUseErrorActionPreference = $false
           $v = winget --version 2>$null
-          if ($LASTEXITCODE -ne 0) {
-              Write-Host "::warning::winget not present; this runner image is unexpected."
-              throw "winget CLI is required but not available."
-          }
+          if ($LASTEXITCODE -ne 0) { throw "winget CLI not available." }
           Write-Host "winget version: $v"
-
-      - name: Install Yayaml PowerShell module
-        shell: pwsh
-        run: |
-          if (-not (Get-Module -ListAvailable -Name Yayaml)) {
-              Write-Host "Installing Yayaml..."
-              Install-Module -Name Yayaml -Scope CurrentUser -Force -AcceptLicense -Repository PSGallery
-          }
-          Import-Module Yayaml
-          Get-Module Yayaml | Format-Table Name, Version
 
       - name: Update winget sources
         shell: pwsh
@@ -76,115 +171,173 @@ jobs:
         run: |
           $PSNativeCommandUseErrorActionPreference = $false
           winget source update --accept-source-agreements --disable-interactivity
-          if ($LASTEXITCODE -ne 0) {
-              Write-Host "::warning::winget source update returned $LASTEXITCODE"
-          }
           exit 0
 
-      - name: Run bulk icon extractor
+      - name: Run extraction for this shard
         id: extract
         shell: pwsh
         continue-on-error: true
         env:
-          PKG_COUNT: ${{ inputs.package_count || '0' }}
-          MAX_NEW: ${{ inputs.max_new || '100' }}
+          SHARD_INDEX: ${{ matrix.shard }}
+          SHARD_TOTAL: ${{ needs.discover.outputs.shard_count }}
+          MAX_PKG: ${{ inputs.max_packages_per_shard || '0' }}
+          MAX_NEW: ${{ inputs.max_new_per_shard || '500' }}
           PKG_TIMEOUT: ${{ inputs.per_package_timeout || '600' }}
           UNINSTALL_AFTER: ${{ inputs.uninstall_after && 'true' || 'true' }}
           IGNORE_REGISTRY: ${{ inputs.ignore_registry && 'true' || 'false' }}
         run: |
           $PSNativeCommandUseErrorActionPreference = $false
-          $maxPackages = [int]($env:PKG_COUNT)
-          $maxNew      = [int]($env:MAX_NEW)
-          $timeout     = [int]($env:PKG_TIMEOUT)
-          $uninstall   = ($env:UNINSTALL_AFTER -eq 'true')
-          $ignoreReg   = ($env:IGNORE_REGISTRY -eq 'true')
-
           $params = @{
-              PackageListFile          = 'tests/popular-packages.txt'
-              OutDir                   = 'out/icons'
-              SummaryPath              = 'out/summary.json'
-              RegistryPath             = 'data/icon-registry.json'
-              PerPackageTimeoutSeconds = $timeout
+              CandidateFile            = 'data/candidates.json'
+              OutDir                   = "out/icons"
+              SummaryPath              = "out/summary.json"
+              RegistryPath             = 'data/registry'
+              ShardIndex               = [int]$env:SHARD_INDEX
+              ShardCount               = [int]$env:SHARD_TOTAL
+              PerPackageTimeoutSeconds = [int]$env:PKG_TIMEOUT
               Force                    = $true
           }
-          if ($maxPackages -gt 0) { $params['MaxPackages']    = $maxPackages }
-          if ($maxNew      -gt 0) { $params['MaxNew']         = $maxNew }
-          if ($uninstall)         { $params['UninstallAfter'] = $true }
-          if ($ignoreReg)         { $params['IgnoreRegistry'] = $true }
+          if ([int]$env:MAX_PKG -gt 0)         { $params['MaxPackages']    = [int]$env:MAX_PKG }
+          if ([int]$env:MAX_NEW -gt 0)         { $params['MaxNew']         = [int]$env:MAX_NEW }
+          if ($env:UNINSTALL_AFTER -eq 'true') { $params['UninstallAfter'] = $true }
+          if ($env:IGNORE_REGISTRY -eq 'true') { $params['IgnoreRegistry'] = $true }
 
           & ./scripts/Invoke-BulkIconExtraction.ps1 @params
 
-      - name: Render summary to GitHub step summary
+      - name: Render shard summary
         if: always()
         shell: pwsh
         run: |
           $summaryPath = 'out/summary.json'
           if (-not (Test-Path -LiteralPath $summaryPath)) {
-              "## WinGet icon extraction" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
-              "" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
-              "_No summary.json was produced._" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+              "## Shard ${{ matrix.shard }}: no summary produced" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
               return
           }
-
           $payload = Get-Content -LiteralPath $summaryPath -Raw | ConvertFrom-Json
-
           $lines = New-Object System.Collections.Generic.List[string]
-          $lines.Add('## WinGet icon extraction')
+          $lines.Add("## Shard ${{ matrix.shard }} / ${{ needs.discover.outputs.shard_count }}")
           $lines.Add('')
-          $lines.Add(("- Generated: ``{0}``"  -f $payload.GeneratedAt))
-          $lines.Add(("- Candidates: **{0}** (processed **{1}**, skipped from cache **{2}**)" -f $payload.Total, $payload.Processed, $payload.Skipped))
-          if ($payload.WingetVersion) { $lines.Add(("- winget: ``{0}``" -f $payload.WingetVersion)) }
-          $lines.Add('')
-          $lines.Add('### Status counts')
+          $lines.Add(("- Candidates in shard: **{0}**" -f ($payload.Total + $payload.Skipped + $payload.Unsupported)))
+          $lines.Add(("- Processed: **{0}**, skipped (cache): **{1}**, unsupported: **{2}**" -f $payload.Processed, $payload.Skipped, $payload.Unsupported))
           $lines.Add('')
           $lines.Add('| Status | Count |')
           $lines.Add('| --- | ---: |')
           foreach ($prop in $payload.StatusCounts.PSObject.Properties) {
               $lines.Add(("| {0} | {1} |" -f $prop.Name, $prop.Value))
           }
-          $lines.Add('')
-          $lines.Add('### Per-package results')
-          $lines.Add('')
-          $lines.Add('| Package | Status | Icons | Bytes | Duration (s) |')
-          $lines.Add('| --- | --- | ---: | ---: | ---: |')
-          foreach ($r in $payload.Results) {
-              $lines.Add(("| {0} | {1} | {2} | {3} | {4} |" -f `
-                  $r.PackageId, $r.Status, $r.IconCount, $r.IconBytes, $r.DurationSeconds))
-          }
-
           $lines -join "`n" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
 
-      - name: Upload icons artifact
+      - name: Upload shard artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: winget-icons-${{ github.run_id }}
-          path: out/
+          name: winget-icons-shard-${{ matrix.shard }}-${{ github.run_id }}
+          path: |
+            out/icons/
+            out/summary.json
+            data/registry/shard-*.json
           if-no-files-found: warn
-          retention-days: 30
+          retention-days: 14
 
-      - name: Commit updated icon registry
-        if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+  # ---------------------------------------------------------------------------
+  # 3) PUBLISH: merge all shard artifacts, build index, upload release
+  # ---------------------------------------------------------------------------
+  publish:
+    name: Publish icon index + release
+    needs: [discover, extract]
+    if: always() && (github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') && !inputs.skip_publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download all shard artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: winget-icons-shard-*-${{ github.run_id }}
+          path: shards
+          merge-multiple: false
+
+      - name: Merge shard outputs
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $mergedRegistry = 'data/registry'
+          $mergedIcons    = 'out/merged'
+          [void](New-Item -ItemType Directory -Path $mergedRegistry -Force)
+          [void](New-Item -ItemType Directory -Path $mergedIcons    -Force)
+
+          $shardDirs = Get-ChildItem -LiteralPath shards -Directory -ErrorAction SilentlyContinue
+          Write-Host ("Found {0} shard artifacts." -f $shardDirs.Count)
+
+          foreach ($d in $shardDirs) {
+              # Registry shard files
+              $regs = Get-ChildItem -LiteralPath (Join-Path $d.FullName 'data/registry') -Filter 'shard-*.json' -File -ErrorAction SilentlyContinue
+              foreach ($r in $regs) {
+                  Copy-Item -LiteralPath $r.FullName -Destination (Join-Path $mergedRegistry $r.Name) -Force
+              }
+              # Icon directories (one per package)
+              $iconRoot = Join-Path $d.FullName 'out/icons'
+              if (Test-Path -LiteralPath $iconRoot) {
+                  $pkgDirs = Get-ChildItem -LiteralPath $iconRoot -Directory -ErrorAction SilentlyContinue
+                  foreach ($p in $pkgDirs) {
+                      $dest = Join-Path $mergedIcons $p.Name
+                      [void](New-Item -ItemType Directory -Path $dest -Force)
+                      Copy-Item -LiteralPath (Join-Path $p.FullName '*') -Destination $dest -Recurse -Force -ErrorAction SilentlyContinue
+                  }
+              }
+          }
+
+          Write-Host ("Merged registry shards: {0}" -f (Get-ChildItem $mergedRegistry -Filter 'shard-*.json' | Measure-Object).Count)
+          Write-Host ("Merged icon dirs: {0}" -f (Get-ChildItem $mergedIcons -Directory -ErrorAction SilentlyContinue | Measure-Object).Count)
+
+      - name: Build icon index + upload to release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $PSNativeCommandUseErrorActionPreference = $false
+          & ./scripts/Build-IconIndex.ps1 `
+              -RegistryDir data/registry `
+              -IconsDir    out/merged `
+              -OutputIndex data/icon-index.json `
+              -Repository  $env:GITHUB_REPOSITORY `
+              -ReleaseTag  $env:RELEASE_TAG `
+              -CommitAssets
+
+      - name: Render publish summary
+        shell: pwsh
+        run: |
+          if (-not (Test-Path data/icon-index.json)) { return }
+          $idx = Get-Content -LiteralPath data/icon-index.json -Raw | ConvertFrom-Json
+          $lines = New-Object System.Collections.Generic.List[string]
+          $lines.Add("## Published icon index")
+          $lines.Add('')
+          $lines.Add(("- Generated: ``{0}``" -f $idx.generated))
+          $lines.Add(("- Release tag: ``{0}``" -f $idx.releaseTag))
+          $lines.Add(("- Public icons: **{0}**" -f $idx.count))
+          $lines.Add('')
+          $lines.Add('| Status | Count |')
+          $lines.Add('| --- | ---: |')
+          foreach ($prop in $idx.statusCounts.PSObject.Properties) {
+              $lines.Add(("| {0} | {1} |" -f $prop.Name, $prop.Value))
+          }
+          $lines -join "`n" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+
+      - name: Commit registry shards + index
         shell: pwsh
         run: |
           $PSNativeCommandUseErrorActionPreference = $false
-          if (-not (Test-Path -LiteralPath 'data/icon-registry.json')) {
-              Write-Host 'No registry file produced; skipping commit.'
-              return
-          }
-
           git config user.name  'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-
-          git add data/icon-registry.json
-
+          git add data/registry/shard-*.json data/icon-index.json
           $cached = git diff --cached --name-only
           if (-not $cached) {
-              Write-Host 'Registry unchanged; nothing to commit.'
+              Write-Host 'No changes to commit.'
               return
           }
-
-          $msg = "chore: update icon registry (run $env:GITHUB_RUN_ID) [skip ci]"
-          git commit -m $msg
+          git commit -m "chore: update icon registry + index (run $env:GITHUB_RUN_ID) [skip ci]"
+          git pull --rebase --autostash
           git push
-          Write-Host 'Registry committed and pushed.'
+          Write-Host 'Registry + index committed and pushed.'

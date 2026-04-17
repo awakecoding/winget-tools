@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "description": "Per-package WinGet icon-extraction registry (shard 7/10). Migrated from icon-registry.json.",
+  "generated": "2026-04-17T20:51:38.3852884Z",
+  "shardIndex": 7,
+  "shardCount": 10,
+  "entries": {}
+}
