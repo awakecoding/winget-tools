@@ -159,8 +159,8 @@ function ConvertTo-Semver {
 function Get-LatestVersionDir {
     param([string] $PackageDir)
 
-    $versionDirs = Get-ChildItem -LiteralPath $PackageDir -Directory -ErrorAction SilentlyContinue
-    if (-not $versionDirs -or $versionDirs.Count -eq 0) { return $null }
+    $versionDirs = @(Get-ChildItem -LiteralPath $PackageDir -Directory -ErrorAction SilentlyContinue)
+    if ($versionDirs.Count -eq 0) { return $null }
 
     $ranked = foreach ($d in $versionDirs) {
         $sv = ConvertTo-Semver -Version $d.Name
@@ -203,7 +203,7 @@ foreach ($letter in $letterDirs) {
 }
 
 # Dedupe (a package dir can be hit multiple times during traversal).
-$packageDirs = [System.Linq.Enumerable]::Distinct([string[]]$packageDirs.ToArray()) | Sort-Object
+$packageDirs = @([System.Linq.Enumerable]::Distinct([string[]]$packageDirs.ToArray()) | Sort-Object)
 
 Write-Host ("Found {0} candidate package directories." -f $packageDirs.Count)
 
@@ -232,7 +232,7 @@ foreach ($pkgDir in $packageDirs) {
     # manifests/<letter>/<segment>/<segment>/<...>/<version>
     $relRoot = $manifestsRoot.TrimEnd('\','/') + [IO.Path]::DirectorySeparatorChar
     $relPath = $pkgDir.Substring($relRoot.Length)
-    $segs    = $relPath -split '[\\/]+' | Where-Object { $_ }
+    $segs    = @($relPath -split '[\\/]+' | Where-Object { $_ })
     if ($segs.Count -lt 2) { $skipped++; continue }
     $idFromPath = ($segs[1..($segs.Count - 1)] -join '.')
 
@@ -305,9 +305,9 @@ foreach ($pkgDir in $packageDirs) {
 Write-Host ("Processed {0} packages, skipped {1}." -f $processed, $skipped)
 
 # Sort by packageId for stable diffs.
-$sorted = $entries | Sort-Object packageId
+$sorted = @($entries | Sort-Object packageId)
 
-$eligibleCount = ($sorted | Where-Object { $_.eligible }).Count
+$eligibleCount = @($sorted | Where-Object { $_.eligible }).Count
 
 $payload = [ordered]@{
     schema        = 1
