@@ -241,11 +241,11 @@ if ($ShardCount -gt 1) {
         # across PowerShell versions; .NET's String.GetHashCode is randomized
         # per-process since core).
         $bytes = [System.Text.Encoding]::UTF8.GetBytes($pkg)
-        $h = [uint32]2166136261
+        $h = [int64]2166136261
         foreach ($b in $bytes) {
-            $h = [uint32](($h -bxor [uint32]$b) * [uint32]16777619)
+            $h = ((($h -bxor [int64]$b) * 16777619L) % 4294967296L)
         }
-        if (($h % [uint32]$ShardCount) -eq [uint32]$ShardIndex) {
+        if (($h % $ShardCount) -eq $ShardIndex) {
             $sliced.Add($pkg) | Out-Null
         }
     }

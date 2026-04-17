@@ -45,11 +45,11 @@ if (-not (Test-Path -LiteralPath $OutputDir)) {
 function Get-ShardIndex {
     param([string] $Key, [int] $Count)
     $bytes = [System.Text.Encoding]::UTF8.GetBytes($Key)
-    $h = [uint32]2166136261
+    $h = [int64]2166136261
     foreach ($b in $bytes) {
-        $h = [uint32](($h -bxor [uint32]$b) * [uint32]16777619)
+        $h = ((($h -bxor [int64]$b) * 16777619L) % 4294967296L)
     }
-    return [int]($h % [uint32]$Count)
+    return [int]($h % $Count)
 }
 
 Write-Host "Loading $SourceRegistry..."
