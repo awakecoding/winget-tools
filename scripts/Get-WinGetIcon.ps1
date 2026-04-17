@@ -135,6 +135,26 @@ namespace WinGetIconTools
         [DllImport("msi.dll", CharSet = CharSet.Unicode)]
         private static extern uint MsiGetProductInfoW(string szProduct, string szProperty, StringBuilder lpValueBuf, ref uint pcchValueBuf);
 
+        // ----- advapi32 (registry key timestamp) -----
+        [DllImport("advapi32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern int RegOpenKeyExW(IntPtr hKey, string lpSubKey, uint ulOptions, uint samDesired, out IntPtr phkResult);
+
+        [DllImport("advapi32.dll", SetLastError = true)]
+        private static extern int RegCloseKey(IntPtr hKey);
+
+        [DllImport("advapi32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern int RegQueryInfoKeyW(
+            IntPtr hKey, IntPtr lpClass, IntPtr lpcchClass, IntPtr lpReserved,
+            IntPtr lpcSubKeys, IntPtr lpcbMaxSubKeyLen, IntPtr lpcbMaxClassLen,
+            IntPtr lpcValues, IntPtr lpcbMaxValueNameLen, IntPtr lpcbMaxValueLen,
+            IntPtr lpcbSecurityDescriptor, out long lpftLastWriteTime);
+
+        private const uint KEY_READ           = 0x20019;
+        private const uint KEY_WOW64_64KEY    = 0x0100;
+        private const uint KEY_WOW64_32KEY    = 0x0200;
+        private static readonly IntPtr HKEY_LOCAL_MACHINE = new IntPtr(unchecked((int)0x80000002));
+        private static readonly IntPtr HKEY_CURRENT_USER  = new IntPtr(unchecked((int)0x80000001));
+
         // ----- constants -----
         private const uint LOAD_LIBRARY_AS_DATAFILE        = 0x00000002;
         private const uint LOAD_LIBRARY_AS_IMAGE_RESOURCE  = 0x00000020;
@@ -339,7 +359,33 @@ namespace WinGetIconTools
             }
         }
 
-        // Mirrors EnumGroupIconProc in IconExtraction.cpp.
+        public static long GetKeyLastWriteTime(string hive, string subKeyPath, bool wow6432)
+        {
+            // hive: "HKLM" or "HKCU". Returns FILETIME (ticks since 1601-01-01) or 0 on failure.
+            IntPtr root;
+            if (string.Equals(hive, "HKLM", StringComparison.OrdinalIgnoreCase)) root = HKEY_LOCAL_MACHINE;
+            else if (string.Equals(hive, "HKCU", StringComparison.OrdinalIgnoreCase)) root = HKEY_CURRENT_USER;
+            else return 0;
+
+            uint sam = KEY_READ | (wow6432 ? KEY_WOW64_32KEY : KEY_WOW64_64KEY);
+            IntPtr h;
+            int rc = RegOpenKeyExW(root, subKeyPath, 0, sam, out h);
+            if (rc != 0) return 0;
+            try
+            {
+                long ft;
+                rc = RegQueryInfoKeyW(h, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero,
+                                       IntPtr.Zero, IntPtr.Zero, IntPtr.Zero,
+                                       IntPtr.Zero, IntPtr.Zero, IntPtr.Zero,
+                                       IntPtr.Zero, out ft);
+                return rc == 0 ? ft : 0;
+            }
+            finally
+            {
+                RegCloseKey(h);
+            }
+        }
+
         private static bool EnumGroupIconProc(IntPtr hModule, IntPtr lpType, IntPtr lpName, EnumState state)
         {
             bool found = false;
@@ -541,6 +587,7 @@ function Find-ArpEntries {
                         $publisher   = $sub.GetValue('Publisher')
                         $displayVer  = $sub.GetValue('DisplayVersion')
                         $displayIcon = $sub.GetValue('DisplayIcon')
+                        $installDate = $sub.GetValue('InstallDate')
                         $winInst     = $sub.GetValue('WindowsInstaller')
                         $isMsi       = ($winInst -is [int] -and $winInst -eq 1)
 
@@ -561,6 +608,13 @@ function Find-ArpEntries {
 
                         if (-not ($codeMatch -or $nameMatch)) { continue }
 
+                        # Registry key LastWriteTime via RegQueryInfoKey (advapi32).
+                        $hiveName = if ($hive.Label -eq 'HKCU') { 'HKCU' } else { 'HKLM' }
+                        $isWow32  = ($hive.Label -eq 'HKLM-32')
+                        $subPath  = "Software\Microsoft\Windows\CurrentVersion\Uninstall\$name"
+                        $ft = [WinGetIconTools.Native]::GetKeyLastWriteTime($hiveName, $subPath, $isWow32)
+                        $lastWrite = if ($ft -gt 0) { [datetime]::FromFileTimeUtc($ft) } else { $null }
+
                         $results.Add([pscustomobject]@{
                             Hive          = $hive.Label
                             ProductCode   = $name
@@ -568,6 +622,8 @@ function Find-ArpEntries {
                             Publisher     = if ($publisher)   { [string]$publisher }   else { '' }
                             DisplayVersion= if ($displayVer)  { [string]$displayVer }  else { '' }
                             DisplayIcon   = if ($displayIcon) { [string]$displayIcon } else { '' }
+                            InstallDate   = if ($installDate) { [string]$installDate } else { '' }
+                            LastWriteTime = $lastWrite
                             IsMsi         = $isMsi
                             MatchKind     = $matchKind
                         }) | Out-Null
@@ -614,10 +670,47 @@ if (-not $arpMatches -or $arpMatches.Count -eq 0) {
 }
 Write-Verbose ("ARP matches: {0}" -f $arpMatches.Count)
 
-# If we got name-only matches and a version is known, prefer the version-confirmed ones.
-if ($hints.Version) {
-    $verConfirmed = $arpMatches | Where-Object { $_.MatchKind -in @('ProductCode', 'NamePublisherVersion') }
-    if ($verConfirmed) { $arpMatches = $verConfirmed }
+function Select-NewestArpEntry {
+    param([object[]] $Entries)
+
+    if ($Entries.Count -le 1) { return $Entries }
+
+    # Score per entry: prefer DisplayVersion (parseable [version]) > InstallDate > LastWriteTime.
+    $scored = foreach ($e in $Entries) {
+        $ver = $null
+        if ($e.DisplayVersion) {
+            try { $ver = [version]$e.DisplayVersion } catch { $ver = $null }
+        }
+        $instDate = $null
+        if ($e.InstallDate -and $e.InstallDate.Length -eq 8) {
+            try {
+                $instDate = [datetime]::ParseExact($e.InstallDate, 'yyyyMMdd',
+                    [System.Globalization.CultureInfo]::InvariantCulture)
+            } catch { $instDate = $null }
+        }
+        [pscustomobject]@{
+            Entry         = $e
+            Version       = $ver
+            InstallDateDt = $instDate
+            LastWrite     = $e.LastWriteTime
+        }
+    }
+
+    $sorted = $scored | Sort-Object `
+        @{ Expression = { if ($_.Version)       { $_.Version }       else { [version]'0.0' } }; Descending = $true }, `
+        @{ Expression = { if ($_.InstallDateDt) { $_.InstallDateDt } else { [datetime]::MinValue } }; Descending = $true }, `
+        @{ Expression = { if ($_.LastWrite)     { $_.LastWrite }     else { [datetime]::MinValue } }; Descending = $true }
+
+    return ,@($sorted[0].Entry)
+}
+
+# When multiple ARP entries match, auto-pick the newest by
+# DisplayVersion > InstallDate > registry key LastWriteTime.
+if ($arpMatches.Count -gt 1) {
+    $picked = Select-NewestArpEntry -Entries $arpMatches
+    Write-Verbose ("Multiple ARP matches; picking newest: {0} (Version={1}, InstallDate={2}, LastWrite={3})" -f `
+        $picked[0].ProductCode, $picked[0].DisplayVersion, $picked[0].InstallDate, $picked[0].LastWriteTime)
+    $arpMatches = $picked
 }
 
 if (-not (Test-Path -LiteralPath $OutDir)) {
@@ -682,15 +775,18 @@ foreach ($m in $arpMatches) {
     }
 
     [pscustomobject]@{
-        PackageId   = $PackageId
-        ProductCode = $m.ProductCode
-        DisplayName = $m.DisplayName
-        Publisher   = $m.Publisher
-        Hive        = $m.Hive
-        MatchKind   = $m.MatchKind
-        Source      = $iconPath
-        IconIndex   = $iconIndex
-        IconPath    = $outFile
-        SizeBytes   = $bytes.Length
+        PackageId     = $PackageId
+        ProductCode   = $m.ProductCode
+        DisplayName   = $m.DisplayName
+        Publisher     = $m.Publisher
+        DisplayVersion= $m.DisplayVersion
+        InstallDate   = $m.InstallDate
+        LastWriteTime = $m.LastWriteTime
+        Hive          = $m.Hive
+        MatchKind     = $m.MatchKind
+        Source        = $iconPath
+        IconIndex     = $iconIndex
+        IconPath      = $outFile
+        SizeBytes     = $bytes.Length
     }
 }
