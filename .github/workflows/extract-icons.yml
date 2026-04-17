@@ -33,6 +33,11 @@ on:
         required: false
         default: '10'
         type: string
+      refresh_candidates:
+        description: 'Regenerate data/candidates.json instead of reusing the committed copy'
+        required: false
+        default: false
+        type: boolean
       skip_publish:
         description: 'Skip the publish job (no GitHub Release upload, no commit)'
         required: false
@@ -79,10 +84,19 @@ jobs:
           }
           Import-Module Yayaml
 
-      - name: Build candidate list
+      - name: Ensure candidate list
         shell: pwsh
+        env:
+          REFRESH_CANDIDATES: ${{ github.event_name == 'schedule' && 'true' || inputs.refresh_candidates && 'true' || 'false' }}
         run: |
           $PSNativeCommandUseErrorActionPreference = $false
+          $refreshCandidates = $env:REFRESH_CANDIDATES -eq 'true'
+
+          if ((-not $refreshCandidates) -and (Test-Path -LiteralPath 'data/candidates.json')) {
+              Write-Host 'Reusing committed data/candidates.json for this run.'
+              return
+          }
+
           & ./scripts/Update-CandidateList.ps1 `
               -OutputPath data/candidates.json `
               -WorkDir $env:RUNNER_TEMP/winget-pkgs
