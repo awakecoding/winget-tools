@@ -13,3 +13,6 @@
 Thumbs.db
 Desktop.ini
 .DS_Store
+
+# Test / script output
+out/

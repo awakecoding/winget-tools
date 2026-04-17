@@ -58,6 +58,62 @@ knobs to force a specific one:
 .\scripts\Get-WinGetManifest.ps1 -PackageId Contoso.App -SourceName MyEnterpriseSource
 ```
 
+### `scripts/Get-WinGetIcon.ps1`
+
+Extracts the raw `.ico` of an installed WinGet package — the same way winget
+itself does it (see winget-cli's `IconExtraction.cpp` and `ARPHelper.cpp`),
+but exposed as a stand-alone script. Uses `Get-WinGetManifest.ps1` to resolve
+the WinGet PackageId to one or more correlation hints (ProductCode and/or
+DisplayName + Publisher), walks the Uninstall registry hives across both
+WOW64 views to find matching ARP entries, and then reproduces the C++ icon
+extraction:
+
+- MSI installs → `MsiGetProductInfoW(ProductIcon)`
+- Everything else → the ARP `DisplayIcon` value
+- Path is unquoted + index parsed via `shlwapi`, env vars expanded
+- `.ico` files are copied verbatim
+- `.exe` / `.dll` sources are walked via `EnumResourceNamesEx(RT_GROUP_ICON, …)`
+  and reassembled into a proper `ICONDIR` + `ICONDIRENTRY` + concatenated
+  `RT_ICON` payloads, byte-for-byte matching `ExtractIconFromBinaryFile`
+
+Native work is done in a small C# helper compiled on first call via
+`Add-Type` — the script stays a single drop-in `.ps1`.
+
+#### Parameters
+
+| Parameter | Description |
+|---|---|
+| `-PackageId` *(required)* | Exact WinGet identifier, e.g. `Git.Git`. |
+| `-Scope` | `User`, `Machine`, or `Both` (default). Picks which Uninstall hives to search. |
+| `-OutDir` | Output directory. Default: `$env:TEMP\winget-icons`. |
+| `-Force` | Overwrite existing files. |
+
+Output filename pattern: `{SanitizedDisplayName}.{ProductCode}.ico`.
+Each emitted PSCustomObject has `PackageId, ProductCode, DisplayName,
+Publisher, Hive, MatchKind, Source, IconIndex, IconPath, SizeBytes`.
+
+#### Examples
+
+```powershell
+# Default: extract icon for an installed package
+.\scripts\Get-WinGetIcon.ps1 -PackageId Git.Git
+
+# Machine-scope only, custom output directory
+.\scripts\Get-WinGetIcon.ps1 -PackageId Docker.DockerDesktop -Scope Machine -OutDir .\icons -Force
+
+# Pipe the result for downstream use
+.\scripts\Get-WinGetIcon.ps1 -PackageId Git.Git | Select-Object DisplayName, IconPath, SizeBytes
+```
+
+#### Notes
+
+- Requires the package to be installed locally — there's no out-of-the-box
+  way to extract an icon for a package that has only been downloaded.
+- MSIX / Microsoft Store packages are out of scope (no ARP entry; winget's
+  own `IconExtraction` doesn't handle them either).
+- Some MSI packages legitimately have no `ProductIcon` set; the script
+  warns and exits 0 (faithful to winget's behavior).
+
 ## Requirements
 
 - PowerShell 7+
