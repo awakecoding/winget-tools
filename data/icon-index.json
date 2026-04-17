@@ -1,10 +1,12 @@
 {
   "schema": 1,
-  "generated": "2026-04-17T22:10:33.1132178Z",
+  "generated": "2026-04-17T23:09:20.8177570Z",
   "repository": "awakecoding/winget-tools",
   "releaseTag": "icons-latest",
   "baseUrl": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/",
   "count": 0,
-  "statusCounts": {},
+  "statusCounts": {
+    "ExtractError": 40
+  },
   "entries": {}
 }
