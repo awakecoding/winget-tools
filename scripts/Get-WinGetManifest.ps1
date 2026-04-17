@@ -59,23 +59,23 @@
 
 .EXAMPLE
     # Auto mode (default): FileCache first, then online fallback
-    .\Get-WinGetManifest.ps1 -PackageId "Git.Git"
+    .\scripts\Get-WinGetManifest.ps1 -PackageId "Git.Git"
 
     # Local cache only — never touch the network
-    .\Get-WinGetManifest.ps1 -PackageId "Git.Git" -Mode FileCache
+    .\scripts\Get-WinGetManifest.ps1 -PackageId "Git.Git" -Mode FileCache
 
     # Guaranteed local read, even on a cold cache (winget warms, then we read)
-    .\Get-WinGetManifest.ps1 -PackageId "Git.Git" -Mode FileCache -WarmCache -PathOnly | Get-Content
+    .\scripts\Get-WinGetManifest.ps1 -PackageId "Git.Git" -Mode FileCache -WarmCache -PathOnly | Get-Content
 
     # Force a fresh online fetch — skip whatever is on disk
-    .\Get-WinGetManifest.ps1 -PackageId "Git.Git" -Version "2.47.1.2" -Mode Online
+    .\scripts\Get-WinGetManifest.ps1 -PackageId "Git.Git" -Version "2.47.1.2" -Mode Online
 
     # Cross-format conversion (JSON output from a YAML community source)
-    .\Get-WinGetManifest.ps1 -PackageId "Git.Git" -AsJson
+    .\scripts\Get-WinGetManifest.ps1 -PackageId "Git.Git" -AsJson
 
     # Non-default source
-    .\Get-WinGetManifest.ps1 -PackageId "Contoso.App" -SourceName "MyEnterpriseSource"
-    .\Get-WinGetManifest.ps1 -PackageId "Contoso.App" -SourceName "MyEnterpriseSource" -Mode Online
+    .\scripts\Get-WinGetManifest.ps1 -PackageId "Contoso.App" -SourceName "MyEnterpriseSource"
+    .\scripts\Get-WinGetManifest.ps1 -PackageId "Contoso.App" -SourceName "MyEnterpriseSource" -Mode Online
 #>
 
 [CmdletBinding()]

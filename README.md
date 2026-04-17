@@ -5,7 +5,7 @@ Manager (winget) beyond what the official CLI exposes.
 
 ## Scripts
 
-### `Get-WinGetManifest.ps1`
+### `scripts/Get-WinGetManifest.ps1`
 
 Fetches the raw, unlocalized WinGet manifest for a package — without going
 through `winget show` (which reformats and localizes its output).
@@ -40,22 +40,22 @@ knobs to force a specific one:
 
 ```powershell
 # Default: FileCache first, fall back to online fetch
-.\Get-WinGetManifest.ps1 -PackageId Git.Git
+.\scripts\Get-WinGetManifest.ps1 -PackageId Git.Git
 
 # Offline only — never touch the network
-.\Get-WinGetManifest.ps1 -PackageId Git.Git -Mode FileCache
+.\scripts\Get-WinGetManifest.ps1 -PackageId Git.Git -Mode FileCache
 
 # Guaranteed local read (winget warms, then we read from disk)
-.\Get-WinGetManifest.ps1 -PackageId Git.Git -Mode FileCache -WarmCache -PathOnly | Get-Content
+.\scripts\Get-WinGetManifest.ps1 -PackageId Git.Git -Mode FileCache -WarmCache -PathOnly | Get-Content
 
 # Force a fresh online fetch — skip whatever is cached
-.\Get-WinGetManifest.ps1 -PackageId Git.Git -Version 2.47.1.2 -Mode Online
+.\scripts\Get-WinGetManifest.ps1 -PackageId Git.Git -Version 2.47.1.2 -Mode Online
 
 # Get JSON output from a YAML community source
-.\Get-WinGetManifest.ps1 -PackageId Git.Git -AsJson
+.\scripts\Get-WinGetManifest.ps1 -PackageId Git.Git -AsJson
 
 # Target a non-default REST source
-.\Get-WinGetManifest.ps1 -PackageId Contoso.App -SourceName MyEnterpriseSource
+.\scripts\Get-WinGetManifest.ps1 -PackageId Contoso.App -SourceName MyEnterpriseSource
 ```
 
 ## Requirements
