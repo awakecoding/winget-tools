@@ -89,6 +89,9 @@ param(
     [ValidateRange(30, 7200)]
     [int]    $PerPackageTimeoutSeconds = 600,
 
+    [ValidateRange(30, 3600)]
+    [int]    $UninstallTimeoutSeconds = 180,
+
     [ValidateRange(0, 10000)]
     [int]    $MaxPackages = 0,
 
@@ -97,6 +100,10 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+# pwsh 7.4+ treats non-zero native exit codes as terminating errors when this
+# preference is $true (GitHub Actions default). We intentionally check exit
+# codes ourselves, so opt out.
+$PSNativeCommandUseErrorActionPreference = $false
 
 $repoRoot   = Split-Path -Parent $PSScriptRoot
 $iconScript = Join-Path $repoRoot 'scripts\Get-WinGetIcon.ps1'
@@ -377,7 +384,7 @@ foreach ($pkg in $Packages) {
         if ($UninstallAfter -and $record.InstalledByThisRun) {
             Write-Host "  Uninstalling..." -ForegroundColor Gray
             try {
-                $uninst = Uninstall-WinGetPackage -PackageId $pkg -TimeoutSeconds $PerPackageTimeoutSeconds
+                $uninst = Uninstall-WinGetPackage -PackageId $pkg -TimeoutSeconds $UninstallTimeoutSeconds
                 $record.UninstallExitCode = $uninst.ExitCode
                 $record.UninstallTimedOut = $uninst.TimedOut
                 if ($uninst.TimedOut) {

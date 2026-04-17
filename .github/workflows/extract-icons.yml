@@ -42,6 +42,7 @@ jobs:
       - name: Verify winget
         shell: pwsh
         run: |
+          $PSNativeCommandUseErrorActionPreference = $false
           $v = winget --version 2>$null
           if ($LASTEXITCODE -ne 0) {
               Write-Host "::warning::winget not present; this runner image is unexpected."
@@ -49,14 +50,26 @@ jobs:
           }
           Write-Host "winget version: $v"
 
+      - name: Install Yayaml PowerShell module
+        shell: pwsh
+        run: |
+          if (-not (Get-Module -ListAvailable -Name Yayaml)) {
+              Write-Host "Installing Yayaml..."
+              Install-Module -Name Yayaml -Scope CurrentUser -Force -AcceptLicense -Repository PSGallery
+          }
+          Import-Module Yayaml
+          Get-Module Yayaml | Format-Table Name, Version
+
       - name: Update winget sources
         shell: pwsh
         continue-on-error: true
         run: |
+          $PSNativeCommandUseErrorActionPreference = $false
           winget source update --accept-source-agreements --disable-interactivity
           if ($LASTEXITCODE -ne 0) {
               Write-Host "::warning::winget source update returned $LASTEXITCODE"
           }
+          exit 0
 
       - name: Run bulk icon extractor
         id: extract
@@ -67,6 +80,7 @@ jobs:
           PKG_TIMEOUT: ${{ inputs.per_package_timeout || '600' }}
           UNINSTALL_AFTER: ${{ inputs.uninstall_after && 'true' || 'true' }}
         run: |
+          $PSNativeCommandUseErrorActionPreference = $false
           $maxPackages = [int]($env:PKG_COUNT)
           $timeout     = [int]($env:PKG_TIMEOUT)
           $uninstall   = ($env:UNINSTALL_AFTER -eq 'true')
