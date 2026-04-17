@@ -1,0 +1,152 @@
+# Popular WinGet packages for bulk icon-extraction CI runs.
+# One PackageId per line. '#' starts a comment. Blank lines ignored.
+#
+# Curation rules:
+#   - Must have a real ARP entry (no MSIX/Store, no portable-only).
+#   - Silent install must work without a license key or interactive EULA prompt
+#     beyond what --accept-package-agreements covers.
+#   - No kernel drivers, no reboot-required installers, nothing >2 GB.
+#   - Mix across categories so the artifact exercises a variety of installer
+#     types (Inno, NSIS, MSI, Burn, Squirrel, custom).
+
+# --- Browsers -------------------------------------------------------------
+Google.Chrome
+Mozilla.Firefox
+Brave.Brave
+Vivaldi.Vivaldi
+Opera.Opera
+
+# --- Communication / collaboration ----------------------------------------
+Discord.Discord
+SlackTechnologies.Slack
+Zoom.Zoom
+TeamSpeakSystems.TeamSpeakClient
+Mumble.Mumble
+Element.Element
+
+# --- Editors / IDEs -------------------------------------------------------
+Microsoft.VisualStudioCode
+Notepad++.Notepad++
+Vim.Vim
+Neovim.Neovim
+SublimeHQ.SublimeText.4
+GitHub.Atom
+Geany.Geany
+
+# --- Source control / dev tools ------------------------------------------
+Git.Git
+GitHub.cli
+GitHub.GitHubDesktop
+Atlassian.Sourcetree
+TortoiseGit.TortoiseGit
+WinMerge.WinMerge
+gerardog.gsudo
+
+# --- Languages / runtimes -------------------------------------------------
+Python.Python.3.12
+OpenJS.NodeJS.LTS
+Rustlang.Rustup
+GoLang.Go
+Microsoft.OpenJDK.21
+Microsoft.PowerShell
+Microsoft.DotNet.SDK.8
+Microsoft.DotNet.SDK.9
+RubyInstallerTeam.RubyWithDevKit.3.3
+Strawberryperl.Strawberryperl
+
+# --- Containers / cloud / infra -------------------------------------------
+Docker.DockerDesktop
+HashiCorp.Terraform
+HashiCorp.Vagrant
+HashiCorp.Packer
+Kubernetes.kubectl
+Helm.Helm
+Microsoft.AzureCLI
+Amazon.AWSCLI
+GoogleCloudSDK.GoogleCloudSDK
+
+# --- Editors for media / images ------------------------------------------
+GIMP.GIMP
+Inkscape.Inkscape
+BlenderFoundation.Blender
+Audacity.Audacity
+Krita.Krita
+ImageGlass.ImageGlass
+IrfanSkiljan.IrfanView
+
+# --- Media playback / capture --------------------------------------------
+VideoLAN.VLC
+MoritzBunkus.MKVToolNix
+OBSProject.OBSStudio
+HandBrake.HandBrake
+Spotify.Spotify
+foobar2000.foobar2000
+
+# --- Archivers / file utilities ------------------------------------------
+7zip.7zip
+RARLab.WinRAR
+PeaZip.PeaZip
+voidtools.Everything
+Bandisoft.Bandizip
+TheDocumentFoundation.LibreOffice
+
+# --- Network / shells / SSH / FTP ----------------------------------------
+PuTTY.PuTTY
+WinSCP.WinSCP
+Mobatek.MobaXterm
+Microsoft.WindowsTerminal
+Insecure.Nmap
+WiresharkFoundation.Wireshark
+Cloudflare.cloudflared
+Tailscale.Tailscale
+
+# --- System utilities ----------------------------------------------------
+Microsoft.Sysinternals.ProcessExplorer
+Microsoft.Sysinternals.Autoruns
+Microsoft.PowerToys
+CPUID.CPU-Z
+TechPowerUp.GPU-Z
+CrystalDewWorld.CrystalDiskInfo
+CrystalDewWorld.CrystalDiskMark
+HWiNFO.HWiNFO
+RevoUninstaller.RevoUninstaller
+
+# --- Hex / disk / forensics ----------------------------------------------
+MHNexus.HxD
+SweetScape.010Editor
+WagnardSoft.DisplayDriverUninstaller
+
+# --- Reading / writing ---------------------------------------------------
+Adobe.Acrobat.Reader.64-bit
+SumatraPDF.SumatraPDF
+Tracker-Software.PDF-XChangeEditor
+Notion.Notion
+Obsidian.Obsidian
+Joplin.Joplin
+
+# --- Password / security -------------------------------------------------
+KeePassXCTeam.KeePassXC
+Bitwarden.Bitwarden
+1Password.1Password
+ProtonTechnologies.ProtonVPN
+Mullvad.Mullvad
+
+# --- Misc apps -----------------------------------------------------------
+Telegram.TelegramDesktop
+WhatsApp.WhatsApp
+Signal.Signal
+Microsoft.Teams
+Microsoft.Edge
+Mozilla.Thunderbird
+Valve.Steam
+EpicGames.EpicGamesLauncher
+Logitech.GHUB
+Razer.Synapse3
+NVIDIA.GeForceExperience
+TimKosse.FileZilla.Client
+JGraph.Draw
+Greenshot.Greenshot
+ShareX.ShareX
+Flameshot.Flameshot
+RustDesk.RustDesk
+Microsoft.VisualStudio.2022.Community

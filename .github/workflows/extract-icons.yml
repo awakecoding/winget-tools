@@ -1,0 +1,132 @@
+name: Extract WinGet icons
+
+on:
+  workflow_dispatch:
+    inputs:
+      package_count:
+        description: 'Limit to first N packages (0 = all)'
+        required: false
+        default: '0'
+        type: string
+      uninstall_after:
+        description: 'Uninstall each package after icon extraction'
+        required: false
+        default: true
+        type: boolean
+      per_package_timeout:
+        description: 'Per-package install timeout (seconds)'
+        required: false
+        default: '600'
+        type: string
+  schedule:
+    # Mondays at 06:00 UTC.
+    - cron: '0 6 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: extract-icons-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  extract:
+    name: Install + extract icons
+    runs-on: windows-latest
+    timeout-minutes: 350
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify winget
+        shell: pwsh
+        run: |
+          $v = winget --version 2>$null
+          if ($LASTEXITCODE -ne 0) {
+              Write-Host "::warning::winget not present; this runner image is unexpected."
+              throw "winget CLI is required but not available."
+          }
+          Write-Host "winget version: $v"
+
+      - name: Update winget sources
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          winget source update --accept-source-agreements --disable-interactivity
+          if ($LASTEXITCODE -ne 0) {
+              Write-Host "::warning::winget source update returned $LASTEXITCODE"
+          }
+
+      - name: Run bulk icon extractor
+        id: extract
+        shell: pwsh
+        continue-on-error: true
+        env:
+          PKG_COUNT: ${{ inputs.package_count || '0' }}
+          PKG_TIMEOUT: ${{ inputs.per_package_timeout || '600' }}
+          UNINSTALL_AFTER: ${{ inputs.uninstall_after && 'true' || 'true' }}
+        run: |
+          $maxPackages = [int]($env:PKG_COUNT)
+          $timeout     = [int]($env:PKG_TIMEOUT)
+          $uninstall   = ($env:UNINSTALL_AFTER -eq 'true')
+
+          $params = @{
+              PackageListFile          = 'tests/popular-packages.txt'
+              OutDir                   = 'out/icons'
+              SummaryPath              = 'out/summary.json'
+              PerPackageTimeoutSeconds = $timeout
+              Force                    = $true
+          }
+          if ($maxPackages -gt 0) { $params['MaxPackages'] = $maxPackages }
+          if ($uninstall)         { $params['UninstallAfter'] = $true }
+
+          & ./scripts/Invoke-BulkIconExtraction.ps1 @params
+
+      - name: Render summary to GitHub step summary
+        if: always()
+        shell: pwsh
+        run: |
+          $summaryPath = 'out/summary.json'
+          if (-not (Test-Path -LiteralPath $summaryPath)) {
+              "## WinGet icon extraction" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+              "" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+              "_No summary.json was produced._" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+              return
+          }
+
+          $payload = Get-Content -LiteralPath $summaryPath -Raw | ConvertFrom-Json
+
+          $lines = New-Object System.Collections.Generic.List[string]
+          $lines.Add('## WinGet icon extraction')
+          $lines.Add('')
+          $lines.Add(("- Generated: ``{0}``"  -f $payload.GeneratedAt))
+          $lines.Add(("- Total packages: **{0}**" -f $payload.Total))
+          $lines.Add('')
+          $lines.Add('### Status counts')
+          $lines.Add('')
+          $lines.Add('| Status | Count |')
+          $lines.Add('| --- | ---: |')
+          foreach ($prop in $payload.StatusCounts.PSObject.Properties) {
+              $lines.Add(("| {0} | {1} |" -f $prop.Name, $prop.Value))
+          }
+          $lines.Add('')
+          $lines.Add('### Per-package results')
+          $lines.Add('')
+          $lines.Add('| Package | Status | Icons | Bytes | Duration (s) |')
+          $lines.Add('| --- | --- | ---: | ---: | ---: |')
+          foreach ($r in $payload.Results) {
+              $lines.Add(("| {0} | {1} | {2} | {3} | {4} |" -f `
+                  $r.PackageId, $r.Status, $r.IconCount, $r.IconBytes, $r.DurationSeconds))
+          }
+
+          $lines -join "`n" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+
+      - name: Upload icons artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: winget-icons-${{ github.run_id }}
+          path: out/
+          if-no-files-found: warn
+          retention-days: 30
