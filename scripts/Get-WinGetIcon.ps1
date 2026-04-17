@@ -458,10 +458,25 @@ function Get-PackageHints {
     Write-Verbose "Resolving manifest for '$PackageId' via Get-WinGetManifest.ps1 -AsJson"
     $json = & $manifestScript -PackageId $PackageId -AsJson 2>$null
     if (-not $json) {
+        # Fresh runner / first-time lookup: the FileCache hasn't been populated
+        # yet (winget only writes it as a side effect of install/show). Retry
+        # with -WarmCache, which runs `winget show` to fetch + cache the
+        # manifest, then re-reads it.
+        Write-Verbose "  First lookup empty; retrying with -WarmCache."
+        $json = & $manifestScript -PackageId $PackageId -AsJson -WarmCache 2>$null
+    }
+    if (-not $json) {
         throw "Could not retrieve manifest for '$PackageId'."
     }
 
-    $manifest = $json | ConvertFrom-Json
+    try {
+        $manifest = $json | ConvertFrom-Json
+    }
+    catch {
+        # The manifest helper falls back to native YAML when Yayaml isn't
+        # available; surface a clear error rather than the ConvertFrom-Json one.
+        throw "Manifest for '$PackageId' is not JSON. Install the Yayaml PowerShell module: Install-Module Yayaml -Scope CurrentUser"
+    }
 
     $codes      = New-Object System.Collections.Generic.List[string]
     $names      = New-Object System.Collections.Generic.List[string]
@@ -597,11 +612,40 @@ function Find-ArpEntries {
                             $matchKind = 'ProductCode'
                         }
                         elseif ($haveNameMatch -and $displayName -and $publisher) {
-                            if ($wantedNames.Contains([string]$displayName) -and $wantedPubs.Contains([string]$publisher)) {
+                            $dn = [string]$displayName
+                            $pb = [string]$publisher
+                            if ($wantedNames.Contains($dn) -and $wantedPubs.Contains($pb)) {
                                 $nameMatch = $true
                                 $matchKind = 'NamePublisher'
                                 if ($Hints.Version -and $displayVer -and ([string]$displayVer -eq $Hints.Version)) {
                                     $matchKind = 'NamePublisherVersion'
+                                }
+                            }
+                            else {
+                                # Fuzzy fallback: many installers expand the manifest
+                                # name (e.g. "Opera" -> "Opera Stable 117.0.5408.36",
+                                # "Chrome" -> "Google Chrome", "Brave" -> "Brave"
+                                # but Publisher "Brave Software, Inc"). Accept if
+                                # ANY hint name appears as a prefix/substring of the
+                                # ARP DisplayName AND ANY hint publisher appears as
+                                # a substring of the ARP Publisher.
+                                $nameHit = $false
+                                foreach ($wn in $wantedNames) {
+                                    if ($dn.StartsWith($wn, [StringComparison]::OrdinalIgnoreCase) -or
+                                        $dn.IndexOf($wn, [StringComparison]::OrdinalIgnoreCase) -ge 0) {
+                                        $nameHit = $true; break
+                                    }
+                                }
+                                $pubHit = $false
+                                foreach ($wp in $wantedPubs) {
+                                    if ($pb.IndexOf($wp, [StringComparison]::OrdinalIgnoreCase) -ge 0 -or
+                                        $wp.IndexOf($pb, [StringComparison]::OrdinalIgnoreCase) -ge 0) {
+                                        $pubHit = $true; break
+                                    }
+                                }
+                                if ($nameHit -and $pubHit) {
+                                    $nameMatch = $true
+                                    $matchKind = 'NamePublisherFuzzy'
                                 }
                             }
                         }
