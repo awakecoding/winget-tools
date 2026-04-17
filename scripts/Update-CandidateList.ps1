@@ -151,7 +151,13 @@ function ConvertTo-Semver {
     $parts = @(0, 0, 0, 0)
     for ($i = 1; $i -le 4; $i++) {
         $g = $coreMatch.Groups[$i]
-        if ($g.Success -and $g.Value) { $parts[$i - 1] = [int]$g.Value }
+        if ($g.Success -and $g.Value) {
+            $parsed = 0
+            if (-not [int]::TryParse($g.Value, [ref]$parsed)) {
+                return $null
+            }
+            $parts[$i - 1] = $parsed
+        }
     }
     return [version]::new($parts[0], $parts[1], $parts[2], $parts[3])
 }
