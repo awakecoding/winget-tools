@@ -1,0 +1,15 @@
+# PowerShell / Windows artifacts
+*.log
+*.tmp
+*.bak
+*.swp
+
+# IDE / editor
+.vscode/
+.idea/
+*.code-workspace
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
