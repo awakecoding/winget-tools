@@ -56,6 +56,27 @@
     If > 0, only process the first N PackageIds from the list. Useful for
     smoke tests.
 
+.PARAMETER RegistryPath
+    Path to a JSON registry file that records per-package extraction outcomes
+    across runs. When supplied, packages whose registry entry is fresh enough
+    are skipped entirely (no install/extract). Updated and rewritten at end.
+
+.PARAMETER MaxNew
+    Cap on the number of NEW packages processed per run, AFTER skipping cached
+    ones. 0 = no cap. Use to spread work across multiple CI runs.
+
+.PARAMETER RefreshAfterDays
+    Re-check packages whose status is HasIcon/NoIcon after this many days.
+    Default: 30.
+
+.PARAMETER RetryFailedAfterDays
+    Re-check packages whose status is InstallFailed/InstallTimeout/ExtractError
+    after this many days. Default: 7.
+
+.PARAMETER IgnoreRegistry
+    Process every candidate, ignoring registry freshness (registry is still
+    updated).
+
 .PARAMETER Force
     Forwarded to Get-WinGetIcon.ps1 to overwrite existing .ico files.
 
@@ -63,6 +84,8 @@
     .\scripts\Invoke-BulkIconExtraction.ps1 `
         -PackageListFile .\tests\popular-packages.txt `
         -OutDir .\out\bulk-icons `
+        -RegistryPath .\data\icon-registry.json `
+        -MaxNew 100 `
         -UninstallAfter
 
 .EXAMPLE
@@ -84,6 +107,8 @@ param(
 
     [string] $SummaryPath,
 
+    [string] $RegistryPath,
+
     [switch] $UninstallAfter,
 
     [ValidateRange(30, 7200)]
@@ -94,6 +119,21 @@ param(
 
     [ValidateRange(0, 10000)]
     [int]    $MaxPackages = 0,
+
+    [Parameter(HelpMessage = 'Cap the number of NEW packages processed per run (after skipping cached ones). 0 = no cap.')]
+    [ValidateRange(0, 10000)]
+    [int]    $MaxNew = 0,
+
+    [Parameter(HelpMessage = 'Skip packages whose registry entry is HasIcon/NoIcon and was checked within this many days.')]
+    [ValidateRange(0, 3650)]
+    [int]    $RefreshAfterDays = 30,
+
+    [Parameter(HelpMessage = 'Retry packages whose registry entry is InstallFailed/InstallTimeout/ExtractError after this many days.')]
+    [ValidateRange(0, 3650)]
+    [int]    $RetryFailedAfterDays = 7,
+
+    [Parameter(HelpMessage = 'Ignore the registry entirely and re-process every candidate.')]
+    [switch] $IgnoreRegistry,
 
     [switch] $Force
 )
@@ -266,54 +306,238 @@ function Uninstall-WinGetPackage {
     return Invoke-WinGetCommand -Arguments $uninstallArgs -TimeoutSeconds $TimeoutSeconds -Tag 'uninstall'
 }
 
+function Show-WinGetPackage {
+    param(
+        [Parameter(Mandatory)] [string] $PackageId,
+        [int] $TimeoutSeconds = 60
+    )
+
+    # `winget show` populates the V2 FileCache (manifest YAML) for the given
+    # package even if the package is preinstalled. This lets Get-WinGetIcon's
+    # manifest-driven hint extraction succeed for packages we never install.
+    $showArgs = @(
+        'show', '--id', $PackageId, '--exact',
+        '--source', 'winget',
+        '--accept-source-agreements',
+        '--disable-interactivity'
+    )
+    return Invoke-WinGetCommand -Arguments $showArgs -TimeoutSeconds $TimeoutSeconds -Tag 'show'
+}
+
+# -----------------------------------------------------------------------------
+# Registry helpers
+# -----------------------------------------------------------------------------
+
+function Read-IconRegistry {
+    param([string] $Path)
+
+    $empty = [pscustomobject]@{
+        schema      = 1
+        description = ''
+        generated   = $null
+        entries     = @{}   # internal: real Hashtable for easy add/remove under StrictMode
+    }
+    if (-not $Path -or -not (Test-Path -LiteralPath $Path)) { return $empty }
+    try {
+        $obj = Get-Content -LiteralPath $Path -Raw -Encoding UTF8 | ConvertFrom-Json -AsHashtable
+        if (-not $obj) { throw 'Registry file is empty.' }
+        if (-not $obj.ContainsKey('entries') -or -not $obj['entries']) { $obj['entries'] = @{} }
+        return [pscustomobject]@{
+            schema      = if ($obj.ContainsKey('schema'))      { $obj['schema'] }      else { 1 }
+            description = if ($obj.ContainsKey('description')) { $obj['description'] } else { '' }
+            generated   = if ($obj.ContainsKey('generated'))   { $obj['generated'] }   else { $null }
+            entries     = [hashtable]$obj['entries']
+        }
+    }
+    catch {
+        Write-Warning "Failed to read registry at '$Path': $($_.Exception.Message). Starting fresh."
+        return $empty
+    }
+}
+
+function Write-IconRegistry {
+    param(
+        [Parameter(Mandatory)] $Registry,
+        [Parameter(Mandatory)] [string] $Path
+    )
+
+    $Registry.generated = (Get-Date).ToUniversalTime().ToString('o')
+    $dir = Split-Path -Parent $Path
+    if ($dir -and -not (Test-Path -LiteralPath $dir)) {
+        [void](New-Item -ItemType Directory -Path $dir -Force)
+    }
+
+    # Sort entries alphabetically by PackageId for stable diffs.
+    $sortedEntries = [ordered]@{}
+    foreach ($key in ($Registry.entries.Keys | Sort-Object)) {
+        $sortedEntries[$key] = $Registry.entries[$key]
+    }
+
+    $payload = [ordered]@{
+        schema      = $Registry.schema
+        description = $Registry.description
+        generated   = $Registry.generated
+        entries     = $sortedEntries
+    }
+
+    $payload | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $Path -Encoding UTF8
+}
+
+function Get-RegistryEntry {
+    param($Registry, [string] $PackageId)
+    if ($Registry.entries.ContainsKey($PackageId)) { return $Registry.entries[$PackageId] }
+    return $null
+}
+
+function Set-RegistryEntry {
+    param($Registry, [string] $PackageId, $Entry)
+    $Registry.entries[$PackageId] = $Entry
+}
+
+function Test-EntryFresh {
+    param(
+        $Entry,
+        [int] $RefreshAfterDays,
+        [int] $RetryFailedAfterDays
+    )
+
+    if (-not $Entry) { return $false }
+    if ($Entry -isnot [hashtable] -and -not ($Entry.PSObject.Properties['lastCheckedUtc'])) { return $false }
+
+    $checkedRaw = if ($Entry -is [hashtable]) { $Entry['lastCheckedUtc'] } else { $Entry.lastCheckedUtc }
+    $statusRaw  = if ($Entry -is [hashtable]) { $Entry['status'] }         else { $Entry.status }
+    if (-not $checkedRaw) { return $false }
+
+    $checked = $null
+    try { $checked = [datetime]::Parse([string]$checkedRaw) } catch { return $false }
+    $age = (Get-Date).ToUniversalTime() - $checked.ToUniversalTime()
+
+    $terminalGood = @('HasIcon', 'NoIcon')
+    $terminalBad  = @('InstallFailed', 'InstallTimeout', 'ExtractError')
+
+    if ($statusRaw -in $terminalGood) { return $age.TotalDays -lt $RefreshAfterDays }
+    if ($statusRaw -in $terminalBad)  { return $age.TotalDays -lt $RetryFailedAfterDays }
+    return $false
+}
+
+function Get-EntryField {
+    param($Entry, [string] $Field)
+    if ($null -eq $Entry) { return $null }
+    if ($Entry -is [hashtable]) {
+        if ($Entry.ContainsKey($Field)) { return $Entry[$Field] } else { return $null }
+    }
+    if ($Entry.PSObject.Properties[$Field]) { return $Entry.$Field }
+    return $null
+}
+
+function Get-FileSha256 {
+    param([string] $Path)
+    if (-not (Test-Path -LiteralPath $Path)) { return $null }
+    return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
+}
+
 # -----------------------------------------------------------------------------
 # Main loop
 # -----------------------------------------------------------------------------
 
+# Load registry up front (mutated as we go; written at the end).
+$registry = Read-IconRegistry -Path $RegistryPath
+$wingetVersion = ''
+try {
+    $wingetVersion = (& winget --version 2>$null) -replace '[\r\n]', ''
+} catch { }
+
+$skipped = New-Object System.Collections.Generic.List[object]
+$todo    = New-Object System.Collections.Generic.List[string]
+
+foreach ($pkg in $Packages) {
+    $entry = Get-RegistryEntry -Registry $registry -PackageId $pkg
+    if (-not $IgnoreRegistry -and (Test-EntryFresh -Entry $entry -RefreshAfterDays $RefreshAfterDays -RetryFailedAfterDays $RetryFailedAfterDays)) {
+        $cachedIcons = Get-EntryField -Entry $entry -Field 'icons'
+        $iconCount   = if ($cachedIcons) { @($cachedIcons).Count } else { 0 }
+        $iconBytes   = if ($cachedIcons) { (@($cachedIcons) | Measure-Object -Property bytes -Sum).Sum } else { 0 }
+        $skipped.Add([pscustomobject]@{
+            PackageId       = $pkg
+            Status          = 'Skipped'
+            CachedStatus    = (Get-EntryField -Entry $entry -Field 'status')
+            LastCheckedUtc  = (Get-EntryField -Entry $entry -Field 'lastCheckedUtc')
+            IconCount       = $iconCount
+            IconBytes       = if ($iconBytes) { $iconBytes } else { 0 }
+            DurationSeconds = 0
+        }) | Out-Null
+        continue
+    }
+    $todo.Add($pkg) | Out-Null
+}
+
+if ($MaxNew -gt 0 -and $todo.Count -gt $MaxNew) {
+    Write-Host "Capping new packages this run to $MaxNew (of $($todo.Count) eligible)."
+    $todo = [System.Collections.Generic.List[string]]@($todo[0..($MaxNew - 1)])
+}
+
 Write-Host ''
-Write-Host "Output dir   : $OutDir"      -ForegroundColor Cyan
-Write-Host "Summary file : $SummaryPath" -ForegroundColor Cyan
-Write-Host "Packages     : $($Packages.Count)" -ForegroundColor Cyan
-Write-Host "Uninstall    : $UninstallAfter" -ForegroundColor Cyan
-Write-Host "Per-pkg TO   : ${PerPackageTimeoutSeconds}s" -ForegroundColor Cyan
+Write-Host "Output dir          : $OutDir"      -ForegroundColor Cyan
+Write-Host "Summary file        : $SummaryPath" -ForegroundColor Cyan
+if ($RegistryPath) {
+    Write-Host "Registry file       : $RegistryPath" -ForegroundColor Cyan
+}
+Write-Host "Candidates          : $($Packages.Count)" -ForegroundColor Cyan
+Write-Host "Skipped (cached)    : $($skipped.Count)" -ForegroundColor Cyan
+Write-Host "To process this run : $($todo.Count)" -ForegroundColor Cyan
+Write-Host "Uninstall after     : $UninstallAfter" -ForegroundColor Cyan
+Write-Host "Per-pkg TO          : ${PerPackageTimeoutSeconds}s" -ForegroundColor Cyan
+Write-Host "Uninstall TO        : ${UninstallTimeoutSeconds}s" -ForegroundColor Cyan
+Write-Host "Refresh after       : ${RefreshAfterDays}d (HasIcon/NoIcon)" -ForegroundColor Cyan
+Write-Host "Retry failed after  : ${RetryFailedAfterDays}d (Install*/Extract*)" -ForegroundColor Cyan
 Write-Host ''
 
 $results = New-Object System.Collections.Generic.List[object]
-$idx = 0
-$total = $Packages.Count
+foreach ($s in $skipped) { $results.Add($s) | Out-Null }
 
-foreach ($pkg in $Packages) {
+$idx = 0
+$total = $todo.Count
+
+foreach ($pkg in $todo) {
     $idx++
     $started = Get-Date
     Write-Host ('=' * 70)
     Write-Host ("[{0}/{1}] {2}" -f $idx, $total, $pkg) -ForegroundColor Yellow
 
     $record = [ordered]@{
-        PackageId        = $pkg
-        Status           = 'Unknown'
-        AlreadyInstalled = $false
-        InstallExitCode  = $null
-        InstallTimedOut  = $false
-        InstallStdErr    = ''
+        PackageId          = $pkg
+        Status             = 'Unknown'
+        AlreadyInstalled   = $false
+        InstallExitCode    = $null
+        InstallTimedOut    = $false
+        InstallStdErr      = ''
         InstalledByThisRun = $false
-        IconCount        = 0
-        IconBytes        = 0
-        IconFiles        = @()
-        ExtractError     = ''
-        UninstallExitCode = $null
-        UninstallTimedOut = $false
-        DurationSeconds  = 0
-        StartedAt        = $started.ToUniversalTime().ToString('o')
+        InstallSeconds     = 0
+        ExtractSeconds     = 0
+        IconCount          = 0
+        IconBytes          = 0
+        IconFiles          = @()
+        ExtractError       = ''
+        UninstallExitCode  = $null
+        UninstallTimedOut  = $false
+        DurationSeconds    = 0
+        StartedAt          = $started.ToUniversalTime().ToString('o')
     }
 
     try {
         $pkgOutDir = Join-Path $OutDir $pkg
 
-        # Try extraction first. If the package is already installed AND has a
-        # usable ARP icon, this short-circuits the whole install/uninstall
-        # dance. Much faster than 'winget list --id' (which forks sources).
+        # Always warm the manifest FileCache up front so the extractor can read
+        # ProductCode / DisplayName / Publisher hints even when the package was
+        # preinstalled on the runner.
+        Write-Host "  Warming manifest cache (winget show)..." -ForegroundColor Gray
+        $null = Show-WinGetPackage -PackageId $pkg -TimeoutSeconds 60
+
+        # Probe for an existing icon. Short-circuits for packages already
+        # installed locally (e.g. dev box, preinstalled on runner).
         Write-Host "  Probing for existing icon..." -ForegroundColor Gray
+        $extStart = Get-Date
         $probe = Invoke-IconExtraction -PackageId $pkg -PkgOutDir $pkgOutDir -Force:$Force
+        $record.ExtractSeconds = [int]((Get-Date) - $extStart).TotalSeconds
 
         if ($probe.Files.Count -gt 0) {
             $record.AlreadyInstalled = $true
@@ -325,7 +549,9 @@ foreach ($pkg in $Packages) {
         }
         else {
             Write-Host "  Not installed (or no ARP icon yet); installing..." -ForegroundColor Gray
+            $instStart = Get-Date
             $install = Install-WinGetPackage -PackageId $pkg -TimeoutSeconds $PerPackageTimeoutSeconds
+            $record.InstallSeconds = [int]((Get-Date) - $instStart).TotalSeconds
 
             $record.InstallExitCode = $install.ExitCode
             $record.InstallTimedOut = $install.TimedOut
@@ -344,7 +570,7 @@ foreach ($pkg in $Packages) {
                 $record.Status = 'InstallTimeout'
             }
             elseif ($install.ExitCode -eq 0) {
-                Write-Host "  Install OK." -ForegroundColor Green
+                Write-Host ("  Install OK ({0}s)." -f $record.InstallSeconds) -ForegroundColor Green
                 $record.Status = 'Installed'
                 $record.InstalledByThisRun = $true
             }
@@ -360,7 +586,9 @@ foreach ($pkg in $Packages) {
 
             if ($record.Status -in @('Installed', 'AlreadyInstalled')) {
                 Write-Host "  Extracting icon..." -ForegroundColor Gray
+                $extStart = Get-Date
                 $ex = Invoke-IconExtraction -PackageId $pkg -PkgOutDir $pkgOutDir -Force:$Force
+                $record.ExtractSeconds = [int]((Get-Date) - $extStart).TotalSeconds
                 if ($ex.Files.Count -gt 0) {
                     $record.IconCount = $ex.Files.Count
                     $record.IconBytes = ($ex.Files | Measure-Object Length -Sum).Sum
@@ -408,6 +636,61 @@ foreach ($pkg in $Packages) {
     finally {
         $record.DurationSeconds = [int]((Get-Date) - $started).TotalSeconds
         $results.Add([pscustomobject]$record) | Out-Null
+
+        # Update registry. Keep an iteration-local copy of the previous entry's
+        # 'firstSeenUtc' so we don't lose it on refresh.
+        $prev = Get-RegistryEntry -Registry $registry -PackageId $pkg
+        $prevFirstSeen     = Get-EntryField -Entry $prev -Field 'firstSeenUtc'
+        $prevLastUpdated   = Get-EntryField -Entry $prev -Field 'lastUpdatedUtc'
+        $firstSeen = if ($prevFirstSeen) { $prevFirstSeen } else { $record.StartedAt }
+
+        # Map orchestrator status -> persistent status.
+        $persistStatus = switch ($record.Status) {
+            'IconExtracted'     { 'HasIcon' }
+            'NoIcon'            { 'NoIcon' }
+            'InstallFailed'     { 'InstallFailed' }
+            'InstallTimeout'    { 'InstallTimeout' }
+            'ExtractError'      { 'ExtractError' }
+            default             { $record.Status }
+        }
+
+        $iconRecords = @()
+        foreach ($f in $record.IconFiles) {
+            $full = Join-Path $pkgOutDir $f
+            if (Test-Path -LiteralPath $full) {
+                $iconRecords += [pscustomobject]@{
+                    name   = $f
+                    bytes  = (Get-Item -LiteralPath $full).Length
+                    sha256 = Get-FileSha256 -Path $full
+                }
+            }
+        }
+
+        $newEntry = [ordered]@{
+            status              = $persistStatus
+            firstSeenUtc        = $firstSeen
+            lastCheckedUtc      = $record.StartedAt
+            lastUpdatedUtc      = if ($persistStatus -eq 'HasIcon') { $record.StartedAt } else { $null }
+            wingetVersion       = $wingetVersion
+            installSeconds      = $record.InstallSeconds
+            extractSeconds      = $record.ExtractSeconds
+            installExitCode     = $record.InstallExitCode
+            installedByThisRun  = $record.InstalledByThisRun
+            alreadyInstalled    = $record.AlreadyInstalled
+            iconCount           = $record.IconCount
+            iconBytes           = $record.IconBytes
+            icons               = $iconRecords
+            extractError        = if ($record.ExtractError) { $record.ExtractError } else { $null }
+            installStdErr       = if ($record.InstallStdErr) { $record.InstallStdErr } else { $null }
+        }
+
+        # Preserve lastUpdatedUtc from previous entry when this run didn't
+        # produce a HasIcon (e.g., transient failure shouldn't erase history).
+        if ($persistStatus -ne 'HasIcon' -and $prevLastUpdated) {
+            $newEntry['lastUpdatedUtc'] = $prevLastUpdated
+        }
+
+        Set-RegistryEntry -Registry $registry -PackageId $pkg -Entry $newEntry
     }
 }
 
@@ -427,16 +710,27 @@ $grouped | ForEach-Object {
 Write-Host ''
 
 $payload = [ordered]@{
-    GeneratedAt = (Get-Date).ToUniversalTime().ToString('o')
-    OutDir      = $OutDir
-    Total       = $results.Count
-    StatusCounts = @{}
-    Results     = $results
+    GeneratedAt   = (Get-Date).ToUniversalTime().ToString('o')
+    OutDir        = $OutDir
+    RegistryPath  = $RegistryPath
+    WingetVersion = $wingetVersion
+    Total         = $results.Count
+    Skipped       = $skipped.Count
+    Processed     = $todo.Count
+    StatusCounts  = @{}
+    Results       = $results
 }
 foreach ($g in $grouped) { $payload.StatusCounts[$g.Name] = $g.Count }
 
 $payload | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $SummaryPath -Encoding UTF8
 Write-Host "Summary written to: $SummaryPath" -ForegroundColor Cyan
 
+if ($RegistryPath) {
+    Write-IconRegistry -Registry $registry -Path $RegistryPath
+    Write-Host "Registry written to: $RegistryPath" -ForegroundColor Cyan
+}
+
 # Emit results on the pipeline so callers can pipe into Format-Table etc.
 $results
+
+

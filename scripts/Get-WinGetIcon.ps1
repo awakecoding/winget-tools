@@ -456,17 +456,26 @@ function Get-PackageHints {
     }
 
     Write-Verbose "Resolving manifest for '$PackageId' via Get-WinGetManifest.ps1 -AsJson"
-    $json = & $manifestScript -PackageId $PackageId -AsJson 2>$null
-    if (-not $json) {
-        # Fresh runner / first-time lookup: the FileCache hasn't been populated
-        # yet (winget only writes it as a side effect of install/show). Retry
-        # with -WarmCache, which runs `winget show` to fetch + cache the
-        # manifest, then re-reads it.
-        Write-Verbose "  First lookup empty; retrying with -WarmCache."
-        $json = & $manifestScript -PackageId $PackageId -AsJson -WarmCache 2>$null
+    $json = $null
+    try {
+        $json = & $manifestScript -PackageId $PackageId -AsJson 2>$null
+    } catch {
+        Write-Verbose "  First lookup threw: $($_.Exception.Message)"
     }
     if (-not $json) {
-        throw "Could not retrieve manifest for '$PackageId'."
+        # Fresh runner / first-time lookup / preinstalled package: the
+        # FileCache hasn't been populated yet (winget only writes it as a side
+        # effect of install/show). Retry with -WarmCache, which runs
+        # `winget show` to fetch + cache the manifest, then re-reads it.
+        Write-Verbose "  Retrying with -WarmCache."
+        try {
+            $json = & $manifestScript -PackageId $PackageId -AsJson -WarmCache 2>$null
+        } catch {
+            Write-Verbose "  WarmCache retry threw: $($_.Exception.Message)"
+        }
+    }
+    if (-not $json) {
+        throw "Could not retrieve manifest for '$PackageId' (FileCache empty and 'winget show' did not populate it)."
     }
 
     try {

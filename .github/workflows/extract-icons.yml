@@ -4,9 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       package_count:
-        description: 'Limit to first N packages (0 = all)'
+        description: 'Limit candidate list to first N entries (0 = all)'
         required: false
         default: '0'
+        type: string
+      max_new:
+        description: 'Cap NEW packages per run after registry skips (0 = no cap)'
+        required: false
+        default: '100'
         type: string
       uninstall_after:
         description: 'Uninstall each package after icon extraction'
@@ -18,12 +23,17 @@ on:
         required: false
         default: '600'
         type: string
+      ignore_registry:
+        description: 'Ignore registry freshness; reprocess every candidate'
+        required: false
+        default: false
+        type: boolean
   schedule:
     # Mondays at 06:00 UTC.
     - cron: '0 6 * * 1'
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: extract-icons-${{ github.ref }}
@@ -77,23 +87,30 @@ jobs:
         continue-on-error: true
         env:
           PKG_COUNT: ${{ inputs.package_count || '0' }}
+          MAX_NEW: ${{ inputs.max_new || '100' }}
           PKG_TIMEOUT: ${{ inputs.per_package_timeout || '600' }}
           UNINSTALL_AFTER: ${{ inputs.uninstall_after && 'true' || 'true' }}
+          IGNORE_REGISTRY: ${{ inputs.ignore_registry && 'true' || 'false' }}
         run: |
           $PSNativeCommandUseErrorActionPreference = $false
           $maxPackages = [int]($env:PKG_COUNT)
+          $maxNew      = [int]($env:MAX_NEW)
           $timeout     = [int]($env:PKG_TIMEOUT)
           $uninstall   = ($env:UNINSTALL_AFTER -eq 'true')
+          $ignoreReg   = ($env:IGNORE_REGISTRY -eq 'true')
 
           $params = @{
               PackageListFile          = 'tests/popular-packages.txt'
               OutDir                   = 'out/icons'
               SummaryPath              = 'out/summary.json'
+              RegistryPath             = 'data/icon-registry.json'
               PerPackageTimeoutSeconds = $timeout
               Force                    = $true
           }
-          if ($maxPackages -gt 0) { $params['MaxPackages'] = $maxPackages }
+          if ($maxPackages -gt 0) { $params['MaxPackages']    = $maxPackages }
+          if ($maxNew      -gt 0) { $params['MaxNew']         = $maxNew }
           if ($uninstall)         { $params['UninstallAfter'] = $true }
+          if ($ignoreReg)         { $params['IgnoreRegistry'] = $true }
 
           & ./scripts/Invoke-BulkIconExtraction.ps1 @params
 
@@ -115,7 +132,8 @@ jobs:
           $lines.Add('## WinGet icon extraction')
           $lines.Add('')
           $lines.Add(("- Generated: ``{0}``"  -f $payload.GeneratedAt))
-          $lines.Add(("- Total packages: **{0}**" -f $payload.Total))
+          $lines.Add(("- Candidates: **{0}** (processed **{1}**, skipped from cache **{2}**)" -f $payload.Total, $payload.Processed, $payload.Skipped))
+          if ($payload.WingetVersion) { $lines.Add(("- winget: ``{0}``" -f $payload.WingetVersion)) }
           $lines.Add('')
           $lines.Add('### Status counts')
           $lines.Add('')
@@ -144,3 +162,29 @@ jobs:
           path: out/
           if-no-files-found: warn
           retention-days: 30
+
+      - name: Commit updated icon registry
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+        shell: pwsh
+        run: |
+          $PSNativeCommandUseErrorActionPreference = $false
+          if (-not (Test-Path -LiteralPath 'data/icon-registry.json')) {
+              Write-Host 'No registry file produced; skipping commit.'
+              return
+          }
+
+          git config user.name  'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+          git add data/icon-registry.json
+
+          $cached = git diff --cached --name-only
+          if (-not $cached) {
+              Write-Host 'Registry unchanged; nothing to commit.'
+              return
+          }
+
+          $msg = "chore: update icon registry (run $env:GITHUB_RUN_ID) [skip ci]"
+          git commit -m $msg
+          git push
+          Write-Host 'Registry committed and pushed.'

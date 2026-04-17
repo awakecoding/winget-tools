@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "description": "Per-package extraction outcome cache. Updated by scripts/Invoke-BulkIconExtraction.ps1. Used to skip packages whose status is already known (e.g. NoIcon, HasIcon) or to retry InstallFailed/ExtractError after a cooldown.",
+  "generated": null,
+  "entries": {}
+}
