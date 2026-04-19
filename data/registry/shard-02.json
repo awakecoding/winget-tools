@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 2/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T18:04:55.4892814Z",
+  "generated": "2026-04-19T19:57:01.3954657Z",
   "entries": {
     "360.NamiClaw": {
       "status": "HasIcon",
@@ -1393,6 +1393,144 @@
       "iconBytes": 0,
       "icons": [],
       "extractError": "Could not retrieve manifest for 'ArobasMusic.GuitarPro.7' (FileCache empty and 'winget show' did not populate it).",
+      "installStdErr": null
+    },
+    "arrow2nd.serizawa": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T19:55:13.4237027Z",
+      "lastCheckedUtc": "2026-04-19T19:55:13.4237027Z",
+      "lastUpdatedUtc": "2026-04-19T19:55:13.4237027Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.1.11",
+      "manifestSha": "578cba98b87d359f5fa595cc37c9ce6d154b2de832bacb88f2e991d4efd7a431",
+      "installerType": "unknown",
+      "installSeconds": 15,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 25295.0,
+      "icons": [
+        {
+          "name": "serizawa 2.1.11.260937b1-30f9-5ef8-aae7-5644a1e8c206.ico",
+          "bytes": 25295,
+          "sha256": "c20cca2bdc669b036f16cfa25f3437feb073cd2d2801ac24dc34bf4153e69e67"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "ArtificialQualia.PyEveLiveDPS": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T19:55:33.7994393Z",
+      "lastCheckedUtc": "2026-04-19T19:55:33.7994393Z",
+      "lastUpdatedUtc": "2026-04-19T19:55:33.7994393Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.7.2",
+      "manifestSha": "840afedcb9dc2ec9a0f2cf9100e72e8ff8b55fe9fad073a58471dcc93bf9f8f8",
+      "installerType": "unknown",
+      "installSeconds": 9,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 49334.0,
+      "icons": [
+        {
+          "name": "PELD version 1.0.PELD_is1.ico",
+          "bytes": 49334,
+          "sha256": "6cff2858ec6d46fbb0b11a29b24a291091607acb384a2b53a5b37955b2cef1aa"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "asdfjkl.YAHB": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T19:55:45.7004035Z",
+      "lastCheckedUtc": "2026-04-19T19:55:45.7004035Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.1.0.0",
+      "manifestSha": "511b84eeadbde405b027552a49a8f18617e40345b869c8e7ca2ad6f60d93a77d",
+      "installerType": "unknown",
+      "installSeconds": 4,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "ASGARDEXMaintainers.ASGARDEX": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T19:55:51.7606817Z",
+      "lastCheckedUtc": "2026-04-19T19:55:51.7606817Z",
+      "lastUpdatedUtc": "2026-04-19T19:55:51.7606817Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.43.2",
+      "manifestSha": "10cfffb0b779308288cba6d801c698659a6f8cda64ac21a5e734f7d9801dfa15",
+      "installerType": "unknown",
+      "installSeconds": 32,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 38435.0,
+      "icons": [
+        {
+          "name": "ASGARDEX 1.43.2.5bcaf717-02bc-561e-bd5c-5ecf0e404bb5.ico",
+          "bytes": 38435,
+          "sha256": "1e720c200659fb53ae4c493f93a440c16303ee15eff04d65df1aefe712107526"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Astronomer.Astro": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T19:56:26.5041160Z",
+      "lastCheckedUtc": "2026-04-19T19:56:26.5041160Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.40.1",
+      "manifestSha": "8f4ffb290ef51d58471033ff4ca44269a16df9d3d4f505fe4718910ff1fd6d3a",
+      "installerType": "unknown",
+      "installSeconds": 12,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "atagon.com.kogiQA": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T19:56:45.8806125Z",
+      "lastCheckedUtc": "2026-04-19T19:56:45.8806125Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "0.4.933",
+      "manifestSha": "8f934ca249a978478e9ae4bf47b2e47eea9d4e251caae90f2034d33a4c942364",
+      "installerType": "unknown",
+      "installSeconds": 12,
+      "extractSeconds": 1,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "Could not retrieve manifest for 'atagon.com.kogiQA' (FileCache empty and 'winget show' did not populate it).",
       "installStdErr": null
     }
   }

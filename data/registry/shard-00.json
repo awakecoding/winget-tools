@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 0/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T17:59:42.7834329Z",
+  "generated": "2026-04-19T19:57:53.8589818Z",
   "entries": {
     "0-don.clippy": {
       "status": "HasIcon",
@@ -1435,6 +1435,150 @@
       "iconBytes": 0,
       "icons": [],
       "extractError": "No ARP entries matched in scope 'Both' for 'AnInsomniacy.MotrixNext'. Is the package actually installed?",
+      "installStdErr": null
+    },
+    "AnnyStudio.JPEGLosslessRotator": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T19:55:12.7579915Z",
+      "lastCheckedUtc": "2026-04-19T19:55:12.7579915Z",
+      "lastUpdatedUtc": "2026-04-19T19:55:12.7579915Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "11.0",
+      "manifestSha": "ca5f3fa3ea27e4df1e060801a6585cac85f47b8176bc006cdc075df8df95f62a",
+      "installerType": "unknown",
+      "installSeconds": 8,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 23603.0,
+      "icons": [
+        {
+          "name": "JPEG Lossless Rotator 11.0.JPEG Lossless Rotator_is1.ico",
+          "bytes": 23603,
+          "sha256": "ee763a36af946b1b4b9410ba49dc9c46545727c9ac899bb5a5c37a2487e90edb"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AnthonyBeaumont.AchievementWatcher": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T19:55:26.4637005Z",
+      "lastCheckedUtc": "2026-04-19T19:55:26.4637005Z",
+      "lastUpdatedUtc": "2026-04-19T19:55:26.4637005Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.6.8",
+      "manifestSha": "83a8a777df7ffc61b5e9b3be8530d03019c4a653454356efe30d11f9dfb55db2",
+      "installerType": "unknown",
+      "installSeconds": 29,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 52349.0,
+      "icons": [
+        {
+          "name": "Achievement Watcher.{2D4560A4-D5A2-4087-9717-E188CE329E97}}_is1.ico",
+          "bytes": 52349,
+          "sha256": "d7bd04dd8851f2a83cca5223b92ccce9a238935903a578eb51097b71f3a4a11b"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AntiMicroX.antimicroxPortable": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T19:55:59.7782406Z",
+      "lastCheckedUtc": "2026-04-19T19:55:59.7782406Z",
+      "lastUpdatedUtc": "2026-04-19T19:55:59.7782406Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "3.5.1",
+      "manifestSha": "a290700ff6c83e52772c9904b236fbfd1b04908662dc65c6eba2b6478dab3fbe",
+      "installerType": "unknown",
+      "installSeconds": 4,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 270398.0,
+      "icons": [
+        {
+          "name": "AntiMicroX.AntiMicroX.ico",
+          "bytes": 270398,
+          "sha256": "14b522c61aec3a6d9d78500dd3b3f7d7984bc11c7f111818ce795427a5a4430f"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AntSoftware.AntRenamer": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T19:56:06.4796753Z",
+      "lastCheckedUtc": "2026-04-19T19:56:06.4796753Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.13.0",
+      "manifestSha": "98d8bf0690104b955627c571518489866360570c4b776021c1d204bc8eee11c9",
+      "installerType": "unknown",
+      "installSeconds": 3,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Anysphere.Cursor": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T19:56:12.0735413Z",
+      "lastCheckedUtc": "2026-04-19T19:56:12.0735413Z",
+      "lastUpdatedUtc": "2026-04-19T19:56:12.0735413Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "3.1.15",
+      "manifestSha": "478ea13fac8c32bae92217fadb6dd5a30ce4e610ac4633d1adfbde2d2c7146aa",
+      "installerType": "unknown",
+      "installSeconds": 72,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 155580.0,
+      "icons": [
+        {
+          "name": "Cursor.{D7D7D7D7-7D7D-7D7D-7D7D-7D7D7D7D7D7D}}_is1.ico",
+          "bytes": 155580,
+          "sha256": "576177078e0f640de5e80535a81046fc5bc5ad273ae1fd17ac1fe087c7ab7b11"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Apache.Groovy.5": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T19:57:34.4219070Z",
+      "lastCheckedUtc": "2026-04-19T19:57:34.4219070Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "5.0.4",
+      "manifestSha": "addd75c90504e1ae29a91c759178647735a106ce8db7c53673a99110fcbcd96b",
+      "installerType": "unknown",
+      "installSeconds": 13,
+      "extractSeconds": 1,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "Could not retrieve manifest for 'Apache.Groovy.5' (FileCache empty and 'winget show' did not populate it).",
       "installStdErr": null
     }
   }

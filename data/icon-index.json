@@ -1,15 +1,15 @@
 {
   "schema": 1,
-  "generated": "2026-04-19T18:05:10.8351544Z",
+  "generated": "2026-04-19T20:03:20.3809616Z",
   "repository": "awakecoding/winget-tools",
   "releaseTag": "icons-latest",
   "baseUrl": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/",
-  "count": 144,
+  "count": 162,
   "statusCounts": {
-    "HasIcon": 144,
-    "InstallTimeout": 20,
-    "ExtractError": 317,
-    "NoIcon": 217
+    "InstallTimeout": 22,
+    "ExtractError": 336,
+    "NoIcon": 238,
+    "HasIcon": 162
   },
   "entries": {
     "0-don.clippy": {
@@ -1083,6 +1083,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T17:56:26.3516666Z"
     },
+    "AmarBego.GitTop": {
+      "version": "0.4.0",
+      "sha256": "2918608810881843075f8a90ff01ce3899c3b980cf83bc5b7c5db97b41834ff2",
+      "sizeBytes": 15406,
+      "assetName": "AmarBego.GitTop.29186088.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AmarBego.GitTop.29186088.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T19:55:43.087444Z"
+    },
     "Amazon.AppStream": {
       "version": "1.1.1532",
       "sha256": "0e8828fbd5cb6e840cc9a57c932352dd061a0e57ac818beb7df19ca1f52f0e91",
@@ -1119,6 +1128,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T17:39:36.7378048Z"
     },
+    "Amazon.KindlePreviewer": {
+      "version": "3.103.0",
+      "sha256": "b000d400f4965f8b7411dc066a49e486b342a7606787de725cb841ea821e212c",
+      "sizeBytes": 43566,
+      "assetName": "Amazon.KindlePreviewer.b000d400.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Amazon.KindlePreviewer.b000d400.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T19:56:20.0665174Z"
+    },
     "Amazon.Kiro": {
       "version": "0.11.132",
       "sha256": "28203d911a0aa847d28419895085fddb8e512dc5a1652df8af974bc5520e08d6",
@@ -1136,6 +1154,15 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Amazon.NoSQLWorkbench.baf56598.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T17:54:42.0171354Z"
+    },
+    "AMSSoftware.PassportPhotoMaker": {
+      "version": "10.0",
+      "sha256": "a5076144dbd4ac1dcab5a2238bfa8c93ac85f2a36a6d0fc46859774faa82ac3a",
+      "sizeBytes": 360518,
+      "assetName": "AMSSoftware.PassportPhotoMaker.a5076144.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AMSSoftware.PassportPhotoMaker.a5076144.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T19:55:20.8000508Z"
     },
     "AmyXun.AxGlyph": {
       "version": "2.5981",
@@ -1164,6 +1191,24 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T17:20:53.3204147Z"
     },
+    "andrewbrey.flot": {
+      "version": "3.0.0",
+      "sha256": "6d1f3e20c245ff16c2125278b6985f5ed414dc32843375f41c9b45abed188516",
+      "sizeBytes": 361102,
+      "assetName": "andrewbrey.flot.6d1f3e20.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/andrewbrey.flot.6d1f3e20.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T19:59:07.2788768Z"
+    },
+    "AngryMiao.AMMaster": {
+      "version": "1.3.6",
+      "sha256": "d3e7c3d89169c39873feac416eb9318d559437489f8dad5acb9253565625e0a6",
+      "sizeBytes": 22107,
+      "assetName": "AngryMiao.AMMaster.d3e7c3d8.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AngryMiao.AMMaster.d3e7c3d8.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T19:55:44.411118Z"
+    },
     "angryziber.AngryIPScanner": {
       "version": "3.9.3",
       "sha256": "b006c23d0721d59df1ab2c3d885db21a8752bf3af67f318407e5c4f621b109e0",
@@ -1172,6 +1217,33 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/angryziber.AngryIPScanner.b006c23d.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T17:38:59.6646339Z"
+    },
+    "ankurk91.GoogleChatElectron": {
+      "version": "2.20.0",
+      "sha256": "73b12162d19edac35595d23a3163d3e388e12366f15980f59dba86765a53b9c1",
+      "sizeBytes": 3347,
+      "assetName": "ankurk91.GoogleChatElectron.73b12162.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/ankurk91.GoogleChatElectron.73b12162.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T19:56:33.0792361Z"
+    },
+    "AnnyStudio.JPEGLosslessRotator": {
+      "version": "11.0",
+      "sha256": "ee763a36af946b1b4b9410ba49dc9c46545727c9ac899bb5a5c37a2487e90edb",
+      "sizeBytes": 23603,
+      "assetName": "AnnyStudio.JPEGLosslessRotator.ee763a36.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AnnyStudio.JPEGLosslessRotator.ee763a36.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T19:55:12.7579915Z"
+    },
+    "AnthonyBeaumont.AchievementWatcher": {
+      "version": "1.6.8",
+      "sha256": "d7bd04dd8851f2a83cca5223b92ccce9a238935903a578eb51097b71f3a4a11b",
+      "sizeBytes": 52349,
+      "assetName": "AnthonyBeaumont.AchievementWatcher.d7bd04dd.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AnthonyBeaumont.AchievementWatcher.d7bd04dd.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T19:55:26.4637005Z"
     },
     "AntibodySoftware.WizFile": {
       "version": "3.15",
@@ -1190,6 +1262,24 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AntiMicroX.antimicrox.14b522c6.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:03:43.4777728Z"
+    },
+    "AntiMicroX.antimicroxPortable": {
+      "version": "3.5.1",
+      "sha256": "14b522c61aec3a6d9d78500dd3b3f7d7984bc11c7f111818ce795427a5a4430f",
+      "sizeBytes": 270398,
+      "assetName": "AntiMicroX.antimicroxPortable.14b522c6.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AntiMicroX.antimicroxPortable.14b522c6.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T19:55:59.7782406Z"
+    },
+    "AntoineAflalo.SoundSwitch": {
+      "version": "6.14.2",
+      "sha256": "e4276894346d5ad47b7b5c9cdd696197c34c7e7227f7b200041f97bb9c3429da",
+      "sizeBytes": 137102,
+      "assetName": "AntoineAflalo.SoundSwitch.e4276894.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AntoineAflalo.SoundSwitch.e4276894.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T19:55:37.9928265Z"
     },
     "antonreshetov.massCode": {
       "version": "5.1.1",
@@ -1218,6 +1308,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:05:00.5243217Z"
     },
+    "AnyAssociation.Anytype": {
+      "version": "0.54.11",
+      "sha256": "c559defd8d7ef0e9629532584ac89cae337e1c4e9dc8c567e48955da77385174",
+      "sizeBytes": 13846,
+      "assetName": "AnyAssociation.Anytype.c559defd.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AnyAssociation.Anytype.c559defd.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T19:57:17.8108382Z"
+    },
     "anyme123.AnyCode": {
       "version": "5.28.5",
       "sha256": "867264cea0c214100df09ff7b43be2ca49b84599e1d91f8bd013db1d6e215059",
@@ -1227,6 +1326,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T17:38:48.9267894Z"
     },
+    "Anysphere.Cursor": {
+      "version": "3.1.15",
+      "sha256": "576177078e0f640de5e80535a81046fc5bc5ad273ae1fd17ac1fe087c7ab7b11",
+      "sizeBytes": 155580,
+      "assetName": "Anysphere.Cursor.57617707.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Anysphere.Cursor.57617707.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T19:56:12.0735413Z"
+    },
     "AnyTXT.AnyTXTSearcher": {
       "version": "1.3.2477",
       "sha256": "31226c65b86876a47161eccea3478c02b4bde0e50d8c406fdfa83b1503e37b24",
@@ -1235,6 +1343,15 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AnyTXT.AnyTXTSearcher.31226c65.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T17:54:30.4503709Z"
+    },
+    "Apipost.ApiPost": {
+      "version": "8.2.6",
+      "sha256": "8b0f29dc7728e14ff3fe69f8d278ff7c41d0e02318538eba3bf777ffa2c95454",
+      "sizeBytes": 282342,
+      "assetName": "Apipost.ApiPost.8b0f29dc.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Apipost.ApiPost.8b0f29dc.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T19:58:55.2819085Z"
     },
     "Appest.TickTick": {
       "version": "8.0.5.0",
@@ -1263,6 +1380,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:31:59.297101Z"
     },
+    "ArashShalchian.SearchMate": {
+      "version": "1.4.4",
+      "sha256": "0c66b71795ca351b2cf6f5e122a82d1ea7f9c5a0ef28c9fae677277c8b3387d9",
+      "sizeBytes": 4425,
+      "assetName": "ArashShalchian.SearchMate.0c66b717.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/ArashShalchian.SearchMate.0c66b717.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T19:56:38.0679066Z"
+    },
     "ArminOsaj.AutoDarkMode": {
       "version": "11.0.0.54",
       "sha256": "49ae3fdbf97ba16fd9212f71f33e8f37890f08a45555082fbbe2ce5f92df1e1b",
@@ -1271,6 +1397,24 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/ArminOsaj.AutoDarkMode.49ae3fdb.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:41:52.9025501Z"
+    },
+    "arrow2nd.serizawa": {
+      "version": "2.1.11",
+      "sha256": "c20cca2bdc669b036f16cfa25f3437feb073cd2d2801ac24dc34bf4153e69e67",
+      "sizeBytes": 25295,
+      "assetName": "arrow2nd.serizawa.c20cca2b.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/arrow2nd.serizawa.c20cca2b.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T19:55:13.4237027Z"
+    },
+    "ArtificialQualia.PyEveLiveDPS": {
+      "version": "2.7.2",
+      "sha256": "6cff2858ec6d46fbb0b11a29b24a291091607acb384a2b53a5b37955b2cef1aa",
+      "sizeBytes": 49334,
+      "assetName": "ArtificialQualia.PyEveLiveDPS.6cff2858.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/ArtificialQualia.PyEveLiveDPS.6cff2858.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T19:55:33.7994393Z"
     },
     "Artsoft.RocksNDiamonds": {
       "version": "4.3.8.1",
@@ -1290,6 +1434,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T17:00:01.0173089Z"
     },
+    "ASGARDEXMaintainers.ASGARDEX": {
+      "version": "1.43.2",
+      "sha256": "1e720c200659fb53ae4c493f93a440c16303ee15eff04d65df1aefe712107526",
+      "sizeBytes": 38435,
+      "assetName": "ASGARDEXMaintainers.ASGARDEX.1e720c20.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/ASGARDEXMaintainers.ASGARDEX.1e720c20.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T19:55:51.7606817Z"
+    },
     "assnctr.unfx-proxy-checker": {
       "version": "1.7.2",
       "sha256": "7951ebe3346eb78b4beb22e88c49709dc5effe37899f7353165fb795d64842a1",
@@ -1307,6 +1460,15 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Atola.MultiDrive.37387e37.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T17:48:16.4627543Z"
+    },
+    "awehook.BlinkMind": {
+      "version": "0.1.7",
+      "sha256": "f4af6b0c7552bd6c7f54f05f52ecbbd2b9a0dec588b1412fd1b046cd58eea825",
+      "sizeBytes": 60481,
+      "assetName": "awehook.BlinkMind.f4af6b0c.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/awehook.BlinkMind.f4af6b0c.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T19:58:23.5658663Z"
     }
   }
 }

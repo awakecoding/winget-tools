@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 4/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T17:56:24.8632232Z",
+  "generated": "2026-04-19T19:59:58.5319264Z",
   "entries": {
     "123.123pan": {
       "status": "HasIcon",
@@ -1321,8 +1321,8 @@
     },
     "AMD.OCAT": {
       "status": "NoIcon",
-      "firstSeenUtc": "2026-04-19T17:54:46.1402910Z",
-      "lastCheckedUtc": "2026-04-19T17:54:46.1402910Z",
+      "firstSeenUtc": "2026-04-19T17:54:46.140291Z",
+      "lastCheckedUtc": "2026-04-19T17:54:46.140291Z",
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.6.3",
@@ -1417,6 +1417,144 @@
       "iconBytes": 0,
       "icons": [],
       "extractError": null,
+      "installStdErr": null
+    },
+    "Anchor.cli": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T19:55:26.9337900Z",
+      "lastCheckedUtc": "2026-04-19T19:55:26.9337900Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "0.1.12",
+      "manifestSha": "b2742da69583b6d942db5e18967e5f5e6e2d8be8a5f51758988c6054fe7d2bb0",
+      "installerType": "unknown",
+      "installSeconds": 11,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AngryMiao.AMMaster": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T19:55:44.4111180Z",
+      "lastCheckedUtc": "2026-04-19T19:55:44.4111180Z",
+      "lastUpdatedUtc": "2026-04-19T19:55:44.4111180Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.3.6",
+      "manifestSha": "e52b14760cec6c1fc5aecf37f8317525a6123590601dfa5b477669e92caea5e4",
+      "installerType": "unknown",
+      "installSeconds": 46,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 22107.0,
+      "icons": [
+        {
+          "name": "AM_Master 1.3.6.AM_Master.ico",
+          "bytes": 22107,
+          "sha256": "d3e7c3d89169c39873feac416eb9318d559437489f8dad5acb9253565625e0a6"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "ankurk91.GoogleChatElectron": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T19:56:33.0792361Z",
+      "lastCheckedUtc": "2026-04-19T19:56:33.0792361Z",
+      "lastUpdatedUtc": "2026-04-19T19:56:33.0792361Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.20.0",
+      "manifestSha": "3e93d2ffc017983f04ac63373b80c75fb0e2ba1fa62b535ee2647138483f33a7",
+      "installerType": "unknown",
+      "installSeconds": 20,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 3347.0,
+      "icons": [
+        {
+          "name": "Google Chat Electron 2.20.0.{E458AEFA-2577-4543-8554-F6335BC2D994}_is1.ico",
+          "bytes": 3347,
+          "sha256": "73b12162d19edac35595d23a3163d3e388e12366f15980f59dba86765a53b9c1"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AntoniKepinski.ParsifyDesktop": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T19:56:57.7844865Z",
+      "lastCheckedUtc": "2026-04-19T19:56:57.7844865Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.0.1",
+      "manifestSha": "34d91fd50a9b96d1096eeeae39f4cb8f72d47bf8ef0f50b21505d66024f4ac8a",
+      "installerType": "unknown",
+      "installSeconds": 17,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "No ARP entries matched in scope 'Both' for 'AntoniKepinski.ParsifyDesktop'. Is the package actually installed?",
+      "installStdErr": null
+    },
+    "AnyAssociation.Anytype": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T19:57:17.8108382Z",
+      "lastCheckedUtc": "2026-04-19T19:57:17.8108382Z",
+      "lastUpdatedUtc": "2026-04-19T19:57:17.8108382Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "0.54.11",
+      "manifestSha": "d8df046ed20141dd3732107abc47b131d2990b576ae7d5a24f83f1d36fab6099",
+      "installerType": "unknown",
+      "installSeconds": 73,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 13846.0,
+      "icons": [
+        {
+          "name": "Anytype 0.54.11.425256e4-03e3-5ba0-b070-d372039ec7ab.ico",
+          "bytes": 13846,
+          "sha256": "c559defd8d7ef0e9629532584ac89cae337e1c4e9dc8c567e48955da77385174"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AnyLogic.AnyLogic.Professional": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T19:58:33.8225834Z",
+      "lastCheckedUtc": "2026-04-19T19:58:33.8225834Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "8.9.5",
+      "manifestSha": "6370b8ee3f474d5cc6c3e4547d8eb12fb5bf7f5ed51ce65a620ea071b2e7b31e",
+      "installerType": "unknown",
+      "installSeconds": 81,
+      "extractSeconds": 1,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "Could not retrieve manifest for 'AnyLogic.AnyLogic.Professional' (FileCache empty and 'winget show' did not populate it).",
       "installStdErr": null
     }
   }
