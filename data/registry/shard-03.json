@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 3/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T16:50:02.8234724Z",
+  "generated": "2026-04-19T17:04:40.5394845Z",
   "entries": {
     "0xGingi.Browser": {
       "status": "HasIcon",
@@ -851,8 +851,8 @@
     },
     "alexd.Metapad": {
       "status": "NoIcon",
-      "firstSeenUtc": "2026-04-19T16:45:53.5721160Z",
-      "lastCheckedUtc": "2026-04-19T16:45:53.5721160Z",
+      "firstSeenUtc": "2026-04-19T16:45:53.572116Z",
+      "lastCheckedUtc": "2026-04-19T16:45:53.572116Z",
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "3.6",
@@ -913,6 +913,144 @@
         }
       ],
       "extractError": null,
+      "installStdErr": null
+    },
+    "Alibaba.DingTalk": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:58:36.3812372Z",
+      "lastCheckedUtc": "2026-04-19T16:58:36.3812372Z",
+      "lastUpdatedUtc": "2026-04-19T16:58:36.3812372Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "8.3.10-Release.260413002",
+      "manifestSha": "c61d9403bdec4f47e0b7c6632f5a776754818b85b83fac18b5aa96fabc34262b",
+      "installerType": "unknown",
+      "installSeconds": 86,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 170024.0,
+      "icons": [
+        {
+          "name": "DingTalk.DingTalk.ico",
+          "bytes": 170024,
+          "sha256": "a0256e08a347efeeffb7cd8fe922c86cc14ac1b062552bdf6a051ce79d59b962"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Alibaba.Lingma": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T17:03:05.6692155Z",
+      "lastCheckedUtc": "2026-04-19T17:03:05.6692155Z",
+      "lastUpdatedUtc": "2026-04-19T17:03:05.6692155Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.106.3",
+      "manifestSha": "e9d7a63dd1b6b604356a2e0f0061e6faa72840678bde7e329c482abb9ed58087",
+      "installerType": "unknown",
+      "installSeconds": 51,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 107324.0,
+      "icons": [
+        {
+          "name": "Lingma.{E03E77F0-C06C-44D5-BFF1-33EDBBE21F3B}_is1.ico",
+          "bytes": 107324,
+          "sha256": "e00c3fc3f4d6c520841997ffd4f4c7faa6cac756bd23008d6b90605d19207238"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AList.AListDesktop": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T17:04:00.8679442Z",
+      "lastCheckedUtc": "2026-04-19T17:04:00.8679442Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "3.59.0",
+      "manifestSha": "e052251ec51137f78bfcbd74046eea658aacffe709cf0d4377a6ab75322ef9f5",
+      "installerType": "unknown",
+      "installSeconds": 10,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Allusion.Allusion": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T17:04:14.0892495Z",
+      "lastCheckedUtc": "2026-04-19T17:04:14.0892495Z",
+      "lastUpdatedUtc": "2026-04-19T17:04:14.0892495Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.0.0-rc.10",
+      "manifestSha": "3c04d36c73db1060b9689c9949710c0a89c1a8502fb7c9aea7a4c3f8afe8ba77",
+      "installerType": "unknown",
+      "installSeconds": 12,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 108374.0,
+      "icons": [
+        {
+          "name": "Allusion 1.0.0-rc.10.9b7b1c10-21d7-57c9-894b-24a0e038ea3d.ico",
+          "bytes": 108374,
+          "sha256": "f7a199b6abd060c0b020d5db66eaa79f08adb4e8812616eafe3985e32037a797"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "aloneguid.markwright": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T17:04:28.1852878Z",
+      "lastCheckedUtc": "2026-04-19T17:04:28.1852878Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.1.0",
+      "manifestSha": "1b920e78feb78b0899bd834c7c12dd8cfb59ff3a1b0bf1f0beaa7c0bac92cb87",
+      "installerType": "unknown",
+      "installSeconds": 3,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "aloneguid.ParquetDotnet.floor": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T17:04:33.5628025Z",
+      "lastCheckedUtc": "2026-04-19T17:04:33.5628025Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "5.1.1",
+      "manifestSha": "c8b56e9f8ba91cda7f0cea2efa44cc97cda3b59ca0b1913f5e0130b8b8143899",
+      "installerType": "unknown",
+      "installSeconds": 4,
+      "extractSeconds": 1,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "Could not retrieve manifest for 'aloneguid.ParquetDotnet.floor' (FileCache empty and 'winget show' did not populate it).",
       "installStdErr": null
     }
   }

@@ -1,15 +1,15 @@
 {
   "schema": 1,
-  "generated": "2026-04-19T16:55:25.4072803Z",
+  "generated": "2026-04-19T17:09:41.8921889Z",
   "repository": "awakecoding/winget-tools",
   "releaseTag": "icons-latest",
   "baseUrl": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/",
-  "count": 103,
+  "count": 121,
   "statusCounts": {
-    "NoIcon": 148,
-    "ExtractError": 201,
-    "HasIcon": 103,
-    "InstallTimeout": 6
+    "NoIcon": 165,
+    "InstallTimeout": 10,
+    "ExtractError": 222,
+    "HasIcon": 121
   },
   "entries": {
     "0-don.clippy": {
@@ -606,6 +606,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:42:59.2898637Z"
     },
+    "Airtame.Airtame": {
+      "version": "4.15.0",
+      "sha256": "795af74ff853d23bf6a4ca8646044b129047055fade8ea44b90c7cba7fc4e6cf",
+      "sizeBytes": 29378,
+      "assetName": "Airtame.Airtame.795af74f.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Airtame.Airtame.795af74f.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:59:15.0865245Z"
+    },
     "Airytec.SwitchOff": {
       "version": "3.5.1",
       "sha256": "f4c51979ff240b5252c21954645960fb2e897f1bfcc7575e052318cf3aca99e6",
@@ -614,6 +623,24 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Airytec.SwitchOff.f4c51979.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:43:36.5951204Z"
+    },
+    "Airzone.Ductzone": {
+      "version": "1.6.2.0",
+      "sha256": "793d226c35ede9a69e34040bfdfa0bca50af7d3d1cf8e7d23f14319d5d600bfd",
+      "sizeBytes": 30404,
+      "assetName": "Airzone.Ductzone.793d226c.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Airzone.Ductzone.793d226c.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:59:36.0911926Z"
+    },
+    "Aiursoft.Kahla": {
+      "version": "4.5.0",
+      "sha256": "e98636dc433a3816bcb16414c60cba74ac19a2df649229b30fef8feb8e07bfbe",
+      "sizeBytes": 38001,
+      "assetName": "Aiursoft.Kahla.e98636dc.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Aiursoft.Kahla.e98636dc.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:58:35.9751162Z"
     },
     "AJA.RetailInstaller": {
       "version": "17.6.0",
@@ -687,6 +714,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:44:01.5086469Z"
     },
+    "alesimula.wsa_pacman": {
+      "version": "1.5.0",
+      "sha256": "71c952d1afb5586f521177dfe5ea1a19b2c18e11e0c7202d9c0f70f90ea7e5cc",
+      "sizeBytes": 144104,
+      "assetName": "alesimula.wsa_pacman.71c952d1.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/alesimula.wsa_pacman.71c952d1.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:59:24.5333243Z"
+    },
     "Alex313031.Codium": {
       "version": "1.93.1.24277",
       "sha256": "8560b5692c21fe5e18ebc16b0d21cbf249d3db5bd694d4519e070d38a15e0608",
@@ -732,6 +768,24 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:34:27.0271768Z"
     },
+    "AlexanderShaduri.GSmartControl": {
+      "version": "2.0.2",
+      "sha256": "84ffc326c360d749e19e537cb3cc570350d7769696c1d6610823d88b14b77db2",
+      "sizeBytes": 132920,
+      "assetName": "AlexanderShaduri.GSmartControl.84ffc326.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AlexanderShaduri.GSmartControl.84ffc326.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:58:42.4488527Z"
+    },
+    "alexkim205.g-desktop-suite": {
+      "version": "0.3.1",
+      "sha256": "4a78644e6d76ec761ed9b6249b6624bc0470aac76076364d11e1a5c8b7ee9ab0",
+      "sizeBytes": 106618,
+      "assetName": "alexkim205.g-desktop-suite.4a78644e.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/alexkim205.g-desktop-suite.4a78644e.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:59:38.531246Z"
+    },
     "AlexRedden.G14ControlV2": {
       "version": "0.2.2",
       "sha256": "6c364902fae8fdeeccae83e8c460949fdae0b2567861f97aaf03bff024483781",
@@ -741,6 +795,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:34:57.3404787Z"
     },
+    "AlexThuering.DVDStyler": {
+      "version": "3.2.1",
+      "sha256": "3836aab021a802a5682d20bf2de4527bfbd968ad1245ffc3e7bcd11857592e43",
+      "sizeBytes": 285478,
+      "assetName": "AlexThuering.DVDStyler.3836aab0.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AlexThuering.DVDStyler.3836aab0.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:59:51.2906872Z"
+    },
     "alexvallat.AlbumArtDownloader": {
       "version": "1.05",
       "sha256": "5b73e239a461fa42de78db7f8d86c2dd99621b04c69b50fb0896383ed0d7b500",
@@ -749,6 +812,15 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/alexvallat.AlbumArtDownloader.5b73e239.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:41:28.0141292Z"
+    },
+    "Alibaba.aDrive": {
+      "version": "6.9.1",
+      "sha256": "eaaef3099bfda1cea33eb6528a48207c57278f417df116ff7ac4dd8c18e40230",
+      "sizeBytes": 340090,
+      "assetName": "Alibaba.aDrive.eaaef309.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Alibaba.aDrive.eaaef309.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:58:59.1352772Z"
     },
     "Alibaba.AliIM": {
       "version": "10.03.39C",
@@ -786,6 +858,33 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:27:31.3837967Z"
     },
+    "Alibaba.DingTalk": {
+      "version": "8.3.10-Release.260413002",
+      "sha256": "a0256e08a347efeeffb7cd8fe922c86cc14ac1b062552bdf6a051ce79d59b962",
+      "sizeBytes": 170024,
+      "assetName": "Alibaba.DingTalk.a0256e08.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Alibaba.DingTalk.a0256e08.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:58:36.3812372Z"
+    },
+    "Alibaba.LightProxy": {
+      "version": "1.1.41",
+      "sha256": "d4ecde6e197808e0fef6b349c02282d9bb803943ae64998a905ea47bcfb94520",
+      "sizeBytes": 31157,
+      "assetName": "Alibaba.LightProxy.d4ecde6e.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Alibaba.LightProxy.d4ecde6e.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:59:37.2874486Z"
+    },
+    "Alibaba.Lingma": {
+      "version": "1.106.3",
+      "sha256": "e00c3fc3f4d6c520841997ffd4f4c7faa6cac756bd23008d6b90605d19207238",
+      "sizeBytes": 107324,
+      "assetName": "Alibaba.Lingma.e00c3fc3.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Alibaba.Lingma.e00c3fc3.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:03:05.6692155Z"
+    },
     "Alibaba.MiniProgramStudio": {
       "version": "3.10.5",
       "sha256": "f5b4cff1576e5347b1dbb50eac276e9c3fe2a9eb8b95805d19dfc9e974913bcb",
@@ -812,6 +911,15 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Alibaba.Qoder.cef01d7f.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:43:35.1250645Z"
+    },
+    "Alibaba.QuarkCloudDrive": {
+      "version": "3.24.0",
+      "sha256": "a40340df9de2fd85566b99c5aec2a4d8af5ce4e90565eb16ceda47626c1c4fa0",
+      "sizeBytes": 42977,
+      "assetName": "Alibaba.QuarkCloudDrive.a40340df.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Alibaba.QuarkCloudDrive.a40340df.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:03:10.4701117Z"
     },
     "Alibaba.Qwen": {
       "version": "1.0.3",
@@ -849,6 +957,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:31:42.5558779Z"
     },
+    "aliceandbob-io.aliceandbob": {
+      "version": "1.1.0-Beta2",
+      "sha256": "dcdd571b793413d517391b32ab8d90c0c2e0f08b8428c16c02b859a4eca10d50",
+      "sizeBytes": 11817,
+      "assetName": "aliceandbob-io.aliceandbob.dcdd571b.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/aliceandbob-io.aliceandbob.dcdd571b.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:00:07.7171655Z"
+    },
     "Allecsc.StremioKai": {
       "version": "4.6.2",
       "sha256": "811ee8e3240cb9a40859adbd48baadceae8a5e947d9b1301d16b5ee241f92349",
@@ -857,6 +974,15 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Allecsc.StremioKai.811ee8e3.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:44:56.5028993Z"
+    },
+    "Allusion.Allusion": {
+      "version": "1.0.0-rc.10",
+      "sha256": "f7a199b6abd060c0b020d5db66eaa79f08adb4e8812616eafe3985e32037a797",
+      "sizeBytes": 108374,
+      "assetName": "Allusion.Allusion.f7a199b6.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Allusion.Allusion.f7a199b6.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:04:14.0892495Z"
     },
     "altair-graphql.altair": {
       "version": "8.5.0",
@@ -876,6 +1002,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:47:06.5606499Z"
     },
+    "ALTEC.QlickPrint": {
+      "version": "1.2",
+      "sha256": "8861fa38e15c0de19d437889d37124158b880e264f0f343c2aced742ef20a968",
+      "sizeBytes": 9662,
+      "assetName": "ALTEC.QlickPrint.8861fa38.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/ALTEC.QlickPrint.8861fa38.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:58:39.761585Z"
+    },
     "AltekaSolutions.Kards": {
       "version": "1.3.1",
       "sha256": "bcaa833a8f695fe0ac179f3e4b21e786403bcb1bb94faf2f751bdabbb70c5a6f",
@@ -884,6 +1019,15 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AltekaSolutions.Kards.bcaa833a.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:32:47.7207944Z"
+    },
+    "Amazon.AppStream": {
+      "version": "1.1.1532",
+      "sha256": "0e8828fbd5cb6e840cc9a57c932352dd061a0e57ac818beb7df19ca1f52f0e91",
+      "sizeBytes": 287934,
+      "assetName": "Amazon.AppStream.0e8828fb.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Amazon.AppStream.0e8828fb.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:59:59.7482225Z"
     },
     "Amazon.Chime": {
       "version": "5.23.32103",
@@ -938,6 +1082,24 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/ArminOsaj.AutoDarkMode.49ae3fdb.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:41:52.9025501Z"
+    },
+    "Artsoft.RocksNDiamonds": {
+      "version": "4.3.8.1",
+      "sha256": "a6ebf144f8f375a56b50bf1fee385673cb1d88b9f9133d57735d74bbf4402de6",
+      "sizeBytes": 82726,
+      "assetName": "Artsoft.RocksNDiamonds.a6ebf144.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Artsoft.RocksNDiamonds.a6ebf144.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:59:37.7607412Z"
+    },
+    "Asana.Asana": {
+      "version": "2.6.0",
+      "sha256": "cfec92971a7537d0d0e71bcff971fede1d8c8898d104bcda8ee438f12fb30005",
+      "sizeBytes": 285478,
+      "assetName": "Asana.Asana.cfec9297.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Asana.Asana.cfec9297.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:00:01.0173089Z"
     }
   }
 }

@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 4/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T16:44:17.1692810Z",
+  "generated": "2026-04-19T17:03:59.5867595Z",
   "entries": {
     "123.123pan": {
       "status": "HasIcon",
@@ -912,6 +912,144 @@
           "sha256": "cf18ebcb0b618e91aff6473a9908a65a5d2890313399de9ac78685f65fbe872e"
         }
       ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AlexanderShaduri.GSmartControl": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:58:42.4488527Z",
+      "lastCheckedUtc": "2026-04-19T16:58:42.4488527Z",
+      "lastUpdatedUtc": "2026-04-19T16:58:42.4488527Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.0.2",
+      "manifestSha": "268f2438927826f899b99d8d316bddd12847179233c3a65d3cf1b915e96281b5",
+      "installerType": "unknown",
+      "installSeconds": 12,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 132920.0,
+      "icons": [
+        {
+          "name": "GSmartControl.gsmartcontrol.ico",
+          "bytes": 132920,
+          "sha256": "84ffc326c360d749e19e537cb3cc570350d7769696c1d6610823d88b14b77db2"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Alibaba.aDrive": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:58:59.1352772Z",
+      "lastCheckedUtc": "2026-04-19T16:58:59.1352772Z",
+      "lastUpdatedUtc": "2026-04-19T16:58:59.1352772Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "6.9.1",
+      "manifestSha": "9b7fd2821e8cb21154490ce0a606abb76b848e95624058a97b973b3eae5cd701",
+      "installerType": "unknown",
+      "installSeconds": 55,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 340090.0,
+      "icons": [
+        {
+          "name": "阿里云盘.300f80e0-781e-56db-ae9d-9d0190486ca9.ico",
+          "bytes": 340090,
+          "sha256": "eaaef3099bfda1cea33eb6528a48207c57278f417df116ff7ac4dd8c18e40230"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Alibaba.AlibabaCloudCLI": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T16:59:56.5422404Z",
+      "lastCheckedUtc": "2026-04-19T16:59:56.5422404Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "3.3.8",
+      "manifestSha": "b26e7f564bb598a4d0e1534b587b50b2d5329e59c2f927d2d79608272b3cb1fb",
+      "installerType": "unknown",
+      "installSeconds": 7,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "aliceandbob-io.aliceandbob": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T17:00:07.7171655Z",
+      "lastCheckedUtc": "2026-04-19T17:00:07.7171655Z",
+      "lastUpdatedUtc": "2026-04-19T17:00:07.7171655Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.1.0-Beta2",
+      "manifestSha": "7e2f8c836737e224109e2abecc100f41f0568027022441f107c377b59b895df1",
+      "installerType": "unknown",
+      "installSeconds": 24,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 11817.0,
+      "icons": [
+        {
+          "name": "aliceandbob.io.aliceandbob.ico",
+          "bytes": 11817,
+          "sha256": "dcdd571b793413d517391b32ab8d90c0c2e0f08b8428c16c02b859a4eca10d50"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AllroundAutomations.PLSQLDeveloper": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T17:00:35.3238676Z",
+      "lastCheckedUtc": "2026-04-19T17:00:35.3238676Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "16.0.8.2176",
+      "manifestSha": "7847941e8f6e0c07a4a3100d21176434826728f3e0127afabc737e69e1a63580",
+      "installerType": "unknown",
+      "installSeconds": 11,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Altova.FlowForceServer.2026": {
+      "status": "InstallTimeout",
+      "firstSeenUtc": "2026-04-19T17:00:57.5764529Z",
+      "lastCheckedUtc": "2026-04-19T17:00:57.5764529Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2026.00.00",
+      "manifestSha": "d9f0f26de51a143a7d6fcacf17a3d448f9905f3b08067167f53052bd10b8123f",
+      "installerType": "unknown",
+      "installSeconds": 180,
+      "extractSeconds": 1,
+      "installExitCode": -1,
+      "installedByThisRun": false,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
       "extractError": null,
       "installStdErr": null
     }

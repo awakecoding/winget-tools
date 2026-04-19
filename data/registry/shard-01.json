@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 1/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T16:43:41.2619025Z",
+  "generated": "2026-04-19T17:03:43.2091064Z",
   "entries": {
     "1IC.BPMN-RPAStudio": {
       "status": "ExtractError",
@@ -913,6 +913,138 @@
         }
       ],
       "extractError": null,
+      "installStdErr": null
+    },
+    "Aiursoft.Kahla": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:58:35.9751162Z",
+      "lastCheckedUtc": "2026-04-19T16:58:35.9751162Z",
+      "lastUpdatedUtc": "2026-04-19T16:58:35.9751162Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "4.5.0",
+      "manifestSha": "f1587fb5cd76e14b6410dcb370f978e28d5432c893c0943483f9cc832aefdccd",
+      "installerType": "unknown",
+      "installSeconds": 13,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 38001.0,
+      "icons": [
+        {
+          "name": "Kahla 4.5.0.d8c56f8a-7be2-50e2-9d89-26555a7a1a89.ico",
+          "bytes": 38001,
+          "sha256": "e98636dc433a3816bcb16414c60cba74ac19a2df649229b30fef8feb8e07bfbe"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "alejoborbo.jj-spice": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T16:58:54.3552261Z",
+      "lastCheckedUtc": "2026-04-19T16:58:54.3552261Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "0.3.0",
+      "manifestSha": "3a534297f1264ee678011bd3e7fbaea65bb29919b0159aeca93c6fe23083ae7e",
+      "installerType": "unknown",
+      "installSeconds": 4,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Alex313031.Thorium.AVX2": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T16:59:00.3381497Z",
+      "lastCheckedUtc": "2026-04-19T16:59:00.3381497Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "138.0.7204.303",
+      "manifestSha": "c12799f486fbdc49dbcd6463f7abf539a6349e3ff27f620cce17ee3c52dd12bf",
+      "installerType": "unknown",
+      "installSeconds": 22,
+      "extractSeconds": 1,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "Could not retrieve manifest for 'Alex313031.Thorium.AVX2' (FileCache empty and 'winget show' did not populate it).",
+      "installStdErr": null
+    },
+    "AlgorandFoundation.AlgoKit": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T16:59:25.9777552Z",
+      "lastCheckedUtc": "2026-04-19T16:59:25.9777552Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.10.2",
+      "manifestSha": "25f9a7af7fa93d3b1f5aed7c777b4d5378341ae99601debb3caafe719cad3cb9",
+      "installerType": "unknown",
+      "installSeconds": 8,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "No ARP entries matched in scope 'Both' for 'AlgorandFoundation.AlgoKit'. Is the package actually installed?",
+      "installStdErr": null
+    },
+    "Alibaba.LightProxy": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:59:37.2874486Z",
+      "lastCheckedUtc": "2026-04-19T16:59:37.2874486Z",
+      "lastUpdatedUtc": "2026-04-19T16:59:37.2874486Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.1.41",
+      "manifestSha": "f9d31c3fe78ec74a4f52f9076a1a054025a70a46d140a6661075f64f37d19030",
+      "installerType": "unknown",
+      "installSeconds": 11,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 31157.0,
+      "icons": [
+        {
+          "name": "LightProxy 1.1.41.3896908a-f0bb-5d4c-935b-4c819a18016d.ico",
+          "bytes": 31157,
+          "sha256": "d4ecde6e197808e0fef6b349c02282d9bb803943ae64998a905ea47bcfb94520"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Alibaba.Quark": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T16:59:50.5737512Z",
+      "lastCheckedUtc": "2026-04-19T16:59:50.5737512Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "6.7.0.800",
+      "manifestSha": "4be916ca3e090ce8fc63c84f749ebe3bef654f72f18d9a82b9a099cff1b31f52",
+      "installerType": "unknown",
+      "installSeconds": 51,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "No ARP entries matched in scope 'Both' for 'Alibaba.Quark'. Is the package actually installed?",
       "installStdErr": null
     }
   }
