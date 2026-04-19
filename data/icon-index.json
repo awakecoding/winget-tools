@@ -1,14 +1,14 @@
 {
   "schema": 1,
-  "generated": "2026-04-19T15:50:24.0254560Z",
+  "generated": "2026-04-19T16:00:57.3096091Z",
   "repository": "awakecoding/winget-tools",
   "releaseTag": "icons-latest",
   "baseUrl": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/",
-  "count": 48,
+  "count": 55,
   "statusCounts": {
-    "NoIcon": 67,
-    "HasIcon": 48,
-    "ExtractError": 101,
+    "NoIcon": 86,
+    "HasIcon": 55,
+    "ExtractError": 135,
     "InstallTimeout": 2
   },
   "entries": {
@@ -390,6 +390,33 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:42:18.9124122Z"
     },
+    "Adamant.Messenger": {
+      "version": "4.11.1",
+      "sha256": "a1c745fb33831eadb2a3721c3a76f283f86a413011149e1249d55c576399e810",
+      "sizeBytes": 305905,
+      "assetName": "Adamant.Messenger.a1c745fb.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Adamant.Messenger.a1c745fb.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:53:54.1055044Z"
+    },
+    "AdamMiskiewicz.GraphiQL": {
+      "version": "0.7.2",
+      "sha256": "cfe79857349be07678432c4e68b296e3d80a5a79db2a64917ba2f211a0f3d2bc",
+      "sizeBytes": 370070,
+      "assetName": "AdamMiskiewicz.GraphiQL.cfe79857.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AdamMiskiewicz.GraphiQL.cfe79857.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:53:53.4532966Z"
+    },
+    "ADATA.SSDToolbox": {
+      "version": "6.2.3",
+      "sha256": "9d89a3dd5f837b848e1319ef9bf7b8a24b9897af6f566c2b905c1a225decd208",
+      "sizeBytes": 4286,
+      "assetName": "ADATA.SSDToolbox.9d89a3dd.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/ADATA.SSDToolbox.9d89a3dd.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:56:31.1965067Z"
+    },
     "Adobe.Connect": {
       "version": "2026.3.125",
       "sha256": "31c02c15fc2dcbb39dd5534b5edcfbe4685f41f5d82390bff1a8679b2389a632",
@@ -399,6 +426,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:28:01.513108Z"
     },
+    "Adobe.CreativeCloud": {
+      "version": "6.9.0.618.5",
+      "sha256": "14352e6b1498baa860a96855d9419365cb53738bd547eaa8565face0763013fc",
+      "sizeBytes": 39906,
+      "assetName": "Adobe.CreativeCloud.14352e6b.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Adobe.CreativeCloud.14352e6b.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:55:08.6379351Z"
+    },
     "Adobe.Cryptr": {
       "version": "0.6.0",
       "sha256": "d270f9658c07d150ad088f1363809224749a993ae33e19f2eb4ef5c581ebce06",
@@ -407,6 +443,15 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Adobe.Cryptr.d270f965.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:28:30.3613299Z"
+    },
+    "aelassas.Servy": {
+      "version": "7.9",
+      "sha256": "4c76ed9a8d9da9067f641eafd4f398883d473b36a9759e30b9f538d90e991434",
+      "sizeBytes": 99678,
+      "assetName": "aelassas.Servy.4c76ed9a.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/aelassas.Servy.4c76ed9a.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:55:30.6503604Z"
     },
     "AGILELEAP.SlideBrowser": {
       "version": "2.0.0",
@@ -426,6 +471,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:10:05.3358698Z"
     },
+    "Alex313031.Thorium": {
+      "version": "138.0.7204.303",
+      "sha256": "f23ed6488cb26d32350db3816c84dd867f8090699d6ed7491675b85eee3a9072",
+      "sizeBytes": 55821,
+      "assetName": "Alex313031.Thorium.f23ed648.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Alex313031.Thorium.f23ed648.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:55:36.7169169Z"
+    },
     "Alibaba.Taobao": {
       "version": "1.3.4",
       "sha256": "8274d42de402e71187d3f292e68d7e250796adaa47b4662968f54a595b756e7e",
@@ -443,6 +497,15 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/altair-graphql.altair.7cd06d77.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:40:05.6551484Z"
+    },
+    "Amazon.Chime": {
+      "version": "5.23.32103",
+      "sha256": "5ca79744f956255b48e10b6891ea527a666d51b0d0cfacad551f89f663cd7985",
+      "sizeBytes": 112852,
+      "assetName": "Amazon.Chime.5ca79744.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Amazon.Chime.5ca79744.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:59:25.73498Z"
     }
   }
 }
