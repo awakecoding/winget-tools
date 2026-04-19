@@ -187,6 +187,14 @@ jobs:
           winget source update --accept-source-agreements --disable-interactivity
           exit 0
 
+      - name: Install Yayaml PowerShell module
+        shell: pwsh
+        run: |
+          if (-not (Get-Module -ListAvailable -Name Yayaml)) {
+              Install-Module -Name Yayaml -Scope CurrentUser -Force -AcceptLicense -Repository PSGallery
+          }
+          Import-Module Yayaml -ErrorAction Stop
+
       - name: Run extraction for this shard
         id: extract
         shell: pwsh
