@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 8/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T17:17:52.4758950Z",
+  "generated": "2026-04-19T17:41:22.0607061Z",
   "entries": {
     "1357310795.JboxTransfer": {
       "status": "NoIcon",
@@ -1134,6 +1134,144 @@
       "iconCount": 0,
       "iconBytes": 0,
       "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "angryziber.AngryIPScanner": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T17:38:59.6646339Z",
+      "lastCheckedUtc": "2026-04-19T17:38:59.6646339Z",
+      "lastUpdatedUtc": "2026-04-19T17:38:59.6646339Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "3.9.3",
+      "manifestSha": "0a93bfc9a3043149d47e1547dde71cfc4fda9b276a3f07b189a2885a18d09bb1",
+      "installerType": "unknown",
+      "installSeconds": 7,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 114517.0,
+      "icons": [
+        {
+          "name": "Angry IP Scanner.Angry IP Scanner.ico",
+          "bytes": 114517,
+          "sha256": "b006c23d0721d59df1ab2c3d885db21a8752bf3af67f318407e5c4f621b109e0"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AngusJohnson.ResourceHacker": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T17:39:12.0525933Z",
+      "lastCheckedUtc": "2026-04-19T17:39:12.0525933Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "5.2.8",
+      "manifestSha": "4f456a36cccd01e65313e2be8a1fb30a71e36a7ce8c215dea8dd89eb7f987a08",
+      "installerType": "unknown",
+      "installSeconds": 6,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "antonmedv.walk": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T17:39:22.4291242Z",
+      "lastCheckedUtc": "2026-04-19T17:39:22.4291242Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.13.0",
+      "manifestSha": "76dee1d1277f3cdaf6b9656845ec870e5b7889e7c5c4a00d393c5d2d4335a423",
+      "installerType": "unknown",
+      "installSeconds": 3,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "antonreshetov.massCode": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T17:39:26.9330886Z",
+      "lastCheckedUtc": "2026-04-19T17:39:26.9330886Z",
+      "lastUpdatedUtc": "2026-04-19T17:39:26.9330886Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "5.1.1",
+      "manifestSha": "358715ddaf15cd01d149d115c05ea7f05b0801e748f458e04008d8721d04dae6",
+      "installerType": "unknown",
+      "installSeconds": 29,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 13527.0,
+      "icons": [
+        {
+          "name": "massCode 5.1.1.28d75001-1a84-5945-8afc-b4fb140bde60.ico",
+          "bytes": 13527,
+          "sha256": "84a73fc3d9e50e1623424729175dd80e59c073f1cc3f2f3113f04d849b5d257a"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "ANTOrg-Inc.ASCIIEngine": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T17:39:58.4849366Z",
+      "lastCheckedUtc": "2026-04-19T17:39:58.4849366Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "3.0",
+      "manifestSha": "8babd072fb5ab728e3fcdb8518e5f51390c628a7061034734f18bb95a4ba4c5d",
+      "installerType": "unknown",
+      "installSeconds": 5,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Antutu.AntutuBenchmark": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T17:40:05.9627355Z",
+      "lastCheckedUtc": "2026-04-19T17:40:05.9627355Z",
+      "lastUpdatedUtc": "2026-04-19T17:40:05.9627355Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2021.08.13.1101",
+      "manifestSha": "a8af6a108e68e6c849272574f12d5ca84ff2e9d75886f3bc94bd2f94f09760ec",
+      "installerType": "unknown",
+      "installSeconds": 74,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 476674.0,
+      "icons": [
+        {
+          "name": "Antutu Benchmark.Antutu Benchmark.ico",
+          "bytes": 476674,
+          "sha256": "b6e714664907bdb3ce574bd1948b3489db1b292d376510512dcbcccad46575c2"
+        }
+      ],
       "extractError": null,
       "installStdErr": null
     }

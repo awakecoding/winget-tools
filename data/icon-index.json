@@ -1,15 +1,15 @@
 {
   "schema": 1,
-  "generated": "2026-04-19T17:33:28.7926016Z",
+  "generated": "2026-04-19T17:52:01.0184072Z",
   "repository": "awakecoding/winget-tools",
   "releaseTag": "icons-latest",
   "baseUrl": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/",
-  "count": 131,
+  "count": 140,
   "statusCounts": {
-    "HasIcon": 131,
-    "NoIcon": 180,
-    "InstallTimeout": 14,
-    "ExtractError": 253
+    "HasIcon": 140,
+    "ExtractError": 288,
+    "InstallTimeout": 17,
+    "NoIcon": 193
   },
   "entries": {
     "0-don.clippy": {
@@ -1083,6 +1083,33 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:59:25.73498Z"
     },
+    "Amazon.Games": {
+      "version": "3.0.9700.3",
+      "sha256": "bf138fc6ce06132ef3ff34ff43fa6a15177ed1c263f3d1118d9ab6b1866920ac",
+      "sizeBytes": 53830,
+      "assetName": "Amazon.Games.bf138fc6.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Amazon.Games.bf138fc6.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:39:59.7235533Z"
+    },
+    "Amazon.Kindle": {
+      "version": "2.8.3.70995",
+      "sha256": "221901b409650e469d4c153628ce46970be7d33516d713d16c399b9380a3e09c",
+      "sizeBytes": 124234,
+      "assetName": "Amazon.Kindle.221901b4.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Amazon.Kindle.221901b4.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:39:36.7378048Z"
+    },
+    "Amazon.Kiro": {
+      "version": "0.11.132",
+      "sha256": "28203d911a0aa847d28419895085fddb8e512dc5a1652df8af974bc5520e08d6",
+      "sizeBytes": 49386,
+      "assetName": "Amazon.Kiro.28203d91.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Amazon.Kiro.28203d91.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:39:53.1568946Z"
+    },
     "AmyXun.AxGlyph": {
       "version": "2.5981",
       "sha256": "3eaa3ead01d6f3e56d07517b9bd7cf33a9bc1142d0e57ab5f059c9e8232c71a1",
@@ -1110,6 +1137,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T17:20:53.3204147Z"
     },
+    "angryziber.AngryIPScanner": {
+      "version": "3.9.3",
+      "sha256": "b006c23d0721d59df1ab2c3d885db21a8752bf3af67f318407e5c4f621b109e0",
+      "sizeBytes": 114517,
+      "assetName": "angryziber.AngryIPScanner.b006c23d.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/angryziber.AngryIPScanner.b006c23d.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:38:59.6646339Z"
+    },
     "AntibodySoftware.WizFile": {
       "version": "3.15",
       "sha256": "106fda49c95a554d8cd6a9bdc8ef89fc3230a1ea511b26a1fb0e46392413ab7f",
@@ -1128,6 +1164,24 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:03:43.4777728Z"
     },
+    "antonreshetov.massCode": {
+      "version": "5.1.1",
+      "sha256": "84a73fc3d9e50e1623424729175dd80e59c073f1cc3f2f3113f04d849b5d257a",
+      "sizeBytes": 13527,
+      "assetName": "antonreshetov.massCode.84a73fc3.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/antonreshetov.massCode.84a73fc3.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:39:26.9330886Z"
+    },
+    "Antutu.AntutuBenchmark": {
+      "version": "2021.08.13.1101",
+      "sha256": "b6e714664907bdb3ce574bd1948b3489db1b292d376510512dcbcccad46575c2",
+      "sizeBytes": 476674,
+      "assetName": "Antutu.AntutuBenchmark.b6e71466.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Antutu.AntutuBenchmark.b6e71466.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:40:05.9627355Z"
+    },
     "Anxcye.AnxReader": {
       "version": "1.14.0",
       "sha256": "7065adffbde9d81c4dcf5711a8b4f81d37d4390f678ebcad2cf5aa0507d49cca",
@@ -1136,6 +1190,24 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Anxcye.AnxReader.7065adff.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:05:00.5243217Z"
+    },
+    "anyme123.AnyCode": {
+      "version": "5.28.5",
+      "sha256": "867264cea0c214100df09ff7b43be2ca49b84599e1d91f8bd013db1d6e215059",
+      "sizeBytes": 199048,
+      "assetName": "anyme123.AnyCode.867264ce.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/anyme123.AnyCode.867264ce.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:38:48.9267894Z"
+    },
+    "Appest.TickTick": {
+      "version": "8.0.5.0",
+      "sha256": "92b7a70114daf97b884555bd3d74ca5aa99688883e2611e7c4bd8ec29edb2f87",
+      "sizeBytes": 370070,
+      "assetName": "Appest.TickTick.92b7a701.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Appest.TickTick.92b7a701.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:42:07.2538894Z"
     },
     "AppFlowy.AppFlowy": {
       "version": "0.11.7",
@@ -1190,6 +1262,15 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/assnctr.unfx-proxy-checker.7951ebe3.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T17:23:08.1666667Z"
+    },
+    "Atola.MultiDrive": {
+      "version": "1.3.0",
+      "sha256": "37387e37f753e173c16eb46acdef9d4f11788e22523625709b9e126a75432354",
+      "sizeBytes": 11781,
+      "assetName": "Atola.MultiDrive.37387e37.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Atola.MultiDrive.37387e37.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:48:16.4627543Z"
     }
   }
 }
