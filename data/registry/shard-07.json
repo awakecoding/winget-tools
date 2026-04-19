@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 7/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T14:43:21.9964330Z",
+  "generated": "2026-04-19T15:15:19.9265616Z",
   "entries": {
     "108thecitizen.DesktopTileLauncher": {
       "status": "NoIcon",
@@ -46,6 +46,98 @@
           "sha256": "fba0c364bb745bef18683be03f08b086cb5e46498b8c1dbd32ecdee6624303fe"
         }
       ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "34u.MultiBaseCSBirdBase": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T15:09:48.0968852Z",
+      "lastCheckedUtc": "2026-04-19T15:09:48.0968852Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "5.4.2",
+      "manifestSha": "8c9aa4c9f176f5975f61491fd614c17d18759f1df19e7869708f0d615fda9593",
+      "installerType": "unknown",
+      "installSeconds": 35,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "No ARP entries matched in scope 'Both' for '34u.MultiBaseCSBirdBase'. Is the package actually installed?",
+      "installStdErr": null
+    },
+    "360.NamiAI": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T15:10:34.1606203Z",
+      "lastCheckedUtc": "2026-04-19T15:10:34.1606203Z",
+      "lastUpdatedUtc": "2026-04-19T15:10:34.1606203Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.3.1563.64",
+      "manifestSha": "1cebe2cf7337d8da99db36bf2b93420c75aa70fa6ccb040d50a4217e08e8addf",
+      "installerType": "unknown",
+      "installSeconds": 91,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 101602.0,
+      "icons": [
+        {
+          "name": "纳米AI.namiai.ico",
+          "bytes": 101602,
+          "sha256": "bf455d6428a469347f58edf8506ad0ba3e093e7271096a324f7822ac06c9ed3b"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "3d-io.Exr-IO": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T15:15:06.7287933Z",
+      "lastCheckedUtc": "2026-04-19T15:15:06.7287933Z",
+      "lastUpdatedUtc": "2026-04-19T15:15:06.7287933Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.06.00",
+      "manifestSha": "7d934d527c91fa196e98e1d5aee18b51676c9d09763949f3a2f31fc79fabb04f",
+      "installerType": "unknown",
+      "installSeconds": 6,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 13262.0,
+      "icons": [
+        {
+          "name": "3d-io Exr-IO 2.06.00.3d-io Exr-IO.ico",
+          "bytes": 13262,
+          "sha256": "031954f9d4b46531577250501af58bc7dd0f03f6f66afeac433a8a0bcc4da13c"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "5mdt.WinGoDarkTray": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T15:15:14.9770812Z",
+      "lastCheckedUtc": "2026-04-19T15:15:14.9770812Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.3.1",
+      "manifestSha": "b8194f7f1619e0eb08a3a6c4d58fa9e7e342c3c6215caacb8bae82988c833d65",
+      "installerType": "unknown",
+      "installSeconds": 3,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
       "extractError": null,
       "installStdErr": null
     }

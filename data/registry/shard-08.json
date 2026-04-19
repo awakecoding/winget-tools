@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 8/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T14:42:56.5236485Z",
+  "generated": "2026-04-19T15:10:40.9782034Z",
   "entries": {
     "1357310795.JboxTransfer": {
       "status": "NoIcon",
@@ -46,6 +46,98 @@
           "sha256": "8255ecc31e5e0a0a34ce6b8bb9a873dd29d3e9bfdf3f246e10d56508c032de2e"
         }
       ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "360.360Zip": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T15:09:39.9467078Z",
+      "lastCheckedUtc": "2026-04-19T15:09:39.9467078Z",
+      "lastUpdatedUtc": "2026-04-19T15:09:39.9467078Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.0.0.1041",
+      "manifestSha": "7438ae04ffdb4768e2ba6a14465dc1dbb4abc0a05d4ca136cdf907e62510f6c0",
+      "installerType": "unknown",
+      "installSeconds": 25,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 39052.0,
+      "icons": [
+        {
+          "name": "360 Zip.360zip.ico",
+          "bytes": 39052,
+          "sha256": "7f4dd50fceb01c191eb5ab12eb355f331c8c090335745eacbc524caf3e1c48bc"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "7gxycn08.WinGetCreateGui": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T15:10:10.5331943Z",
+      "lastCheckedUtc": "2026-04-19T15:10:10.5331943Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.1",
+      "manifestSha": "94162dcf260dd6b9d24f01fbae52f1050d14e939329913ea13c26f143b6daea6",
+      "installerType": "unknown",
+      "installSeconds": 15,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "7room.Aya": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T15:10:27.4191399Z",
+      "lastCheckedUtc": "2026-04-19T15:10:27.4191399Z",
+      "lastUpdatedUtc": "2026-04-19T15:10:27.4191399Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "0.10.5",
+      "manifestSha": "93194de3dddc11889535c27d3fa5d596e3131ffa01b06105c0457bff96f35d2d",
+      "installerType": "unknown",
+      "installSeconds": 5,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 147491.0,
+      "icons": [
+        {
+          "name": "Aya.{80EFFAA7-723F-433D-BF49-C6FE6D96C1DB}_is1.ico",
+          "bytes": 147491,
+          "sha256": "e6b4bb388d5d8d60823054b8dde6a77099b02d7384d16cf366026bf55bb516ce"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "7zip.7zr": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T15:10:35.1295148Z",
+      "lastCheckedUtc": "2026-04-19T15:10:35.1295148Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "26.00",
+      "manifestSha": "724d8c1fa3d42ee853a84316c791776b105c74983d06fde6727f221bf08cf3de",
+      "installerType": "unknown",
+      "installSeconds": 4,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
       "extractError": null,
       "installStdErr": null
     }

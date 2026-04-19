@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 0/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T14:43:21.0255055Z",
+  "generated": "2026-04-19T15:19:06.9817858Z",
   "entries": {
     "0-don.clippy": {
       "status": "HasIcon",
@@ -47,6 +47,98 @@
       "iconBytes": 0,
       "icons": [],
       "extractError": null,
+      "installStdErr": null
+    },
+    "360.360CleanMaster": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T15:09:57.6451947Z",
+      "lastCheckedUtc": "2026-04-19T15:09:57.6451947Z",
+      "lastUpdatedUtc": "2026-04-19T15:09:57.6451947Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.0.0.1020",
+      "manifestSha": "eab7798e1ddc3c0b5d318f5fceb8b594adc6a2af499f9ff62535a99df820220c",
+      "installerType": "unknown",
+      "installSeconds": 16,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 77849.0,
+      "icons": [
+        {
+          "name": "360清理大师.360CleanMaster.ico",
+          "bytes": 77849,
+          "sha256": "a274074363189cf5a22182d77029095b3ed9be60b19bb6b4637af4156814fce9"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "360.360Ent": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T15:13:17.1539104Z",
+      "lastCheckedUtc": "2026-04-19T15:13:17.1539104Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "13.3.4010.746",
+      "manifestSha": "6ca92e4bc7e6381936820b299a3e65970821a0038e3766eee95eb162b71aade1",
+      "installerType": "unknown",
+      "installSeconds": 41,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "No ARP entries matched in scope 'Both' for '360.360Ent'. Is the package actually installed?",
+      "installStdErr": null
+    },
+    "360.360VirtualVault": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T15:16:59.5925117Z",
+      "lastCheckedUtc": "2026-04-19T15:16:59.5925117Z",
+      "lastUpdatedUtc": "2026-04-19T15:16:59.5925117Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.0.0.1004",
+      "manifestSha": "87a11ddea1c419f4dda1b6b6f8e1c7982f1cb008d7143e1be08f7fa7389b2052",
+      "installerType": "unknown",
+      "installSeconds": 9,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 136001.0,
+      "icons": [
+        {
+          "name": "360 Virtual Vault.{47F89500-9524-425F-9BEB-FFFD23D66E23}}_is1.ico",
+          "bytes": 136001,
+          "sha256": "a9a62bfeb470e08b5b8a23ac084c28d50f65dd8f440c6ef6d928cab5760f436b"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "3Dconnexion.3DxWare.10": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T15:17:11.1571265Z",
+      "lastCheckedUtc": "2026-04-19T15:17:11.1571265Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "10.9.12.735",
+      "manifestSha": "e88a4c3049dea8d7681a2d1d34c13fcdc59b9cefe6dbe0056b97ec32b23548da",
+      "installerType": "unknown",
+      "installSeconds": 69,
+      "extractSeconds": 1,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "Could not retrieve manifest for '3Dconnexion.3DxWare.10' (FileCache empty and 'winget show' did not populate it).",
       "installStdErr": null
     }
   }

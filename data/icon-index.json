@@ -1,14 +1,14 @@
 {
   "schema": 1,
-  "generated": "2026-04-19T15:01:46.7365657Z",
+  "generated": "2026-04-19T15:22:21.7203325Z",
   "repository": "awakecoding/winget-tools",
   "releaseTag": "icons-latest",
   "baseUrl": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/",
-  "count": 8,
+  "count": 23,
   "statusCounts": {
-    "ExtractError": 45,
-    "HasIcon": 8,
-    "NoIcon": 5
+    "ExtractError": 59,
+    "NoIcon": 16,
+    "HasIcon": 23
   },
   "entries": {
     "0-don.clippy": {
@@ -56,6 +56,24 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T14:43:19.6548869Z"
     },
+    "2BrightSparks.SyncBackPro": {
+      "version": "12.0.0.0",
+      "sha256": "90e9f26d071e51b676c1d0e9697a22e55be32b68b3031c5aef9680d70514a5ed",
+      "sizeBytes": 58876,
+      "assetName": "2BrightSparks.SyncBackPro.90e9f26d.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/2BrightSparks.SyncBackPro.90e9f26d.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:09:40.7400951Z"
+    },
+    "2BrightSparks.SyncBackSE": {
+      "version": "12.0.0.0",
+      "sha256": "8e5fb616377e4b22126b5eb3126afe1603932997108799b5e66acf03bd639c59",
+      "sizeBytes": 58829,
+      "assetName": "2BrightSparks.SyncBackSE.8e5fb616.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/2BrightSparks.SyncBackSE.8e5fb616.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:09:55.9936942Z"
+    },
     "2BrightSparks.UndeleteOnClick": {
       "version": "1.12.11.0",
       "sha256": "8255ecc31e5e0a0a34ce6b8bb9a873dd29d3e9bfdf3f246e10d56508c032de2e",
@@ -64,6 +82,33 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/2BrightSparks.UndeleteOnClick.8255ecc3.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T14:42:50.5591933Z"
+    },
+    "360.360AlbumViewer": {
+      "version": "1.0.1.1271",
+      "sha256": "255af4ac04033826e20ea3ad0624061916553610a3519451650f92d1a737fd40",
+      "sizeBytes": 29345,
+      "assetName": "360.360AlbumViewer.255af4ac.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/360.360AlbumViewer.255af4ac.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:10:58.0411644Z"
+    },
+    "360.360Chrome": {
+      "version": "23.0.1200.0",
+      "sha256": "5af2adee56bba90b64dadfed205797d9c1531fc89e3f9bcde6020dfe192fcc7e",
+      "sizeBytes": 74819,
+      "assetName": "360.360Chrome.5af2adee.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/360.360Chrome.5af2adee.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:10:12.4974414Z"
+    },
+    "360.360CleanMaster": {
+      "version": "1.0.0.1020",
+      "sha256": "a274074363189cf5a22182d77029095b3ed9be60b19bb6b4637af4156814fce9",
+      "sizeBytes": 77849,
+      "assetName": "360.360CleanMaster.a2740743.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/360.360CleanMaster.a2740743.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:09:57.6451947Z"
     },
     "360.360DesktopLite": {
       "version": "11.0.0.2251",
@@ -74,6 +119,51 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T14:47:44.2959901Z"
     },
+    "360.360DocProtect": {
+      "version": "1.0.0.1202",
+      "sha256": "fc7f14f5de9b6c9399fbe2a34f277413bf087bb7381e74a6a8f8957502f36095",
+      "sizeBytes": 370070,
+      "assetName": "360.360DocProtect.fc7f14f5.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/360.360DocProtect.fc7f14f5.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:10:42.5114609Z"
+    },
+    "360.360SE": {
+      "version": "16.1.2000.64",
+      "sha256": "536f15090cc082b2410fee735db630cab52d5188efe402699c42ccf78a1e09bb",
+      "sizeBytes": 93686,
+      "assetName": "360.360SE.536f1509.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/360.360SE.536f1509.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:17:48.6443151Z"
+    },
+    "360.360VirtualVault": {
+      "version": "1.0.0.1004",
+      "sha256": "a9a62bfeb470e08b5b8a23ac084c28d50f65dd8f440c6ef6d928cab5760f436b",
+      "sizeBytes": 136001,
+      "assetName": "360.360VirtualVault.a9a62bfe.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/360.360VirtualVault.a9a62bfe.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:16:59.5925117Z"
+    },
+    "360.360Zip": {
+      "version": "1.0.0.1041",
+      "sha256": "7f4dd50fceb01c191eb5ab12eb355f331c8c090335745eacbc524caf3e1c48bc",
+      "sizeBytes": 39052,
+      "assetName": "360.360Zip.7f4dd50f.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/360.360Zip.7f4dd50f.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:09:39.9467078Z"
+    },
+    "360.NamiAI": {
+      "version": "1.3.1563.64",
+      "sha256": "bf455d6428a469347f58edf8506ad0ba3e093e7271096a324f7822ac06c9ed3b",
+      "sizeBytes": 101602,
+      "assetName": "360.NamiAI.bf455d64.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/360.NamiAI.bf455d64.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:10:34.1606203Z"
+    },
     "360.NamiClaw": {
       "version": "2.2.1140.64",
       "sha256": "b481c4a473bda9c6b397f3df2f01d70cd0131e3660f8b93d5befc706985d27ff",
@@ -82,6 +172,51 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/360.NamiClaw.b481c4a4.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T14:42:44.2279829Z"
+    },
+    "360.PalmInput": {
+      "version": "3.2.9.1020",
+      "sha256": "45ad5404217f35c8c030c1b242e453d1ddec553f003eead20303ab5194bd66c7",
+      "sizeBytes": 31417,
+      "assetName": "360.PalmInput.45ad5404.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/360.PalmInput.45ad5404.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:11:02.5600303Z"
+    },
+    "3d-io.Exr-IO": {
+      "version": "2.06.00",
+      "sha256": "031954f9d4b46531577250501af58bc7dd0f03f6f66afeac433a8a0bcc4da13c",
+      "sizeBytes": 13262,
+      "assetName": "3d-io.Exr-IO.031954f9.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/3d-io.Exr-IO.031954f9.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:15:06.7287933Z"
+    },
+    "4tNiagaraSoftware.4tTrayMinimizer": {
+      "version": "6.07",
+      "sha256": "5355fdd0b8d587f8eeb571b518d3f78084deb88c94855da229a8d90225ab2302",
+      "sizeBytes": 9158,
+      "assetName": "4tNiagaraSoftware.4tTrayMinimizer.5355fdd0.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/4tNiagaraSoftware.4tTrayMinimizer.5355fdd0.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:11:16.4181047Z"
+    },
+    "7room.Aya": {
+      "version": "0.10.5",
+      "sha256": "e6b4bb388d5d8d60823054b8dde6a77099b02d7384d16cf366026bf55bb516ce",
+      "sizeBytes": 147491,
+      "assetName": "7room.Aya.e6b4bb38.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/7room.Aya.e6b4bb38.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:10:27.4191399Z"
+    },
+    "ALCPU.CoreTemp": {
+      "version": "1.20.0",
+      "sha256": "77f26794a8c68c06643c83237a97b864e31d1849ad6b5c4064007af9fb18c7a2",
+      "sizeBytes": 25214,
+      "assetName": "ALCPU.CoreTemp.77f26794.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/ALCPU.CoreTemp.77f26794.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:10:05.3358698Z"
     }
   }
 }

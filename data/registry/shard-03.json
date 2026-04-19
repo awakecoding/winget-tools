@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 3/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T14:43:14.1261193Z",
+  "generated": "2026-04-19T15:14:45.2803093Z",
   "entries": {
     "0xGingi.Browser": {
       "status": "HasIcon",
@@ -39,6 +39,98 @@
       "manifestSha": "5736ee0f343531570af977fe1959e26ddeb9bfa237b739b43524b3fe645a6dc6",
       "installerType": "unknown",
       "installSeconds": 4,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "2BrightSparks.SyncBackSE": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T15:09:55.9936942Z",
+      "lastCheckedUtc": "2026-04-19T15:09:55.9936942Z",
+      "lastUpdatedUtc": "2026-04-19T15:09:55.9936942Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "12.0.0.0",
+      "manifestSha": "00c6e0fd57a7deb4b8dc61ca0d3ffa9c09cbf17f6f37aa80013a8639f87248b0",
+      "installerType": "unknown",
+      "installSeconds": 25,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 58829.0,
+      "icons": [
+        {
+          "name": "SyncBackSE x64.SyncBackSE64_is1_is1.ico",
+          "bytes": 58829,
+          "sha256": "8e5fb616377e4b22126b5eb3126afe1603932997108799b5e66acf03bd639c59"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "3CX.Softphone": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T15:10:36.6569697Z",
+      "lastCheckedUtc": "2026-04-19T15:10:36.6569697Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "20.0.1076.0",
+      "manifestSha": "d822a5a55b343385c46b44004e2c2a1233efd3b94cedb0f9f52cdee9edb7917e",
+      "installerType": "unknown",
+      "installSeconds": 39,
+      "extractSeconds": 0,
+      "installExitCode": -1978335215,
+      "installedByThisRun": false,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "Cannot convert value \"-1978335215\" to type \"System.UInt32\". Error: \"Value was either too large or too small for a UInt32.\"",
+      "installStdErr": null
+    },
+    "4tNiagaraSoftware.4tTrayMinimizer": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T15:11:16.4181047Z",
+      "lastCheckedUtc": "2026-04-19T15:11:16.4181047Z",
+      "lastUpdatedUtc": "2026-04-19T15:11:16.4181047Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "6.07",
+      "manifestSha": "3b92fdf36744dc21de7f93ee08237388f17c0d8c46d73ffbafa04fabb597d790",
+      "installerType": "unknown",
+      "installSeconds": 6,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 9158.0,
+      "icons": [
+        {
+          "name": "4t Tray Minimizer Free 6.07.4t Tray Minimizer_is1.ico",
+          "bytes": 9158,
+          "sha256": "5355fdd0b8d587f8eeb571b518d3f78084deb88c94855da229a8d90225ab2302"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "99natmar99.Windows11Fixer": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T15:14:25.1173071Z",
+      "lastCheckedUtc": "2026-04-19T15:14:25.1173071Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.1.0",
+      "manifestSha": "71779fb43f54b0c9123d349d4d43b1c0eaec47f0fcaecbea230448f5a3800390",
+      "installerType": "unknown",
+      "installSeconds": 18,
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,

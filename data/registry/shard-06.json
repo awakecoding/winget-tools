@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 6/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T14:44:03.5472635Z",
+  "generated": "2026-04-19T15:11:19.7418190Z",
   "entries": {
     "0x192.UniversalAndroidDebloaterGUI": {
       "status": "ExtractError",
@@ -41,6 +41,92 @@
       "iconBytes": 0,
       "icons": [],
       "extractError": "No ARP entries matched in scope 'Both' for '0x4D44.mdmdview'. Is the package actually installed?",
+      "installStdErr": null
+    },
+    "0xJacky.nginx-ui": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T15:09:48.6548782Z",
+      "lastCheckedUtc": "2026-04-19T15:09:48.6548782Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.3.6",
+      "manifestSha": "b60d90b3d130c7f9c6a29b287d606b5760ff7ef28a7be9b3e278171d2ff6b929",
+      "installerType": "unknown",
+      "installSeconds": 7,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "34u.MultiBaseCSProfessional": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T15:10:00.4455083Z",
+      "lastCheckedUtc": "2026-04-19T15:10:00.4455083Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "5.4.2",
+      "manifestSha": "1e25219c81d6b703041f7ec7f221ea2f542dcf7dd8621e5988af8afd51940c29",
+      "installerType": "unknown",
+      "installSeconds": 22,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "No ARP entries matched in scope 'Both' for '34u.MultiBaseCSProfessional'. Is the package actually installed?",
+      "installStdErr": null
+    },
+    "34u.MultiBaseCSServer": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T15:10:29.2732954Z",
+      "lastCheckedUtc": "2026-04-19T15:10:29.2732954Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "5.4.2",
+      "manifestSha": "d58d39760807591baffa2940a2933b13fd7fce96bf4471324304bd294193caaf",
+      "installerType": "unknown",
+      "installSeconds": 22,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "No ARP entries matched in scope 'Both' for '34u.MultiBaseCSServer'. Is the package actually installed?",
+      "installStdErr": null
+    },
+    "360.360AlbumViewer": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T15:10:58.0411644Z",
+      "lastCheckedUtc": "2026-04-19T15:10:58.0411644Z",
+      "lastUpdatedUtc": "2026-04-19T15:10:58.0411644Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.0.1.1271",
+      "manifestSha": "5c776c4b3a97b27d70b3ac03493bbcb260210c87f877109113e442b48e3e14f9",
+      "installerType": "unknown",
+      "installSeconds": 19,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 29345.0,
+      "icons": [
+        {
+          "name": "360看图.360看图.ico",
+          "bytes": 29345,
+          "sha256": "255af4ac04033826e20ea3ad0624061916553610a3519451650f92d1a737fd40"
+        }
+      ],
+      "extractError": null,
       "installStdErr": null
     }
   }
