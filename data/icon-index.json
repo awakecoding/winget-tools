@@ -1,15 +1,15 @@
 {
   "schema": 1,
-  "generated": "2026-04-19T16:00:57.3096091Z",
+  "generated": "2026-04-19T16:12:00.2352055Z",
   "repository": "awakecoding/winget-tools",
   "releaseTag": "icons-latest",
   "baseUrl": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/",
-  "count": 55,
+  "count": 62,
   "statusCounts": {
-    "NoIcon": 86,
-    "HasIcon": 55,
-    "ExtractError": 135,
-    "InstallTimeout": 2
+    "HasIcon": 62,
+    "ExtractError": 161,
+    "InstallTimeout": 4,
+    "NoIcon": 111
   },
   "entries": {
     "0-don.clippy": {
@@ -444,6 +444,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:28:30.3613299Z"
     },
+    "Adobe.WorkfrontProof": {
+      "version": "2.1.55",
+      "sha256": "a006a2cd19dbbaf35212062a1a4f9a8153926d8823b5d486e33774d8bf289efd",
+      "sizeBytes": 361102,
+      "assetName": "Adobe.WorkfrontProof.a006a2cd.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Adobe.WorkfrontProof.a006a2cd.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:03:14.6028807Z"
+    },
     "aelassas.Servy": {
       "version": "7.9",
       "sha256": "4c76ed9a8d9da9067f641eafd4f398883d473b36a9759e30b9f538d90e991434",
@@ -462,6 +471,24 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:40:32.0173291Z"
     },
+    "ahkohd.switch": {
+      "version": "1.0.23",
+      "sha256": "58a5b54ab0039970cb1261800d9f9849fdd8b0dfd5c702a596bb70e116f821bf",
+      "sizeBytes": 47064,
+      "assetName": "ahkohd.switch.58a5b54a.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/ahkohd.switch.58a5b54a.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:04:05.9241289Z"
+    },
+    "Akiflow.Akiflow": {
+      "version": "2.71.11",
+      "sha256": "6e0c849cec93fc17050d01f422ad83bc9dffa30187740d49f9afd01a168883e3",
+      "sizeBytes": 15664,
+      "assetName": "Akiflow.Akiflow.6e0c849c.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Akiflow.Akiflow.6e0c849c.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:03:43.8871144Z"
+    },
     "ALCPU.CoreTemp": {
       "version": "1.20.0",
       "sha256": "77f26794a8c68c06643c83237a97b864e31d1849ad6b5c4064007af9fb18c7a2",
@@ -479,6 +506,24 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Alex313031.Thorium.f23ed648.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:55:36.7169169Z"
+    },
+    "AlexanderGorishnyak.APKIconEditor": {
+      "version": "2.2.0",
+      "sha256": "a20d2a78bfe7c8104f11fd4f0a5b7a8a8abd7313273404595039823e70840b4c",
+      "sizeBytes": 64355,
+      "assetName": "AlexanderGorishnyak.APKIconEditor.a20d2a78.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AlexanderGorishnyak.APKIconEditor.a20d2a78.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:03:05.944271Z"
+    },
+    "Alibaba.Qianwen": {
+      "version": "2.3.1",
+      "sha256": "e9b17e6f80f556461b76e434aaee333292bad965e18c5c4a12cf6e55c4abfe38",
+      "sizeBytes": 171714,
+      "assetName": "Alibaba.Qianwen.e9b17e6f.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Alibaba.Qianwen.e9b17e6f.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:04:10.2050982Z"
     },
     "Alibaba.Taobao": {
       "version": "1.3.4",
@@ -506,6 +551,24 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Amazon.Chime.5ca79744.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:59:25.73498Z"
+    },
+    "AntiMicroX.antimicrox": {
+      "version": "3.5.1",
+      "sha256": "14b522c61aec3a6d9d78500dd3b3f7d7984bc11c7f111818ce795427a5a4430f",
+      "sizeBytes": 270398,
+      "assetName": "AntiMicroX.antimicrox.14b522c6.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AntiMicroX.antimicrox.14b522c6.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:03:43.4777728Z"
+    },
+    "Anxcye.AnxReader": {
+      "version": "1.14.0",
+      "sha256": "7065adffbde9d81c4dcf5711a8b4f81d37d4390f678ebcad2cf5aa0507d49cca",
+      "sizeBytes": 111744,
+      "assetName": "Anxcye.AnxReader.7065adff.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Anxcye.AnxReader.7065adff.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:05:00.5243217Z"
     }
   }
 }
