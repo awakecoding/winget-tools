@@ -294,11 +294,24 @@ jobs:
           Write-Host ("Found {0} shard artifacts." -f $shardDirs.Count)
 
           foreach ($d in $shardDirs) {
-              # Registry shard files
-              $regs = Get-ChildItem -LiteralPath (Join-Path $d.FullName 'data/registry') -Filter 'shard-*.json' -File -ErrorAction SilentlyContinue
-              foreach ($r in $regs) {
-                  Copy-Item -LiteralPath $r.FullName -Destination (Join-Path $mergedRegistry $r.Name) -Force
+              # Each shard artifact currently contains all shard JSON files from
+              # the repo checkout, but only one of them was updated by that job.
+              # Copy just the shard file that matches the artifact name so a
+              # later artifact cannot overwrite fresh data with stale copies.
+              if ($d.Name -match '^winget-icons-shard-(\d+)-') {
+                $shardName = ('shard-{0:D2}.json' -f [int]$Matches[1])
+                $srcRegistry = Join-Path $d.FullName (Join-Path 'data/registry' $shardName)
+                if (Test-Path -LiteralPath $srcRegistry) {
+                  Copy-Item -LiteralPath $srcRegistry -Destination (Join-Path $mergedRegistry $shardName) -Force
+                }
+                else {
+                  Write-Warning "Expected registry file '$shardName' not found in artifact '$($d.Name)'."
+                }
               }
+              else {
+                Write-Warning "Could not infer shard index from artifact directory '$($d.Name)'; skipping registry merge for this artifact."
+              }
+
               # Icon directories (one per package)
               $iconRoot = Join-Path $d.FullName 'out/icons'
               if (Test-Path -LiteralPath $iconRoot) {
