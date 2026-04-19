@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 0/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T16:35:11.3449719Z",
+  "generated": "2026-04-19T16:48:49.3997678Z",
   "entries": {
     "0-don.clippy": {
       "status": "HasIcon",
@@ -659,8 +659,8 @@
     },
     "Aignesberger.WebSiteWatcherFree": {
       "status": "ExtractError",
-      "firstSeenUtc": "2026-04-19T16:27:24.6600930Z",
-      "lastCheckedUtc": "2026-04-19T16:27:24.6600930Z",
+      "firstSeenUtc": "2026-04-19T16:27:24.660093Z",
+      "lastCheckedUtc": "2026-04-19T16:27:24.660093Z",
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "25.8.0.100",
@@ -679,8 +679,8 @@
     },
     "Aircall.AircallWorkspace": {
       "status": "NoIcon",
-      "firstSeenUtc": "2026-04-19T16:32:50.6845900Z",
-      "lastCheckedUtc": "2026-04-19T16:32:50.6845900Z",
+      "firstSeenUtc": "2026-04-19T16:32:50.68459Z",
+      "lastCheckedUtc": "2026-04-19T16:32:50.68459Z",
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.13.10",
@@ -719,8 +719,8 @@
     },
     "Akko.CloudDriver": {
       "status": "ExtractError",
-      "firstSeenUtc": "2026-04-19T16:33:58.1315380Z",
-      "lastCheckedUtc": "2026-04-19T16:33:58.1315380Z",
+      "firstSeenUtc": "2026-04-19T16:33:58.131538Z",
+      "lastCheckedUtc": "2026-04-19T16:33:58.131538Z",
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "370.1.54",
@@ -784,6 +784,162 @@
           "name": "G14ControlV2 0.2.2.fbff9d9c-f88d-5090-ac12-7e98f3d3a6e5.ico",
           "bytes": 102303,
           "sha256": "6c364902fae8fdeeccae83e8c460949fdae0b2567861f97aaf03bff024483781"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "alexvallat.AlbumArtDownloader": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:41:28.0141292Z",
+      "lastCheckedUtc": "2026-04-19T16:41:28.0141292Z",
+      "lastUpdatedUtc": "2026-04-19T16:41:28.0141292Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.05",
+      "manifestSha": "00277c925923c91934fdafffd94363ebd8fceb4b3e519634d1fe6f14c2c9cf5c",
+      "installerType": "unknown",
+      "installSeconds": 8,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 23558.0,
+      "icons": [
+        {
+          "name": "Album Art Downloader XUI 1.05.Album Art Downloader XUI.ico",
+          "bytes": 23558,
+          "sha256": "5b73e239a461fa42de78db7f8d86c2dd99621b04c69b50fb0896383ed0d7b500"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Alibaba.AliMail": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:41:41.2552181Z",
+      "lastCheckedUtc": "2026-04-19T16:41:41.2552181Z",
+      "lastUpdatedUtc": "2026-04-19T16:41:41.2552181Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.15.2",
+      "manifestSha": "ad72946bba7061eb37e34ef92e6dd3ca42f7e6eab5bbae36b6592b4fa0e70957",
+      "installerType": "unknown",
+      "installSeconds": 34,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 174093.0,
+      "icons": [
+        {
+          "name": "AliMail 2.15.2.a2c56d7c-b1c7-5b29-b179-74ce70cef1fd.ico",
+          "bytes": 174093,
+          "sha256": "224205ecdf6035d79b6df056742933056901240c4953e74082f3aac9839f7fa7"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Alibaba.AlipayKeyTool": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:42:17.7619328Z",
+      "lastCheckedUtc": "2026-04-19T16:42:17.7619328Z",
+      "lastUpdatedUtc": "2026-04-19T16:42:17.7619328Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.0.3",
+      "manifestSha": "0f7e7394aeb36b4f6bd81f1e9df08b1ca32ff6b62d541aa69eaf8c49df6411a5",
+      "installerType": "unknown",
+      "installSeconds": 22,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 22575.0,
+      "icons": [
+        {
+          "name": "支付宝开放平台密钥工具 2.0.3.5c52e846-84c7-55aa-bdc0-4e5fcdb3662f.ico",
+          "bytes": 22575,
+          "sha256": "52098799c96a458fd8d6bf75e3ea960ff01eba5bfa013d0d321e4acb5399d89f"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Alibaba.MiniProgramStudio": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:42:42.0772713Z",
+      "lastCheckedUtc": "2026-04-19T16:42:42.0772713Z",
+      "lastUpdatedUtc": "2026-04-19T16:42:42.0772713Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "3.10.5",
+      "manifestSha": "fc1e4c47bba8f2584fbccc0da0992380141874aa27d25e2b6f31888fcc4195a7",
+      "installerType": "unknown",
+      "installSeconds": 50,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 127552.0,
+      "icons": [
+        {
+          "name": "小程序开发者工具 3.10.5.d62c6ca9-18a8-5361-90f2-bf27002a49f0.ico",
+          "bytes": 127552,
+          "sha256": "f5b4cff1576e5347b1dbb50eac276e9c3fe2a9eb8b95805d19dfc9e974913bcb"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Alibaba.Qoder": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:43:35.1250645Z",
+      "lastCheckedUtc": "2026-04-19T16:43:35.1250645Z",
+      "lastUpdatedUtc": "2026-04-19T16:43:35.1250645Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.106.3",
+      "manifestSha": "97b8ee54289c30b17d2833d885898d015113690ab42e2438862c9e4e5ccd509a",
+      "installerType": "unknown",
+      "installSeconds": 76,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 127955.0,
+      "icons": [
+        {
+          "name": "Qoder (User).{943D6004-554E-4B49-A1D5-52F999A1B3C9}_is1.ico",
+          "bytes": 127955,
+          "sha256": "cef01d7f9f6affa54c45fdfc28de0c4f65f4fe0fc6ef140410f770cff536f10a"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Allecsc.StremioKai": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:44:56.5028993Z",
+      "lastCheckedUtc": "2026-04-19T16:44:56.5028993Z",
+      "lastUpdatedUtc": "2026-04-19T16:44:56.5028993Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "4.6.2",
+      "manifestSha": "f28ae2a8bdb4aa1c9bf5f7a0dcf7ef70e6eabb76bf1e8383f009caa202ff39dd",
+      "installerType": "unknown",
+      "installSeconds": 52,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 521385.0,
+      "icons": [
+        {
+          "name": "Stremio Kai.{D37D8040-0259-4D6F-8F8D-D1F8C9E7A3B1}_is1.ico",
+          "bytes": 521385,
+          "sha256": "811ee8e3240cb9a40859adbd48baadceae8a5e947d9b1301d16b5ee241f92349"
         }
       ],
       "extractError": null,

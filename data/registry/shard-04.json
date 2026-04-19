@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 4/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T16:31:02.3167675Z",
+  "generated": "2026-04-19T16:44:17.1692810Z",
   "entries": {
     "123.123pan": {
       "status": "HasIcon",
@@ -774,6 +774,144 @@
       "iconCount": 0,
       "iconBytes": 0,
       "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AIDotNet.OpenCowork": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:41:25.8428209Z",
+      "lastCheckedUtc": "2026-04-19T16:41:25.8428209Z",
+      "lastUpdatedUtc": "2026-04-19T16:41:25.8428209Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "0.9.1",
+      "manifestSha": "6ee810af3b0b3427e3289d864b3893a40e03e70a43126023700ff79fd8932223",
+      "installerType": "unknown",
+      "installSeconds": 31,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 42694.0,
+      "icons": [
+        {
+          "name": "OpenCoWork.ef264783-8179-52ad-bf3a-efd1a5ce435d.ico",
+          "bytes": 42694,
+          "sha256": "7deb9c1f76f1e61afc286823d47d4a0b79f931d4d7ada8c1e695b7bf367033ff"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "aimotrens.impulsar": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T16:42:01.9833798Z",
+      "lastCheckedUtc": "2026-04-19T16:42:01.9833798Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "0.19.3",
+      "manifestSha": "612f8867506d73d6703db6edb6b1dff971fb3d74a595347b24534ee8be02d5ef",
+      "installerType": "unknown",
+      "installSeconds": 3,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AirVPN.Eddie": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T16:42:07.6651964Z",
+      "lastCheckedUtc": "2026-04-19T16:42:07.6651964Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.24.6",
+      "manifestSha": "6ab1dc765693d59d215c024c74ae56e4642a48fb9cf652b563ef4028fddf89e0",
+      "installerType": "unknown",
+      "installSeconds": 5,
+      "extractSeconds": 0,
+      "installExitCode": -1978335215,
+      "installedByThisRun": false,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "Cannot convert value \"-1978335215\" to type \"System.UInt32\". Error: \"Value was either too large or too small for a UInt32.\"",
+      "installStdErr": null
+    },
+    "AJA.RetailInstaller": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:42:14.0925322Z",
+      "lastCheckedUtc": "2026-04-19T16:42:14.0925322Z",
+      "lastUpdatedUtc": "2026-04-19T16:42:14.0925322Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "17.6.0",
+      "manifestSha": "e8d2b3c8274435f24fae737d03e7fcb1e78530ff44136cfb57840ab549e6a1e3",
+      "installerType": "unknown",
+      "installSeconds": 88,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 367958.0,
+      "icons": [
+        {
+          "name": "AJA Retail Installer 17.6.0-x64.{4cd92eec-550b-4d9a-95cb-ee3441586f45}.ico",
+          "bytes": 367958,
+          "sha256": "a96093d7ec5b4448e95b218ef5cb986d3e1c6e628b24cd5aa334452049267d26"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Akaere.whois": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T16:43:55.8147788Z",
+      "lastCheckedUtc": "2026-04-19T16:43:55.8147788Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "0.3.3",
+      "manifestSha": "3207389cb738bb5e5f927af37f51233f2abae13fdb7463a75b68f4f750c79547",
+      "installerType": "unknown",
+      "installSeconds": 3,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AlekseyHoffman.Sigma-File-Manager": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:44:01.5086469Z",
+      "lastCheckedUtc": "2026-04-19T16:44:01.5086469Z",
+      "lastUpdatedUtc": "2026-04-19T16:44:01.5086469Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.7.0",
+      "manifestSha": "75354b008ca138718debc0aa23135c48dbd78d460a6cf0fef105a7ea53914fe7",
+      "installerType": "unknown",
+      "installSeconds": 13,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 17014.0,
+      "icons": [
+        {
+          "name": "Sigma file manager 1.7.0.fcdf4159-5b1b-5de8-b2c6-c93b443d414f.ico",
+          "bytes": 17014,
+          "sha256": "cf18ebcb0b618e91aff6473a9908a65a5d2890313399de9ac78685f65fbe872e"
+        }
+      ],
       "extractError": null,
       "installStdErr": null
     }

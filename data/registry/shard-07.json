@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 7/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T16:32:36.0588622Z",
+  "generated": "2026-04-19T16:46:13.9173734Z",
   "entries": {
     "108thecitizen.DesktopTileLauncher": {
       "status": "NoIcon",
@@ -667,9 +667,9 @@
     },
     "Aegisub.Aegisub": {
       "status": "HasIcon",
-      "firstSeenUtc": "2026-04-19T16:30:40.9110750Z",
-      "lastCheckedUtc": "2026-04-19T16:30:40.9110750Z",
-      "lastUpdatedUtc": "2026-04-19T16:30:40.9110750Z",
+      "firstSeenUtc": "2026-04-19T16:30:40.911075Z",
+      "lastCheckedUtc": "2026-04-19T16:30:40.911075Z",
+      "lastUpdatedUtc": "2026-04-19T16:30:40.911075Z",
       "wingetVersion": "v1.11.510",
       "packageVersion": "3.4.2",
       "manifestSha": "a10f192f2fc0d9d512d0238f8625d99162c64c3417a2f7370ec8fd6f68c56555",
@@ -759,8 +759,8 @@
     },
     "Agisoft.TextureDeLighter": {
       "status": "ExtractError",
-      "firstSeenUtc": "2026-04-19T16:32:20.0728970Z",
-      "lastCheckedUtc": "2026-04-19T16:32:20.0728970Z",
+      "firstSeenUtc": "2026-04-19T16:32:20.072897Z",
+      "lastCheckedUtc": "2026-04-19T16:32:20.072897Z",
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "2.2.2",
@@ -775,6 +775,144 @@
       "iconBytes": 0,
       "icons": [],
       "extractError": "Cannot convert value \"-1978334974\" to type \"System.UInt32\". Error: \"Value was either too large or too small for a UInt32.\"",
+      "installStdErr": null
+    },
+    "AGTEK.MaterialsSA": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:41:44.3595810Z",
+      "lastCheckedUtc": "2026-04-19T16:41:44.3595810Z",
+      "lastUpdatedUtc": "2026-04-19T16:41:44.3595810Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.12.5.4",
+      "manifestSha": "d61864af183202e629868e3345e6ece49ae6e4636f0df6b55e43803d774cfcc9",
+      "installerType": "unknown",
+      "installSeconds": 49,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 209840.0,
+      "icons": [
+        {
+          "name": "AGTEK Materials SA (Stand-Alone).AGTEK Materials SA (Stand-Alone).ico",
+          "bytes": 209840,
+          "sha256": "402dc85c3c0052eb368cf0d3f7fc24a094165b46e7ff8e5066cb3e1ffccb782f"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "ahg101.AmrLogRotation": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T16:42:55.6279732Z",
+      "lastCheckedUtc": "2026-04-19T16:42:55.6279732Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.0.45.2602",
+      "manifestSha": "55a342641ab65b832d6d82fa28358a3a692fe91463a91dfd8659125f24071fbc",
+      "installerType": "unknown",
+      "installSeconds": 2,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Ahoy.Ahoy": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T16:43:00.4234487Z",
+      "lastCheckedUtc": "2026-04-19T16:43:00.4234487Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.5.0",
+      "manifestSha": "0aeb77d49c892d1b5bbc944d0b691aedaa1c93d0799abc0cbb61783454d86021",
+      "installerType": "unknown",
+      "installSeconds": 2,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AhoyLabs.BackyardAI": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:43:05.0882025Z",
+      "lastCheckedUtc": "2026-04-19T16:43:05.0882025Z",
+      "lastUpdatedUtc": "2026-04-19T16:43:05.0882025Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "0.37.0",
+      "manifestSha": "2a551219080dea7150692ec9a8ab7810e7e3a88ff516bb35763bc54c02ebed2a",
+      "installerType": "unknown",
+      "installSeconds": 68,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 32894.0,
+      "icons": [
+        {
+          "name": "Backyard AI.faraday.ico",
+          "bytes": 32894,
+          "sha256": "1d43634924c08295a5391e55c0000ea8e3f588b3d81ed32b5e205f92a5762a70"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AHS.TohokuItako": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T16:44:17.3663241Z",
+      "lastCheckedUtc": "2026-04-19T16:44:17.3663241Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.0.0",
+      "manifestSha": "9005406d46a0784012c7d4e1f4a2b09c41ba34e11b9d3c90f9918f7e45649aed",
+      "installerType": "unknown",
+      "installSeconds": 66,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "aiko-chan-ai.DiscordBotClient": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:45:27.1527861Z",
+      "lastCheckedUtc": "2026-04-19T16:45:27.1527861Z",
+      "lastUpdatedUtc": "2026-04-19T16:45:27.1527861Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "3.9.1",
+      "manifestSha": "83f9a1605348c237bcf38be589c2de90b55f781e201237bb943e82bff19ea76f",
+      "installerType": "unknown",
+      "installSeconds": 44,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 26721.0,
+      "icons": [
+        {
+          "name": "DiscordBotClient 3.9.1.760f5afc-fded-5554-b14c-1a3bd05a770d.ico",
+          "bytes": 26721,
+          "sha256": "b33e7d06f99ebd8e03a32464fb30256105eaa9ca66725e9391fa49f9f2db0510"
+        }
+      ],
+      "extractError": null,
       "installStdErr": null
     }
   }

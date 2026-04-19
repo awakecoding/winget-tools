@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 1/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T16:30:08.7785821Z",
+  "generated": "2026-04-19T16:43:41.2619025Z",
   "entries": {
     "1IC.BPMN-RPAStudio": {
       "status": "ExtractError",
@@ -774,6 +774,144 @@
       "iconCount": 0,
       "iconBytes": 0,
       "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AHS.TohokuKiritan": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T16:41:29.0341416Z",
+      "lastCheckedUtc": "2026-04-19T16:41:29.0341416Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.0.0",
+      "manifestSha": "19ee52473a27dc17cc08a6b8e0f7274d5a5be4e63fed9d630d0eb06e2c171017",
+      "installerType": "unknown",
+      "installSeconds": 60,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "No ARP entries matched in scope 'Both' for 'AHS.TohokuKiritan'. Is the package actually installed?",
+      "installStdErr": null
+    },
+    "aiclientproxy.ProxyCast": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T16:42:36.7314525Z",
+      "lastCheckedUtc": "2026-04-19T16:42:36.7314525Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "0.98.0",
+      "manifestSha": "8c99d17d201509038f733e407ce6ac3b80cc0b44cd290ce2bfd02f170977f36b",
+      "installerType": "unknown",
+      "installSeconds": 9,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AirExplorer.AirExplorer": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:42:51.0452026Z",
+      "lastCheckedUtc": "2026-04-19T16:42:51.0452026Z",
+      "lastUpdatedUtc": "2026-04-19T16:42:51.0452026Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "5.9.0",
+      "manifestSha": "25a99239c26feaf4641826a392f18679ee41dafda7ea80bb023e9a7a4b6ead8e",
+      "installerType": "unknown",
+      "installSeconds": 5,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 53887.0,
+      "icons": [
+        {
+          "name": "Air Explorer.Air Explorer.ico",
+          "bytes": 53887,
+          "sha256": "b447dedbd94f845dbeee7bd24d399972457c313a3777108378454f5096602355"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AirMyPC.AirMyPC": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:42:59.2898637Z",
+      "lastCheckedUtc": "2026-04-19T16:42:59.2898637Z",
+      "lastUpdatedUtc": "2026-04-19T16:42:59.2898637Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "7.2.0",
+      "manifestSha": "fd3902f0901272043edf112becacc35430141d084013190b428b1be0df180d18",
+      "installerType": "unknown",
+      "installSeconds": 10,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 34020.0,
+      "icons": [
+        {
+          "name": "AirMyPC.AirMyPC_is1.ico",
+          "bytes": 34020,
+          "sha256": "ba38b856d2c8d071883534dda838846e8b71adb83039693ae438446be4791967"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Airspy.SDRSharp.DotNet9": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T16:43:12.3827048Z",
+      "lastCheckedUtc": "2026-04-19T16:43:12.3827048Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.0.0.1921",
+      "manifestSha": "a5b76a28e7c441cc421670b68093753bc4b764a5010cea4c16fca33cdc72cb07",
+      "installerType": "unknown",
+      "installSeconds": 18,
+      "extractSeconds": 2,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "Could not retrieve manifest for 'Airspy.SDRSharp.DotNet9' (FileCache empty and 'winget show' did not populate it).",
+      "installStdErr": null
+    },
+    "Airytec.SwitchOff": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:43:36.5951204Z",
+      "lastCheckedUtc": "2026-04-19T16:43:36.5951204Z",
+      "lastUpdatedUtc": "2026-04-19T16:43:36.5951204Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "3.5.1",
+      "manifestSha": "2a7122fe74b17aac5e83b19e3ee36edc7635cccb26e2dc5d29bc18139a9b2ea4",
+      "installerType": "unknown",
+      "installSeconds": 2,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 18718.0,
+      "icons": [
+        {
+          "name": "Airytec Switch Off.Airytec Switch Off.ico",
+          "bytes": 18718,
+          "sha256": "f4c51979ff240b5252c21954645960fb2e897f1bfcc7575e052318cf3aca99e6"
+        }
+      ],
       "extractError": null,
       "installStdErr": null
     }
