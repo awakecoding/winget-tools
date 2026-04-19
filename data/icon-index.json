@@ -1,15 +1,15 @@
 {
   "schema": 1,
-  "generated": "2026-04-19T16:12:00.2352055Z",
+  "generated": "2026-04-19T16:35:28.1052207Z",
   "repository": "awakecoding/winget-tools",
   "releaseTag": "icons-latest",
   "baseUrl": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/",
-  "count": 62,
+  "count": 82,
   "statusCounts": {
-    "HasIcon": 62,
-    "ExtractError": 161,
-    "InstallTimeout": 4,
-    "NoIcon": 111
+    "NoIcon": 130,
+    "ExtractError": 180,
+    "HasIcon": 82,
+    "InstallTimeout": 6
   },
   "entries": {
     "0-don.clippy": {
@@ -453,6 +453,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:03:14.6028807Z"
     },
+    "Aegisub.Aegisub": {
+      "version": "3.4.2",
+      "sha256": "c0f6f301a386db34a88a15657c9e41bd5cb5a39187e4262711df42c65f16a690",
+      "sizeBytes": 74974,
+      "assetName": "Aegisub.Aegisub.c0f6f301.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Aegisub.Aegisub.c0f6f301.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:30:40.911075Z"
+    },
     "aelassas.Servy": {
       "version": "7.9",
       "sha256": "4c76ed9a8d9da9067f641eafd4f398883d473b36a9759e30b9f538d90e991434",
@@ -462,6 +471,33 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:55:30.6503604Z"
     },
+    "afractal.Echo": {
+      "version": "1.0.0",
+      "sha256": "94a8d2fa9050b2fe8a56f574454ba28475261f166c8d91c0cc4f2bd05dbf89e6",
+      "sizeBytes": 3620,
+      "assetName": "afractal.Echo.94a8d2fa.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/afractal.Echo.94a8d2fa.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:27:28.7372911Z"
+    },
+    "afractal.Metronome": {
+      "version": "1.0.60",
+      "sha256": "be35c5cf23dd7d4262e558bc3b5f80718d1aad3c022180e72345ebc9bccea77e",
+      "sizeBytes": 110476,
+      "assetName": "afractal.Metronome.be35c5cf.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/afractal.Metronome.be35c5cf.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:27:46.5171582Z"
+    },
+    "afractal.TwitterTron": {
+      "version": "1.0.2",
+      "sha256": "1116a8be2622864ead863cacb22319bfb5b1ee98e14c5088823dc4fb06d9efe5",
+      "sizeBytes": 4084,
+      "assetName": "afractal.TwitterTron.1116a8be.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/afractal.TwitterTron.1116a8be.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:30:57.8691372Z"
+    },
     "AGILELEAP.SlideBrowser": {
       "version": "2.0.0",
       "sha256": "3affdf8bf6366dd389d573479d5f9a5ec32efdea3e2864dcb1429964e433e5ab",
@@ -470,6 +506,33 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AGILELEAP.SlideBrowser.3affdf8b.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:40:32.0173291Z"
+    },
+    "AGSProjectTeam.AdventureGameStudio": {
+      "version": "3.6.2.18",
+      "sha256": "d7ae1651c67e306e5bfa6a3551243f974a8c63d0c39670ba5e61f929dde43ed5",
+      "sizeBytes": 146076,
+      "assetName": "AGSProjectTeam.AdventureGameStudio.d7ae1651.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AGSProjectTeam.AdventureGameStudio.d7ae1651.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:28:39.8175958Z"
+    },
+    "AGTEK.Gradework": {
+      "version": "1.12.5.4",
+      "sha256": "ffe8927f8d6a819deab6dbe5aa1ee63fb3d3f1ffff4dade8bb2be664acb72a73",
+      "sizeBytes": 217759,
+      "assetName": "AGTEK.Gradework.ffe8927f.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AGTEK.Gradework.ffe8927f.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:28:01.1583766Z"
+    },
+    "AGTEK.UndergroundSA": {
+      "version": "1.12.5.4",
+      "sha256": "f72be30da6c96233df506bf9ee4f7792950fdc4475b5475228b2c3e252d757d2",
+      "sizeBytes": 167745,
+      "assetName": "AGTEK.UndergroundSA.f72be30d.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AGTEK.UndergroundSA.f72be30d.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:29:02.1406734Z"
     },
     "ahkohd.switch": {
       "version": "1.0.23",
@@ -489,6 +552,24 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:03:43.8871144Z"
     },
+    "alagrede.znote": {
+      "version": "3.7.5",
+      "sha256": "fbc5075c4ef93b75383a8d592c3797c062d174d86ce4fbecc0ab7e857093f329",
+      "sizeBytes": 104344,
+      "assetName": "alagrede.znote.fbc5075c.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/alagrede.znote.fbc5075c.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:34:26.1178514Z"
+    },
+    "Albion.Online": {
+      "version": "25.08.27",
+      "sha256": "1e21a5e28c39e94ac0cd92e0a839a30eeef629d4901e1878694ef5f7766b2da4",
+      "sizeBytes": 99678,
+      "assetName": "Albion.Online.1e21a5e2.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Albion.Online.1e21a5e2.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:27:36.0347175Z"
+    },
     "ALCPU.CoreTemp": {
       "version": "1.20.0",
       "sha256": "77f26794a8c68c06643c83237a97b864e31d1849ad6b5c4064007af9fb18c7a2",
@@ -497,6 +578,33 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/ALCPU.CoreTemp.77f26794.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:10:05.3358698Z"
+    },
+    "ALE.Rainbow": {
+      "version": "2.165.3.0",
+      "sha256": "65cebddef11b5ed5e845c61f2bf7685c5dc4cd9c5e29f9f3f95bdc3f13afd878",
+      "sizeBytes": 404006,
+      "assetName": "ALE.Rainbow.65cebdde.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/ALE.Rainbow.65cebdde.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:28:19.116348Z"
+    },
+    "Aleab.Toastify": {
+      "version": "1.11.2",
+      "sha256": "e4879f7748da6566113e6dfcc77cddc9d0cd28c3295ec7a79e73e315f8a0f082",
+      "sizeBytes": 47284,
+      "assetName": "Aleab.Toastify.e4879f77.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Aleab.Toastify.e4879f77.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:28:43.5564001Z"
+    },
+    "Alex313031.Mercury": {
+      "version": "129.0.2",
+      "sha256": "07d6cc9ef2bd434c6a2bd7fd5b6cc681dfefdf1acf57742a860f51b73aca9245",
+      "sizeBytes": 42859,
+      "assetName": "Alex313031.Mercury.07d6cc9e.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Alex313031.Mercury.07d6cc9e.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:33:39.6992574Z"
     },
     "Alex313031.Thorium": {
       "version": "138.0.7204.303",
@@ -516,6 +624,33 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:03:05.944271Z"
     },
+    "AlexanderPershin.lsdeer": {
+      "version": "0.1.6",
+      "sha256": "c30a63dd8ea003c509b314289d4493b1be4fe0b39c6bfba07949af01681a5d06",
+      "sizeBytes": 10711,
+      "assetName": "AlexanderPershin.lsdeer.c30a63dd.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AlexanderPershin.lsdeer.c30a63dd.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:34:27.0271768Z"
+    },
+    "AlexRedden.G14ControlV2": {
+      "version": "0.2.2",
+      "sha256": "6c364902fae8fdeeccae83e8c460949fdae0b2567861f97aaf03bff024483781",
+      "sizeBytes": 102303,
+      "assetName": "AlexRedden.G14ControlV2.6c364902.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AlexRedden.G14ControlV2.6c364902.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:34:57.3404787Z"
+    },
+    "Alibaba.AliWorkbench": {
+      "version": "9.63.20N",
+      "sha256": "b4437f2102ad2e1acd7729f18728653655c40116ffc4e43bd3d82647d5977f13",
+      "sizeBytes": 121756,
+      "assetName": "Alibaba.AliWorkbench.b4437f21.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Alibaba.AliWorkbench.b4437f21.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:27:31.3837967Z"
+    },
     "Alibaba.Qianwen": {
       "version": "2.3.1",
       "sha256": "e9b17e6f80f556461b76e434aaee333292bad965e18c5c4a12cf6e55c4abfe38",
@@ -524,6 +659,15 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Alibaba.Qianwen.e9b17e6f.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:04:10.2050982Z"
+    },
+    "Alibaba.Qwen": {
+      "version": "1.0.3",
+      "sha256": "34c38307bdb01b91832b0ebb673ea2098842517a65760614536d5f69ba0be0fb",
+      "sizeBytes": 115762,
+      "assetName": "Alibaba.Qwen.34c38307.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Alibaba.Qwen.34c38307.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:31:17.8694537Z"
     },
     "Alibaba.Taobao": {
       "version": "1.3.4",
@@ -534,6 +678,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:27:57.4757763Z"
     },
+    "Alibaba.Yuque": {
+      "version": "4.2.1",
+      "sha256": "4eee8b0a5abe24c1e76b8ffa78cb19046712ff9f400cb124ef5a0f33317eee1a",
+      "sizeBytes": 58671,
+      "assetName": "Alibaba.Yuque.4eee8b0a.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Alibaba.Yuque.4eee8b0a.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:31:42.5558779Z"
+    },
     "altair-graphql.altair": {
       "version": "8.5.0",
       "sha256": "7cd06d77a3d5f1a3d4bd509086ada3ce4b526a9f13f52446db41d3cf9e911f15",
@@ -542,6 +695,15 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/altair-graphql.altair.7cd06d77.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:40:05.6551484Z"
+    },
+    "AltekaSolutions.Kards": {
+      "version": "1.3.1",
+      "sha256": "bcaa833a8f695fe0ac179f3e4b21e786403bcb1bb94faf2f751bdabbb70c5a6f",
+      "sizeBytes": 51275,
+      "assetName": "AltekaSolutions.Kards.bcaa833a.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AltekaSolutions.Kards.bcaa833a.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:32:47.7207944Z"
     },
     "Amazon.Chime": {
       "version": "5.23.32103",
@@ -569,6 +731,24 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Anxcye.AnxReader.7065adff.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:05:00.5243217Z"
+    },
+    "AppFlowy.AppFlowy": {
+      "version": "0.11.7",
+      "sha256": "4958a4553a9150650e26d0280856ad743e66c31fd54cf16dafd0a9f13fad516a",
+      "sizeBytes": 171504,
+      "assetName": "AppFlowy.AppFlowy.4958a455.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AppFlowy.AppFlowy.4958a455.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:31:23.2104559Z"
+    },
+    "ApSIC.Xbench": {
+      "version": "3.0.0.1603",
+      "sha256": "85b1aff190d447245d84217e6b15ed31fedced3dbc645e22b1bb406ddd0f523a",
+      "sizeBytes": 95910,
+      "assetName": "ApSIC.Xbench.85b1aff1.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/ApSIC.Xbench.85b1aff1.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T16:31:59.297101Z"
     }
   }
 }

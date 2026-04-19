@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 3/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T16:04:31.2397576Z",
+  "generated": "2026-04-19T16:28:49.5689834Z",
   "entries": {
     "0xGingi.Browser": {
       "status": "HasIcon",
@@ -642,6 +642,144 @@
       "iconCount": 0,
       "iconBytes": 0,
       "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AlbinAlm.Straumr": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T16:27:21.9221596Z",
+      "lastCheckedUtc": "2026-04-19T16:27:21.9221596Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2026.4.15.34",
+      "manifestSha": "ee6a6bb1a595c8137939020dbc429956c6e3f1ca26898acc1b1920fa35fd82d5",
+      "installerType": "unknown",
+      "installSeconds": 9,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Albion.Online": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:27:36.0347175Z",
+      "lastCheckedUtc": "2026-04-19T16:27:36.0347175Z",
+      "lastUpdatedUtc": "2026-04-19T16:27:36.0347175Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "25.08.27",
+      "manifestSha": "7efaef4fcc8a3e0e0898352cb6042cb4c6d7f9d0ae49b9cf0bbe31e6464103d1",
+      "installerType": "unknown",
+      "installSeconds": 16,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 99678.0,
+      "icons": [
+        {
+          "name": "Albion Online.SandboxAlbionOnline.ico",
+          "bytes": 99678,
+          "sha256": "1e21a5e28c39e94ac0cd92e0a839a30eeef629d4901e1878694ef5f7766b2da4"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AlbrechtL.WelleIO": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T16:27:54.0209500Z",
+      "lastCheckedUtc": "2026-04-19T16:27:54.0209500Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.7",
+      "manifestSha": "a0975acbcd6252354eaa90866d4ecf9104b2ebf29543981a81b7c8df134791fb",
+      "installerType": "unknown",
+      "installSeconds": 17,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "No ARP entries matched in scope 'Both' for 'AlbrechtL.WelleIO'. Is the package actually installed?",
+      "installStdErr": null
+    },
+    "Aldaviva.AuthenticatorChooser": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T16:28:13.9826194Z",
+      "lastCheckedUtc": "2026-04-19T16:28:13.9826194Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "0.4.0",
+      "manifestSha": "95a62d9d3bcbd638154426237956621447c278bf0add58e85e2aad8145b75829",
+      "installerType": "unknown",
+      "installSeconds": 3,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "ALE.Rainbow": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:28:19.1163480Z",
+      "lastCheckedUtc": "2026-04-19T16:28:19.1163480Z",
+      "lastUpdatedUtc": "2026-04-19T16:28:19.1163480Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.165.3.0",
+      "manifestSha": "cf8acfa710233a4c77584bfcfcf0f15852c9903a9d2779c157a4f7c24ab9dc39",
+      "installerType": "unknown",
+      "installSeconds": 22,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 404006.0,
+      "icons": [
+        {
+          "name": "Rainbow.1A7843C5-3352-4383-9893-2EB77C94CC46_is1.ico",
+          "bytes": 404006,
+          "sha256": "65cebddef11b5ed5e845c61f2bf7685c5dc4cd9c5e29f9f3f95bdc3f13afd878"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Aleab.Toastify": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:28:43.5564001Z",
+      "lastCheckedUtc": "2026-04-19T16:28:43.5564001Z",
+      "lastUpdatedUtc": "2026-04-19T16:28:43.5564001Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.11.2",
+      "manifestSha": "254d3966c812449cd63ad1d9acdfd4a05f7c65b4f9b9bcfe4df7cc24f925a165",
+      "installerType": "unknown",
+      "installSeconds": 3,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 47284.0,
+      "icons": [
+        {
+          "name": "Toastify.Toastify.ico",
+          "bytes": 47284,
+          "sha256": "e4879f7748da6566113e6dfcc77cddc9d0cd28c3295ec7a79e73e315f8a0f082"
+        }
+      ],
       "extractError": null,
       "installStdErr": null
     }

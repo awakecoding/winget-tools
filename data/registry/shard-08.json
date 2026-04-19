@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 8/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T16:04:43.1673990Z",
+  "generated": "2026-04-19T16:34:00.1933412Z",
   "entries": {
     "1357310795.JboxTransfer": {
       "status": "NoIcon",
@@ -503,8 +503,8 @@
     },
     "albertony.npiperelay": {
       "status": "NoIcon",
-      "firstSeenUtc": "2026-04-19T16:03:15.6949550Z",
-      "lastCheckedUtc": "2026-04-19T16:03:15.6949550Z",
+      "firstSeenUtc": "2026-04-19T16:03:15.694955Z",
+      "lastCheckedUtc": "2026-04-19T16:03:15.694955Z",
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.11.1",
@@ -619,6 +619,150 @@
       "iconBytes": 0,
       "icons": [],
       "extractError": "Cannot convert value \"-1978335215\" to type \"System.UInt32\". Error: \"Value was either too large or too small for a UInt32.\"",
+      "installStdErr": null
+    },
+    "Alibaba.AliWorkbench": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:27:31.3837967Z",
+      "lastCheckedUtc": "2026-04-19T16:27:31.3837967Z",
+      "lastUpdatedUtc": "2026-04-19T16:27:31.3837967Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "9.63.20N",
+      "manifestSha": "d79c12f0175a78cf8758d41eb1a6c69f46a7401e7ea0a0bb18854f76446abf48",
+      "installerType": "unknown",
+      "installSeconds": 43,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 121756.0,
+      "icons": [
+        {
+          "name": "千牛工作台.千牛工作台.ico",
+          "bytes": 121756,
+          "sha256": "b4437f2102ad2e1acd7729f18728653655c40116ffc4e43bd3d82647d5977f13"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Alibaba.Qwen": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:31:17.8694537Z",
+      "lastCheckedUtc": "2026-04-19T16:31:17.8694537Z",
+      "lastUpdatedUtc": "2026-04-19T16:31:17.8694537Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.0.3",
+      "manifestSha": "0e01c58dd295856668da7c6a414b9ab34924458c7d9bfd4ec73ff10f0108aaf4",
+      "installerType": "unknown",
+      "installSeconds": 22,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 115762.0,
+      "icons": [
+        {
+          "name": "Qwen 1.0.3.5104bb71-6741-59b2-ba05-ce6913d8cdbc.ico",
+          "bytes": 115762,
+          "sha256": "34c38307bdb01b91832b0ebb673ea2098842517a65760614536d5f69ba0be0fb"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Alibaba.Yuque": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:31:42.5558779Z",
+      "lastCheckedUtc": "2026-04-19T16:31:42.5558779Z",
+      "lastUpdatedUtc": "2026-04-19T16:31:42.5558779Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "4.2.1",
+      "manifestSha": "53a1e4194ae539f666040e336c55a0bde6fff83ce151678a27c6fb1909e5ea89",
+      "installerType": "unknown",
+      "installSeconds": 20,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 58671.0,
+      "icons": [
+        {
+          "name": "语雀 4.2.1.a47a88c0-27d8-5a45-af46-ded84899f5d9.ico",
+          "bytes": 58671,
+          "sha256": "4eee8b0a5abe24c1e76b8ffa78cb19046712ff9f400cb124ef5a0f33317eee1a"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "ALTEC.AltecDataPrint": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T16:32:06.0451382Z",
+      "lastCheckedUtc": "2026-04-19T16:32:06.0451382Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.20.9944",
+      "manifestSha": "996379e4b8717f1cb68cf877119da55f49366e627fab53ffa7bf316be4921b81",
+      "installerType": "unknown",
+      "installSeconds": 14,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AltekaSolutions.Kards": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T16:32:47.7207944Z",
+      "lastCheckedUtc": "2026-04-19T16:32:47.7207944Z",
+      "lastUpdatedUtc": "2026-04-19T16:32:47.7207944Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.3.1",
+      "manifestSha": "5caf014a9bc0340f6367b99b2b24f2794cf8deb873f2cc83893e89f045bf5925",
+      "installerType": "unknown",
+      "installSeconds": 12,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 51275.0,
+      "icons": [
+        {
+          "name": "Kards 1.3.1.c4282208-6982-5c48-9688-30c288f9b3dd.ico",
+          "bytes": 51275,
+          "sha256": "bcaa833a8f695fe0ac179f3e4b21e786403bcb1bb94faf2f751bdabbb70c5a6f"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Altova.Authentic.2026.Enterprise": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T16:33:02.7202438Z",
+      "lastCheckedUtc": "2026-04-19T16:33:02.7202438Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2026.00.00.03",
+      "manifestSha": "d1ed59600a1fffae43af74f08ade0f564c5e445222d10f2973269c2cf1e33562",
+      "installerType": "unknown",
+      "installSeconds": 36,
+      "extractSeconds": 1,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "Could not retrieve manifest for 'Altova.Authentic.2026.Enterprise' (FileCache empty and 'winget show' did not populate it).",
       "installStdErr": null
     }
   }
