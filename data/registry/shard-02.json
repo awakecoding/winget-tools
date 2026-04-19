@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 2/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T17:01:29.7643030Z",
+  "generated": "2026-04-19T17:22:48.4571541Z",
   "entries": {
     "360.NamiClaw": {
       "status": "HasIcon",
@@ -887,8 +887,8 @@
     },
     "Altova.StyleVision.2024.Professional": {
       "status": "ExtractError",
-      "firstSeenUtc": "2026-04-19T16:58:42.5979530Z",
-      "lastCheckedUtc": "2026-04-19T16:58:42.5979530Z",
+      "firstSeenUtc": "2026-04-19T16:58:42.597953Z",
+      "lastCheckedUtc": "2026-04-19T16:58:42.597953Z",
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "2024.02.01",
@@ -1003,6 +1003,144 @@
       "iconBytes": 0,
       "icons": [],
       "extractError": null,
+      "installStdErr": null
+    },
+    "AmyXun.AxGlyph": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T17:17:24.5656765Z",
+      "lastCheckedUtc": "2026-04-19T17:17:24.5656765Z",
+      "lastUpdatedUtc": "2026-04-19T17:17:24.5656765Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.5981",
+      "manifestSha": "aabe07d3e6501a52eb45669cec6b559d7d8035b67af9f777b2f9388578df6a70",
+      "installerType": "unknown",
+      "installSeconds": 21,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 284334.0,
+      "icons": [
+        {
+          "name": "AxGlyph.AxGlyph.ico",
+          "bytes": 284334,
+          "sha256": "3eaa3ead01d6f3e56d07517b9bd7cf33a9bc1142d0e57ab5f059c9e8232c71a1"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Anaconda.Anaconda3": {
+      "status": "InstallTimeout",
+      "firstSeenUtc": "2026-04-19T17:17:51.3393357Z",
+      "lastCheckedUtc": "2026-04-19T17:17:51.3393357Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2025.12-1",
+      "manifestSha": "9ff4445675498e9df022f45ae3563ae7516642c5ebed51c455cf70df88b3e449",
+      "installerType": "unknown",
+      "installSeconds": 180,
+      "extractSeconds": 0,
+      "installExitCode": -1,
+      "installedByThisRun": false,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AndrejFogelton.eyeblink": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T17:20:53.3204147Z",
+      "lastCheckedUtc": "2026-04-19T17:20:53.3204147Z",
+      "lastUpdatedUtc": "2026-04-19T17:20:53.3204147Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "3.7.4.0",
+      "manifestSha": "bdc3c2723cba7b2358aff7f94e3e7b194622243804f2eeb63843a4e9679d797c",
+      "installerType": "unknown",
+      "installSeconds": 26,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 104600.0,
+      "icons": [
+        {
+          "name": "eyeblink 3.7.4.0 Win64.eyeblink.ico",
+          "bytes": 104600,
+          "sha256": "0ba729ad2d1c37033fd80c4e4e3b070a00e423821f84c18711f779634cba0a9a"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Anthropic.ClaudeCode": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T17:21:21.7368952Z",
+      "lastCheckedUtc": "2026-04-19T17:21:21.7368952Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.1.112",
+      "manifestSha": "8a47270fbdcfbdb26862f39ad3c1ee3576412167686265b67e33f00ca60f0206",
+      "installerType": "unknown",
+      "installSeconds": 9,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AntibodySoftware.WizFile": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T17:21:35.0437575Z",
+      "lastCheckedUtc": "2026-04-19T17:21:35.0437575Z",
+      "lastUpdatedUtc": "2026-04-19T17:21:35.0437575Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "3.15",
+      "manifestSha": "d3034cbd8ff9eae620dc831023a00ab1e250c18609b939873696127baa78e125",
+      "installerType": "unknown",
+      "installSeconds": 8,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 285478.0,
+      "icons": [
+        {
+          "name": "WizFile v3.15.WizFile_is1.ico",
+          "bytes": 285478,
+          "sha256": "106fda49c95a554d8cd6a9bdc8ef89fc3230a1ea511b26a1fb0e46392413ab7f"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "antnsn.lexorium": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T17:21:49.2651134Z",
+      "lastCheckedUtc": "2026-04-19T17:21:49.2651134Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "3.0.4",
+      "manifestSha": "2a478c622027043c2693835db3bf05d1402b692dbac1363669ab14ce9ce5b907",
+      "installerType": "unknown",
+      "installSeconds": 45,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "No ARP entries matched in scope 'Both' for 'antnsn.lexorium'. Is the package actually installed?",
       "installStdErr": null
     }
   }

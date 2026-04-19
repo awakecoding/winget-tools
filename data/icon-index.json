@@ -1,15 +1,15 @@
 {
   "schema": 1,
-  "generated": "2026-04-19T17:09:41.8921889Z",
+  "generated": "2026-04-19T17:33:28.7926016Z",
   "repository": "awakecoding/winget-tools",
   "releaseTag": "icons-latest",
   "baseUrl": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/",
-  "count": 121,
+  "count": 131,
   "statusCounts": {
-    "NoIcon": 165,
-    "InstallTimeout": 10,
-    "ExtractError": 222,
-    "HasIcon": 121
+    "HasIcon": 131,
+    "NoIcon": 180,
+    "InstallTimeout": 14,
+    "ExtractError": 253
   },
   "entries": {
     "0-don.clippy": {
@@ -777,6 +777,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:58:42.4488527Z"
     },
+    "AlexKaul.Freeter": {
+      "version": "1.2.1",
+      "sha256": "a0baaf631c0c8d8bd6a797b937c32c8022b27b84e5d86f64572a3872067278e5",
+      "sizeBytes": 38967,
+      "assetName": "AlexKaul.Freeter.a0baaf63.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AlexKaul.Freeter.a0baaf63.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:17:03.3920926Z"
+    },
     "alexkim205.g-desktop-suite": {
       "version": "0.3.1",
       "sha256": "4a78644e6d76ec761ed9b6249b6624bc0470aac76076364d11e1a5c8b7ee9ab0",
@@ -939,6 +948,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:27:57.4757763Z"
     },
+    "Alibaba.Teambition": {
+      "version": "2.0.3",
+      "sha256": "385f65ae54dee4ba20d6b3e51b3b186853e9c369589340040edc2074d18bc13f",
+      "sizeBytes": 15206,
+      "assetName": "Alibaba.Teambition.385f65ae.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Alibaba.Teambition.385f65ae.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:16:53.7423652Z"
+    },
     "Alibaba.UC": {
       "version": "1.1.0.20",
       "sha256": "163482d9c2fb25b1a8bcba3ada86a930b2cda41ab40fe32f010c62129d5b0e09",
@@ -975,6 +993,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:44:56.5028993Z"
     },
+    "allentown521.Saladict": {
+      "version": "4.0.0",
+      "sha256": "27c8d6cbbf2379c4b9a9d1629c21a07a3190e71a18a1979280beda5af6b79c63",
+      "sizeBytes": 19788,
+      "assetName": "allentown521.Saladict.27c8d6cb.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/allentown521.Saladict.27c8d6cb.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:17:30.2986395Z"
+    },
     "Allusion.Allusion": {
       "version": "1.0.0-rc.10",
       "sha256": "f7a199b6abd060c0b020d5db66eaa79f08adb4e8812616eafe3985e32037a797",
@@ -983,6 +1010,15 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Allusion.Allusion.f7a199b6.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T17:04:14.0892495Z"
+    },
+    "AlroviApS.RoGoldUltimateApp": {
+      "version": "1.4.0",
+      "sha256": "518c76c328b4ead9556af3b2a873d01e425080b429da32476a49973c8c92a90f",
+      "sizeBytes": 19816,
+      "assetName": "AlroviApS.RoGoldUltimateApp.518c76c3.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AlroviApS.RoGoldUltimateApp.518c76c3.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:17:21.3132073Z"
     },
     "altair-graphql.altair": {
       "version": "8.5.0",
@@ -1001,6 +1037,15 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Altap.Salamander.bbbc4e66.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:47:06.5606499Z"
+    },
+    "AltDrag.AltDrag": {
+      "version": "1.1",
+      "sha256": "3ec2bafa7d3a5703a0cc0f17eeba3165fd37afccac79807f746097a11ea96d14",
+      "sizeBytes": 766,
+      "assetName": "AltDrag.AltDrag.3ec2bafa.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AltDrag.AltDrag.3ec2bafa.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:17:28.9259649Z"
     },
     "ALTEC.QlickPrint": {
       "version": "1.2",
@@ -1037,6 +1082,42 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Amazon.Chime.5ca79744.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:59:25.73498Z"
+    },
+    "AmyXun.AxGlyph": {
+      "version": "2.5981",
+      "sha256": "3eaa3ead01d6f3e56d07517b9bd7cf33a9bc1142d0e57ab5f059c9e8232c71a1",
+      "sizeBytes": 284334,
+      "assetName": "AmyXun.AxGlyph.3eaa3ead.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AmyXun.AxGlyph.3eaa3ead.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:17:24.5656765Z"
+    },
+    "AmyXun.AxMath": {
+      "version": "2.7061",
+      "sha256": "1c6cb324f41167a0f91696f40e491cf83e0a90e12004ecd63d57136507364abf",
+      "sizeBytes": 284334,
+      "assetName": "AmyXun.AxMath.1c6cb324.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AmyXun.AxMath.1c6cb324.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:17:02.3408065Z"
+    },
+    "AndrejFogelton.eyeblink": {
+      "version": "3.7.4.0",
+      "sha256": "0ba729ad2d1c37033fd80c4e4e3b070a00e423821f84c18711f779634cba0a9a",
+      "sizeBytes": 104600,
+      "assetName": "AndrejFogelton.eyeblink.0ba729ad.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AndrejFogelton.eyeblink.0ba729ad.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:20:53.3204147Z"
+    },
+    "AntibodySoftware.WizFile": {
+      "version": "3.15",
+      "sha256": "106fda49c95a554d8cd6a9bdc8ef89fc3230a1ea511b26a1fb0e46392413ab7f",
+      "sizeBytes": 285478,
+      "assetName": "AntibodySoftware.WizFile.106fda49.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AntibodySoftware.WizFile.106fda49.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:21:35.0437575Z"
     },
     "AntiMicroX.antimicrox": {
       "version": "3.5.1",
@@ -1100,6 +1181,15 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Asana.Asana.cfec9297.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T17:00:01.0173089Z"
+    },
+    "assnctr.unfx-proxy-checker": {
+      "version": "1.7.2",
+      "sha256": "7951ebe3346eb78b4beb22e88c49709dc5effe37899f7353165fb795d64842a1",
+      "sizeBytes": 111200,
+      "assetName": "assnctr.unfx-proxy-checker.7951ebe3.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/assnctr.unfx-proxy-checker.7951ebe3.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:23:08.1666667Z"
     }
   }
 }
