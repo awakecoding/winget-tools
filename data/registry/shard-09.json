@@ -1,7 +1,11 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 9/10). Migrated from icon-registry.json.",
+<<<<<<< Updated upstream
   "generated": "2026-04-19T16:05:37.7760964Z",
+=======
+  "generated": "2026-04-19T16:15:05.0795042Z",
+>>>>>>> Stashed changes
   "entries": {
     "15722UsefulApp.WorkspaceLauncherForVSCode": {
       "status": "ExtractError",
@@ -1269,14 +1273,23 @@
     },
     "Andekan.Kinship": {
       "status": "NoIcon",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:19.0029814Z",
       "lastCheckedUtc": "2026-04-19T16:03:19.0029814Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:13:07.1566018Z",
+      "lastCheckedUtc": "2026-04-19T16:13:07.1566018Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.95.0.0",
       "manifestSha": "1e4e9c28202df1b7e55125b3e8d369df369b9d0146113dd940962c81cc3ac8cd",
       "installerType": "unknown",
+<<<<<<< Updated upstream
       "installSeconds": 11,
+=======
+      "installSeconds": 9,
+>>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -1289,8 +1302,13 @@
     },
     "AndrewCantino.McFly": {
       "status": "NoIcon",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:37.1121891Z",
       "lastCheckedUtc": "2026-04-19T16:03:37.1121891Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:13:22.0062268Z",
+      "lastCheckedUtc": "2026-04-19T16:13:22.0062268Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "0.9.4",
@@ -1309,9 +1327,15 @@
     },
     "AntiMicroX.antimicrox": {
       "status": "HasIcon",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:43.4777728Z",
       "lastCheckedUtc": "2026-04-19T16:03:43.4777728Z",
       "lastUpdatedUtc": "2026-04-19T16:03:43.4777728Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:13:27.6749496Z",
+      "lastCheckedUtc": "2026-04-19T16:13:27.6749496Z",
+      "lastUpdatedUtc": "2026-04-19T16:13:27.6749496Z",
+>>>>>>> Stashed changes
       "wingetVersion": "v1.11.510",
       "packageVersion": "3.5.1",
       "manifestSha": "bee304bda69d34fb5928fa2235fa2aad384f8b16d3abff2d76668b7796882f15",
@@ -1335,14 +1359,23 @@
     },
     "Antutu.AntutuLLMBenchmark": {
       "status": "ExtractError",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:50.3143005Z",
       "lastCheckedUtc": "2026-04-19T16:03:50.3143005Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:13:34.5479072Z",
+      "lastCheckedUtc": "2026-04-19T16:13:34.5479072Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "2024.10.22.1096",
       "manifestSha": "14388eb3d10fc0cba25f7fe16b76765d256d420244af4e7dfd3fae912cd9e237",
       "installerType": "unknown",
+<<<<<<< Updated upstream
       "installSeconds": 69,
+=======
+      "installSeconds": 42,
+>>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": -1978335215,
       "installedByThisRun": false,
@@ -1355,14 +1388,24 @@
     },
     "Anxcye.AnxReader": {
       "status": "HasIcon",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:05:00.5243217Z",
       "lastCheckedUtc": "2026-04-19T16:05:00.5243217Z",
       "lastUpdatedUtc": "2026-04-19T16:05:00.5243217Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:14:17.6024247Z",
+      "lastCheckedUtc": "2026-04-19T16:14:17.6024247Z",
+      "lastUpdatedUtc": "2026-04-19T16:14:17.6024247Z",
+>>>>>>> Stashed changes
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.14.0",
       "manifestSha": "e8ab8f6947812eb1eb8298f8104ac6b56b8f3590ec7aa283e0e684b2c106249d",
       "installerType": "unknown",
+<<<<<<< Updated upstream
       "installSeconds": 16,
+=======
+      "installSeconds": 26,
+>>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -1381,14 +1424,23 @@
     },
     "Apache.Groovy.4": {
       "status": "ExtractError",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:05:21.9175422Z",
       "lastCheckedUtc": "2026-04-19T16:05:21.9175422Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:14:48.1724559Z",
+      "lastCheckedUtc": "2026-04-19T16:14:48.1724559Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "4.0.31",
       "manifestSha": "6a85fccf4e37ebb602b899b5b717ed77840ee11b810741c62a57eed694963bbe",
       "installerType": "unknown",
+<<<<<<< Updated upstream
       "installSeconds": 10,
+=======
+      "installSeconds": 11,
+>>>>>>> Stashed changes
       "extractSeconds": 1,
       "installExitCode": 0,
       "installedByThisRun": true,

@@ -1,7 +1,11 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 3/10). Migrated from icon-registry.json.",
+<<<<<<< Updated upstream
   "generated": "2026-04-19T16:04:31.2397576Z",
+=======
+  "generated": "2026-04-19T16:14:55.6426571Z",
+>>>>>>> Stashed changes
   "entries": {
     "0xGingi.Browser": {
       "status": "HasIcon",
@@ -521,8 +525,13 @@
     },
     "AirDroid.AirDroid": {
       "status": "ExtractError",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:07.1265723Z",
       "lastCheckedUtc": "2026-04-19T16:03:07.1265723Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:13:22.4319029Z",
+      "lastCheckedUtc": "2026-04-19T16:13:22.4319029Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "3.8.0.4",
@@ -541,14 +550,23 @@
     },
     "Airesoft.DisAsm": {
       "status": "NoIcon",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:28.9070136Z",
       "lastCheckedUtc": "2026-04-19T16:03:28.9070136Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:13:44.5020513Z",
+      "lastCheckedUtc": "2026-04-19T16:13:44.5020513Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.1.0.0",
       "manifestSha": "9510c366a24b5a0dbb6949bb897dcb6d90386fb90d5bb960e93960b98e0f7283",
       "installerType": "unknown",
+<<<<<<< Updated upstream
       "installSeconds": 2,
+=======
+      "installSeconds": 3,
+>>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -561,14 +579,23 @@
     },
     "AkelPad.AkelPad": {
       "status": "ExtractError",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:33.2283866Z",
       "lastCheckedUtc": "2026-04-19T16:03:33.2283866Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:13:50.3018081Z",
+      "lastCheckedUtc": "2026-04-19T16:13:50.3018081Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "4.9.9",
       "manifestSha": "ca04b5ef4bd2aaaf87c13924ab62751165ddba43ab6e175f768e8f6ef2d8bcbd",
       "installerType": "unknown",
+<<<<<<< Updated upstream
       "installSeconds": 8,
+=======
+      "installSeconds": 14,
+>>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -581,9 +608,15 @@
     },
     "Akiflow.Akiflow": {
       "status": "HasIcon",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:43.8871144Z",
       "lastCheckedUtc": "2026-04-19T16:03:43.8871144Z",
       "lastUpdatedUtc": "2026-04-19T16:03:43.8871144Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:14:06.8529611Z",
+      "lastCheckedUtc": "2026-04-19T16:14:06.8529611Z",
+      "lastUpdatedUtc": "2026-04-19T16:14:06.8529611Z",
+>>>>>>> Stashed changes
       "wingetVersion": "v1.11.510",
       "packageVersion": "2.71.11",
       "manifestSha": "03f636d77027fc11c646dcf51e11d29bb37c6fbf8a57414e09817fba07a37674",
@@ -607,8 +640,13 @@
     },
     "Akka.Cli": {
       "status": "NoIcon",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:04:16.7808058Z",
       "lastCheckedUtc": "2026-04-19T16:04:16.7808058Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:14:42.4245792Z",
+      "lastCheckedUtc": "2026-04-19T16:14:42.4245792Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "3.0.59",
@@ -627,14 +665,23 @@
     },
     "Alacritty.Alacritty": {
       "status": "NoIcon",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:04:23.6777659Z",
       "lastCheckedUtc": "2026-04-19T16:04:23.6777659Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:14:48.5675224Z",
+      "lastCheckedUtc": "2026-04-19T16:14:48.5675224Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "0.17.0",
       "manifestSha": "0e8e5ef50047b80e16ca0f1a9197b951ff68d393499fa6867cb6f1b9cf9a9db8",
       "installerType": "unknown",
+<<<<<<< Updated upstream
       "installSeconds": 5,
+=======
+      "installSeconds": 4,
+>>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,

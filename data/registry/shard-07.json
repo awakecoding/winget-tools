@@ -1,7 +1,11 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 7/10). Migrated from icon-registry.json.",
+<<<<<<< Updated upstream
   "generated": "2026-04-19T16:08:44.8870103Z",
+=======
+  "generated": "2026-04-19T16:18:49.2499274Z",
+>>>>>>> Stashed changes
   "entries": {
     "108thecitizen.DesktopTileLauncher": {
       "status": "NoIcon",
@@ -527,14 +531,23 @@
     },
     "ADInstruments.LabChart.Module.SpikeHistogram": {
       "status": "ExtractError",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:22.1877089Z",
       "lastCheckedUtc": "2026-04-19T16:03:22.1877089Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:13:20.0384040Z",
+      "lastCheckedUtc": "2026-04-19T16:13:20.0384040Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "2.6.3400",
       "manifestSha": "361d4de8fc30952aef477963bf0bf55a12ad170cfdb77e5d40bc000c5bfe05f1",
       "installerType": "unknown",
+<<<<<<< Updated upstream
       "installSeconds": 15,
+=======
+      "installSeconds": 16,
+>>>>>>> Stashed changes
       "extractSeconds": 1,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -547,8 +560,13 @@
     },
     "Admobilize.AdMobilize.MalosVision": {
       "status": "ExtractError",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:43.7885005Z",
       "lastCheckedUtc": "2026-04-19T16:03:43.7885005Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:13:42.9832608Z",
+      "lastCheckedUtc": "2026-04-19T16:13:42.9832608Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "2.9.4",
@@ -567,14 +585,23 @@
     },
     "Adobe.Acrobat.Reader.64-bit": {
       "status": "ExtractError",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:58.4118605Z",
       "lastCheckedUtc": "2026-04-19T16:03:58.4118605Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:13:57.8499209Z",
+      "lastCheckedUtc": "2026-04-19T16:13:57.8499209Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "26.001.21431",
       "manifestSha": "4979ea9d1ab0e94738a9365ab37816256134dbce052d396c6e50eed7c40e23f5",
       "installerType": "unknown",
+<<<<<<< Updated upstream
       "installSeconds": 152,
+=======
+      "installSeconds": 150,
+>>>>>>> Stashed changes
       "extractSeconds": 1,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -587,14 +614,23 @@
     },
     "AdoptOpenJDK.OpenJDK.16.OpenJ9": {
       "status": "ExtractError",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:07:00.3101125Z",
       "lastCheckedUtc": "2026-04-19T16:07:00.3101125Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:16:59.0314480Z",
+      "lastCheckedUtc": "2026-04-19T16:16:59.0314480Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "16.0.1.9",
       "manifestSha": "6763070ad71474faa5d28e13e2975fd5e2834e9c143f76370ffdc20a7882902b",
       "installerType": "unknown",
+<<<<<<< Updated upstream
       "installSeconds": 12,
+=======
+      "installSeconds": 13,
+>>>>>>> Stashed changes
       "extractSeconds": 1,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -607,14 +643,23 @@
     },
     "advaith.CurrencyConverterCommandPalette": {
       "status": "ExtractError",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:07:21.6998326Z",
       "lastCheckedUtc": "2026-04-19T16:07:21.6998326Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:17:20.0930135Z",
+      "lastCheckedUtc": "2026-04-19T16:17:20.0930135Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "0.2.1",
       "manifestSha": "5fa8d019a4a764c218a61c9ffca98d80971c18eb076885ee4c7a5d9d17562e12",
       "installerType": "unknown",
+<<<<<<< Updated upstream
       "installSeconds": 71,
+=======
+      "installSeconds": 77,
+>>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -627,14 +672,23 @@
     },
     "advaith.CurrencyConverterPowerToys": {
       "status": "ExtractError",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:08:36.1632577Z",
       "lastCheckedUtc": "2026-04-19T16:08:36.1632577Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:18:41.3019281Z",
+      "lastCheckedUtc": "2026-04-19T16:18:41.3019281Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.5.4",
       "manifestSha": "f9b398efa00a533f8cd6bfec23393948640b31649af47b8e41d732d278899e6b",
       "installerType": "unknown",
+<<<<<<< Updated upstream
       "installSeconds": 7,
+=======
+      "installSeconds": 6,
+>>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,

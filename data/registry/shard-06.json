@@ -1,7 +1,11 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 6/10). Migrated from icon-registry.json.",
+<<<<<<< Updated upstream
   "generated": "2026-04-19T16:11:43.1925664Z",
+=======
+  "generated": "2026-04-19T16:21:01.6179443Z",
+>>>>>>> Stashed changes
   "entries": {
     "0x192.UniversalAndroidDebloaterGUI": {
       "status": "ExtractError",
@@ -508,35 +512,61 @@
       "installStdErr": null
     },
     "Adobe.Acrobat.Reader.32-bit": {
+<<<<<<< Updated upstream
       "status": "InstallTimeout",
       "firstSeenUtc": "2026-04-19T16:03:42.1758358Z",
       "lastCheckedUtc": "2026-04-19T16:03:42.1758358Z",
+=======
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T16:13:07.3243691Z",
+      "lastCheckedUtc": "2026-04-19T16:13:07.3243691Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "26.001.21431",
       "manifestSha": "49d13c89532b5ee205c97a91215b694065bffd0ef92cf270d68647ccdf6d3e39",
       "installerType": "unknown",
+<<<<<<< Updated upstream
       "installSeconds": 182,
       "extractSeconds": 1,
       "installExitCode": -1,
       "installedByThisRun": false,
+=======
+      "installSeconds": 175,
+      "extractSeconds": 1,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+>>>>>>> Stashed changes
       "alreadyInstalled": false,
       "iconCount": 0,
       "iconBytes": 0,
       "icons": [],
+<<<<<<< Updated upstream
       "extractError": null,
+=======
+      "extractError": "Could not retrieve manifest for 'Adobe.Acrobat.Reader.32-bit' (FileCache empty and 'winget show' did not populate it).",
+>>>>>>> Stashed changes
       "installStdErr": null
     },
     "AdoptOpenJDK.IcedTea-Web": {
       "status": "NoIcon",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:06:49.2145817Z",
       "lastCheckedUtc": "2026-04-19T16:06:49.2145817Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:16:55.7497964Z",
+      "lastCheckedUtc": "2026-04-19T16:16:55.7497964Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.8.8.0",
       "manifestSha": "734e2e5f4a1c89b95871687974fe3a61b88785356f6643a70542e6ee591b181a",
       "installerType": "unknown",
+<<<<<<< Updated upstream
       "installSeconds": 19,
+=======
+      "installSeconds": 18,
+>>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -549,8 +579,13 @@
     },
     "adryledo.ArcaCLI": {
       "status": "NoIcon",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:07:26.8016024Z",
       "lastCheckedUtc": "2026-04-19T16:07:26.8016024Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:17:21.4684194Z",
+      "lastCheckedUtc": "2026-04-19T16:17:21.4684194Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "0.0.1",
@@ -569,14 +604,23 @@
     },
     "AETEurope.SafeSignICMiniDriver": {
       "status": "NoIcon",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:07:32.2695508Z",
       "lastCheckedUtc": "2026-04-19T16:07:32.2695508Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:17:27.4493195Z",
+      "lastCheckedUtc": "2026-04-19T16:17:27.4493195Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "4.6.0.0",
       "manifestSha": "0f7ed249a829810e4ded1d5329946088759fa973c7ee61f244ee9ae0d8a37f3f",
       "installerType": "unknown",
+<<<<<<< Updated upstream
       "installSeconds": 31,
+=======
+      "installSeconds": 17,
+>>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -589,8 +633,13 @@
     },
     "AETEurope.SafeSignICStandard": {
       "status": "InstallTimeout",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:08:15.1920939Z",
       "lastCheckedUtc": "2026-04-19T16:08:15.1920939Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:17:53.9197547Z",
+      "lastCheckedUtc": "2026-04-19T16:17:53.9197547Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "3.5.3.0",
@@ -609,14 +658,23 @@
     },
     "afonsojramos.discrakt": {
       "status": "ExtractError",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:11:17.3746018Z",
       "lastCheckedUtc": "2026-04-19T16:11:17.3746018Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:20:56.1790023Z",
+      "lastCheckedUtc": "2026-04-19T16:20:56.1790023Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "3.4.4",
       "manifestSha": "3d6c7ad4dd622cbd8936f370d9ee0946ef8e7bad03063de848b551c375620bb2",
       "installerType": "unknown",
+<<<<<<< Updated upstream
       "installSeconds": 11,
+=======
+      "installSeconds": 4,
+>>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": -1978334974,
       "installedByThisRun": false,

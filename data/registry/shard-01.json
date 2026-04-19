@@ -1,7 +1,11 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 1/10). Migrated from icon-registry.json.",
+<<<<<<< Updated upstream
   "generated": "2026-04-19T16:04:24.9038613Z",
+=======
+  "generated": "2026-04-19T16:14:25.3379551Z",
+>>>>>>> Stashed changes
   "entries": {
     "1IC.BPMN-RPAStudio": {
       "status": "ExtractError",
@@ -527,8 +531,13 @@
     },
     "ADInstruments.LabChart.Extension.NICO": {
       "status": "ExtractError",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:07.6380886Z",
       "lastCheckedUtc": "2026-04-19T16:03:07.6380886Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:13:08.3456157Z",
+      "lastCheckedUtc": "2026-04-19T16:13:08.3456157Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.1.0400",
@@ -547,8 +556,13 @@
     },
     "ADInstruments.LabChart.Extension.Scheduler": {
       "status": "ExtractError",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:29.2433141Z",
       "lastCheckedUtc": "2026-04-19T16:03:29.2433141Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:13:29.9759481Z",
+      "lastCheckedUtc": "2026-04-19T16:13:29.9759481Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "2.2.0400",
@@ -567,14 +581,23 @@
     },
     "ADInstruments.LabChart.Module.CardiacOutput": {
       "status": "ExtractError",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:35.9593819Z",
       "lastCheckedUtc": "2026-04-19T16:03:35.9593819Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:13:37.7055025Z",
+      "lastCheckedUtc": "2026-04-19T16:13:37.7055025Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.3.0400",
       "manifestSha": "fe77a3a383f3cb0c1dfd702120a7c39d2034fba1105b616a164e5edefcea23f0",
       "installerType": "unknown",
+<<<<<<< Updated upstream
       "installSeconds": 4,
+=======
+      "installSeconds": 3,
+>>>>>>> Stashed changes
       "extractSeconds": 1,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -587,8 +610,13 @@
     },
     "ADInstruments.LabChart.Module.DMTNormalization": {
       "status": "ExtractError",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:42.9163205Z",
       "lastCheckedUtc": "2026-04-19T16:03:42.9163205Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:13:45.1756550Z",
+      "lastCheckedUtc": "2026-04-19T16:13:45.1756550Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.4.3400",
@@ -607,14 +635,23 @@
     },
     "AdLock.AdLock": {
       "status": "ExtractError",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:51.4302067Z",
       "lastCheckedUtc": "2026-04-19T16:03:51.4302067Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:13:55.4623211Z",
+      "lastCheckedUtc": "2026-04-19T16:13:55.4623211Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "2.1.7.4",
       "manifestSha": "6ca4d9f9462353d1ccee5265b5b788dcf62c4bd71e617eee0a43bf68fdcfa476",
       "installerType": "unknown",
+<<<<<<< Updated upstream
       "installSeconds": 14,
+=======
+      "installSeconds": 10,
+>>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": -1978335215,
       "installedByThisRun": false,
@@ -627,14 +664,23 @@
     },
     "Admobilize.AdMobilize.DesktopUI": {
       "status": "ExtractError",
+<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:04:05.8752638Z",
       "lastCheckedUtc": "2026-04-19T16:04:05.8752638Z",
+=======
+      "firstSeenUtc": "2026-04-19T16:14:06.4594285Z",
+      "lastCheckedUtc": "2026-04-19T16:14:06.4594285Z",
+>>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "2.1.3",
       "manifestSha": "cf04d1167abb3f242fdc4b628533bda15452350c83679a1827b44c57c1eac9c5",
       "installerType": "unknown",
+<<<<<<< Updated upstream
       "installSeconds": 14,
+=======
+      "installSeconds": 13,
+>>>>>>> Stashed changes
       "extractSeconds": 1,
       "installExitCode": 0,
       "installedByThisRun": true,
