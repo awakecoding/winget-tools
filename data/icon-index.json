@@ -1,15 +1,15 @@
 {
   "schema": 1,
-  "generated": "2026-04-19T17:52:01.0184072Z",
+  "generated": "2026-04-19T18:05:10.8351544Z",
   "repository": "awakecoding/winget-tools",
   "releaseTag": "icons-latest",
   "baseUrl": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/",
-  "count": 140,
+  "count": 144,
   "statusCounts": {
-    "HasIcon": 140,
-    "ExtractError": 288,
-    "InstallTimeout": 17,
-    "NoIcon": 193
+    "HasIcon": 144,
+    "InstallTimeout": 20,
+    "ExtractError": 317,
+    "NoIcon": 217
   },
   "entries": {
     "0-don.clippy": {
@@ -1065,6 +1065,24 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T16:32:47.7207944Z"
     },
+    "AltSnap.AltSnap": {
+      "version": "1.67",
+      "sha256": "1eaebb71e3c1e76fb7017867ecd052722a20cd8b5120f2302e2c7c7930a4b68a",
+      "sizeBytes": 1078,
+      "assetName": "AltSnap.AltSnap.1eaebb71.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AltSnap.AltSnap.1eaebb71.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:56:17.0372919Z"
+    },
+    "AmanHarwara.Altus": {
+      "version": "5.7.2",
+      "sha256": "a3d6170cbdd26b687588c6e7f3b144ed4cd7133d49afabf11110b4dd7ab89918",
+      "sizeBytes": 116025,
+      "assetName": "AmanHarwara.Altus.a3d6170c.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AmanHarwara.Altus.a3d6170c.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:56:26.3516666Z"
+    },
     "Amazon.AppStream": {
       "version": "1.1.1532",
       "sha256": "0e8828fbd5cb6e840cc9a57c932352dd061a0e57ac818beb7df19ca1f52f0e91",
@@ -1109,6 +1127,15 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Amazon.Kiro.28203d91.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T17:39:53.1568946Z"
+    },
+    "Amazon.NoSQLWorkbench": {
+      "version": "3.20.2",
+      "sha256": "baf565985fe17ef5872401e019d4d4c171f3ec2733ed6eaaf4e73d1013b79b83",
+      "sizeBytes": 17808,
+      "assetName": "Amazon.NoSQLWorkbench.baf56598.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Amazon.NoSQLWorkbench.baf56598.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:54:42.0171354Z"
     },
     "AmyXun.AxGlyph": {
       "version": "2.5981",
@@ -1199,6 +1226,15 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/anyme123.AnyCode.867264ce.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T17:38:48.9267894Z"
+    },
+    "AnyTXT.AnyTXTSearcher": {
+      "version": "1.3.2477",
+      "sha256": "31226c65b86876a47161eccea3478c02b4bde0e50d8c406fdfa83b1503e37b24",
+      "sizeBytes": 110970,
+      "assetName": "AnyTXT.AnyTXTSearcher.31226c65.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AnyTXT.AnyTXTSearcher.31226c65.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T17:54:30.4503709Z"
     },
     "Appest.TickTick": {
       "version": "8.0.5.0",
