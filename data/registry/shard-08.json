@@ -1,11 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 8/10). Migrated from icon-registry.json.",
-<<<<<<< Updated upstream
   "generated": "2026-04-19T16:04:43.1673990Z",
-=======
-  "generated": "2026-04-19T16:14:36.0095581Z",
->>>>>>> Stashed changes
   "entries": {
     "1357310795.JboxTransfer": {
       "status": "NoIcon",
@@ -507,13 +503,8 @@
     },
     "albertony.npiperelay": {
       "status": "NoIcon",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:15.6949550Z",
       "lastCheckedUtc": "2026-04-19T16:03:15.6949550Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:13:05.2207132Z",
-      "lastCheckedUtc": "2026-04-19T16:13:05.2207132Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.11.1",
@@ -532,23 +523,14 @@
     },
     "alelec.WSLUSBManager": {
       "status": "ExtractError",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:24.3609008Z",
       "lastCheckedUtc": "2026-04-19T16:03:24.3609008Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:13:13.3472962Z",
-      "lastCheckedUtc": "2026-04-19T16:13:13.3472962Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "5.8.0",
       "manifestSha": "cdd92fed620b1265c76f73690ff440f6372a65503d9193c9da1c9c1777c3f086",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 22,
-=======
-      "installSeconds": 19,
->>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -561,23 +543,14 @@
     },
     "AlexanderKojevnikov.Spek": {
       "status": "NoIcon",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:54.4162229Z",
       "lastCheckedUtc": "2026-04-19T16:03:54.4162229Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:13:44.2583140Z",
-      "lastCheckedUtc": "2026-04-19T16:13:44.2583140Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "0.8.5",
       "manifestSha": "30ad34f35665bccd3a93244ea5b620c748e7db4a207ae124f5c11a92246ad9ec",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 6,
-=======
-      "installSeconds": 5,
->>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -590,13 +563,8 @@
     },
     "AlexanderLitvinov.AutoText": {
       "status": "ExtractError",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:04:03.4987711Z",
       "lastCheckedUtc": "2026-04-19T16:04:03.4987711Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:13:52.8282357Z",
-      "lastCheckedUtc": "2026-04-19T16:13:52.8282357Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.5.2",
@@ -615,23 +583,14 @@
     },
     "alexx2000.DoubleCommander": {
       "status": "NoIcon",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:04:17.3826843Z",
       "lastCheckedUtc": "2026-04-19T16:04:17.3826843Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:14:06.3639635Z",
-      "lastCheckedUtc": "2026-04-19T16:14:06.3639635Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.1.32",
       "manifestSha": "04ce03348c056f5d4f3a931477c09a34e16b6231f694680daafe77893e8a0d8f",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 10,
-=======
-      "installSeconds": 8,
->>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -644,23 +603,14 @@
     },
     "Algento.Botim": {
       "status": "ExtractError",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:04:36.4511114Z",
       "lastCheckedUtc": "2026-04-19T16:04:36.4511114Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:14:25.6204093Z",
-      "lastCheckedUtc": "2026-04-19T16:14:25.6204093Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.7.5",
       "manifestSha": "a6b2f618c972839271838cdee496cbd50939ae308a63d6669071677449860e22",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 6,
-=======
-      "installSeconds": 7,
->>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": -1978335215,
       "installedByThisRun": false,

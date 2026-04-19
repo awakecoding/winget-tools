@@ -1,11 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 2/10). Migrated from icon-registry.json.",
-<<<<<<< Updated upstream
   "generated": "2026-04-19T16:04:37.6475375Z",
-=======
-  "generated": "2026-04-19T16:15:00.2605334Z",
->>>>>>> Stashed changes
   "entries": {
     "360.NamiClaw": {
       "status": "HasIcon",
@@ -519,24 +515,14 @@
     },
     "AlexanderGorishnyak.APKIconEditor": {
       "status": "HasIcon",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:05.9442710Z",
       "lastCheckedUtc": "2026-04-19T16:03:05.9442710Z",
       "lastUpdatedUtc": "2026-04-19T16:03:05.9442710Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:13:18.6765940Z",
-      "lastCheckedUtc": "2026-04-19T16:13:18.6765940Z",
-      "lastUpdatedUtc": "2026-04-19T16:13:18.6765940Z",
->>>>>>> Stashed changes
       "wingetVersion": "v1.11.510",
       "packageVersion": "2.2.0",
       "manifestSha": "8e2c4836a04360d973142f9873e772323e07ec6eac3b0c3257a63a21a97a2e07",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 28,
-=======
-      "installSeconds": 30,
->>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -555,13 +541,8 @@
     },
     "AlexandreRouma.SDRPlusPlus": {
       "status": "NoIcon",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:41.4628358Z",
       "lastCheckedUtc": "2026-04-19T16:03:41.4628358Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:13:53.7649976Z",
-      "lastCheckedUtc": "2026-04-19T16:13:53.7649976Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.0.4",
@@ -580,13 +561,8 @@
     },
     "AlexandrSubbotin.Cerebro": {
       "status": "NoIcon",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:47.6926352Z",
       "lastCheckedUtc": "2026-04-19T16:03:47.6926352Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:14:00.7730212Z",
-      "lastCheckedUtc": "2026-04-19T16:14:00.7730212Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "0.11.0",
@@ -605,23 +581,14 @@
     },
     "ali50m.AddCurrentPath": {
       "status": "NoIcon",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:54.2480720Z",
       "lastCheckedUtc": "2026-04-19T16:03:54.2480720Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:14:07.7247841Z",
-      "lastCheckedUtc": "2026-04-19T16:14:07.7247841Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.4.3",
       "manifestSha": "328b68d8998b8f94333c034c163f6b7f24ac4e20b3817d9c86cd47a6c3def6e4",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 8,
-=======
-      "installSeconds": 9,
->>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -634,13 +601,8 @@
     },
     "Alibaba.DingTalkWorkspaceCLI": {
       "status": "NoIcon",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:04:05.5854852Z",
       "lastCheckedUtc": "2026-04-19T16:04:05.5854852Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:14:21.3163927Z",
-      "lastCheckedUtc": "2026-04-19T16:14:21.3163927Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.0.10",
@@ -659,24 +621,14 @@
     },
     "Alibaba.Qianwen": {
       "status": "HasIcon",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:04:10.2050982Z",
       "lastCheckedUtc": "2026-04-19T16:04:10.2050982Z",
       "lastUpdatedUtc": "2026-04-19T16:04:10.2050982Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:14:27.3041654Z",
-      "lastCheckedUtc": "2026-04-19T16:14:27.3041654Z",
-      "lastUpdatedUtc": "2026-04-19T16:14:27.3041654Z",
->>>>>>> Stashed changes
       "wingetVersion": "v1.11.510",
       "packageVersion": "2.3.1",
       "manifestSha": "5afa1a4d835a1534ca30c8300e7a2201c7bec94f46875c2ba03cd6967474b97e",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 24,
-=======
-      "installSeconds": 29,
->>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,

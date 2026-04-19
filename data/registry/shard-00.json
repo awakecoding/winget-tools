@@ -1,11 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 0/10). Migrated from icon-registry.json.",
-<<<<<<< Updated upstream
   "generated": "2026-04-19T16:05:11.0038314Z",
-=======
-  "generated": "2026-04-19T16:15:34.7187348Z",
->>>>>>> Stashed changes
   "entries": {
     "0-don.clippy": {
       "status": "HasIcon",
@@ -531,24 +527,14 @@
     },
     "Adobe.WorkfrontProof": {
       "status": "HasIcon",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:14.6028807Z",
       "lastCheckedUtc": "2026-04-19T16:03:14.6028807Z",
       "lastUpdatedUtc": "2026-04-19T16:03:14.6028807Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:13:23.8189597Z",
-      "lastCheckedUtc": "2026-04-19T16:13:23.8189597Z",
-      "lastUpdatedUtc": "2026-04-19T16:13:23.8189597Z",
->>>>>>> Stashed changes
       "wingetVersion": "v1.11.510",
       "packageVersion": "2.1.55",
       "manifestSha": "f4300eeeb795490475cbf24568c90845699c6c4f81a9b8a4812328e4300e61b4",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 16,
-=======
-      "installSeconds": 20,
->>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -567,23 +553,14 @@
     },
     "AdoptOpenJDK.OpenJDK.16": {
       "status": "ExtractError",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:35.3758908Z",
       "lastCheckedUtc": "2026-04-19T16:03:35.3758908Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:13:52.9654658Z",
-      "lastCheckedUtc": "2026-04-19T16:13:52.9654658Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "16.0.1.9",
       "manifestSha": "ce7b1192f91af40cd21fd9830b57caa68a029b6cc6a4fceb865b0bd255662689",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 17,
-=======
-      "installSeconds": 18,
->>>>>>> Stashed changes
       "extractSeconds": 1,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -596,23 +573,14 @@
     },
     "Aerosoft.One": {
       "status": "ExtractError",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:58.0627612Z",
       "lastCheckedUtc": "2026-04-19T16:03:58.0627612Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:14:19.5831001Z",
-      "lastCheckedUtc": "2026-04-19T16:14:19.5831001Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "0.16.12",
       "manifestSha": "2172df5b141f9312a23f5d0b92d30bf3ce8e3f85f00a3de9cfc9d793cc0b0d5c",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 7,
-=======
-      "installSeconds": 8,
->>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": -1978335215,
       "installedByThisRun": false,
@@ -625,24 +593,14 @@
     },
     "ahkohd.switch": {
       "status": "HasIcon",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:04:05.9241289Z",
       "lastCheckedUtc": "2026-04-19T16:04:05.9241289Z",
       "lastUpdatedUtc": "2026-04-19T16:04:05.9241289Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:14:28.2484330Z",
-      "lastCheckedUtc": "2026-04-19T16:14:28.2484330Z",
-      "lastUpdatedUtc": "2026-04-19T16:14:28.2484330Z",
->>>>>>> Stashed changes
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.0.23",
       "manifestSha": "b07ef2cb462f98a8a4b9ba63a8bd41e02f6f1d6db7b0b40616dc08289ed1e1ef",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 10,
-=======
-      "installSeconds": 11,
->>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -661,23 +619,14 @@
     },
     "ahmetb.kubectx": {
       "status": "NoIcon",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:04:18.1781667Z",
       "lastCheckedUtc": "2026-04-19T16:04:18.1781667Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:14:41.1612482Z",
-      "lastCheckedUtc": "2026-04-19T16:14:41.1612482Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "0.11.0",
       "manifestSha": "38eaa4a88fc15f24ddb2834b0a2d71b6981c64ae449837c474ca9dd34a97e571",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 4,
-=======
-      "installSeconds": 3,
->>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -690,23 +639,14 @@
     },
     "Aignesberger.WebSiteWatcher": {
       "status": "NoIcon",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:04:24.1366838Z",
       "lastCheckedUtc": "2026-04-19T16:04:24.1366838Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:14:46.8792123Z",
-      "lastCheckedUtc": "2026-04-19T16:14:46.8792123Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "25.5",
       "manifestSha": "1d04c99f37ea6ba12daf875d8dcdafe4c0e6bf54f0fb2ce9751dce300f99c27a",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 41,
-=======
-      "installSeconds": 42,
->>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,

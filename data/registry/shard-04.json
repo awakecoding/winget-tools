@@ -1,11 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 4/10). Migrated from icon-registry.json.",
-<<<<<<< Updated upstream
   "generated": "2026-04-19T16:05:59.9247287Z",
-=======
-  "generated": "2026-04-19T16:15:42.5906883Z",
->>>>>>> Stashed changes
   "entries": {
     "123.123pan": {
       "status": "HasIcon",
@@ -531,23 +527,14 @@
     },
     "ActiveDirectoryPro.365ProToolkit": {
       "status": "NoIcon",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:58.5039053Z",
       "lastCheckedUtc": "2026-04-19T16:03:58.5039053Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:13:31.0673646Z",
-      "lastCheckedUtc": "2026-04-19T16:13:31.0673646Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.2.0",
       "manifestSha": "7fb28f830db00c42f1e90207186fbfbbeb99c9dc7cfa17c2efc726cad2763ddc",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 48,
-=======
-      "installSeconds": 56,
->>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -560,23 +547,14 @@
     },
     "activescott.lessmsi": {
       "status": "NoIcon",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:04:59.8482990Z",
       "lastCheckedUtc": "2026-04-19T16:04:59.8482990Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:14:43.1498765Z",
-      "lastCheckedUtc": "2026-04-19T16:14:43.1498765Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "2.12.9",
       "manifestSha": "10cb6c8c060e19a397f6f30aa986c3497a06add233a00fa34b85a3d6912274e4",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 8,
-=======
-      "installSeconds": 7,
->>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -589,13 +567,8 @@
     },
     "Addi.Yucca": {
       "status": "NoIcon",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:05:15.5769442Z",
       "lastCheckedUtc": "2026-04-19T16:05:15.5769442Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:14:57.6741815Z",
-      "lastCheckedUtc": "2026-04-19T16:14:57.6741815Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.0.0",
@@ -614,23 +587,14 @@
     },
     "AdGuard.dnsproxy": {
       "status": "NoIcon",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:05:20.6937454Z",
       "lastCheckedUtc": "2026-04-19T16:05:20.6937454Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:15:02.4774293Z",
-      "lastCheckedUtc": "2026-04-19T16:15:02.4774293Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "0.81.1",
       "manifestSha": "026ecacef868affd616ff76096337056ab5efc73ba67f5fed234239e18540baf",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 3,
-=======
-      "installSeconds": 4,
->>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -643,23 +607,14 @@
     },
     "ADInstruments.kuraCloudDesktop": {
       "status": "NoIcon",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:05:26.2724103Z",
       "lastCheckedUtc": "2026-04-19T16:05:26.2724103Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:15:09.7288975Z",
-      "lastCheckedUtc": "2026-04-19T16:15:09.7288975Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.14.4401",
       "manifestSha": "01f0db064c9d51513c6e38cc16124ca0bde9ddb059295eb6bd3db304e96e73cc",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 13,
-=======
-      "installSeconds": 11,
->>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -672,23 +627,14 @@
     },
     "ADInstruments.LabChart.Extension.CardiacAxis": {
       "status": "ExtractError",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:05:44.5374966Z",
       "lastCheckedUtc": "2026-04-19T16:05:44.5374966Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:15:26.7110398Z",
-      "lastCheckedUtc": "2026-04-19T16:15:26.7110398Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.3.0400",
       "manifestSha": "d69319a25bb3e0b29b02ff40e0855fefedeeaca8dec4fe67d17aac3ce5c76481",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 11,
-=======
-      "installSeconds": 12,
->>>>>>> Stashed changes
       "extractSeconds": 1,
       "installExitCode": 0,
       "installedByThisRun": true,

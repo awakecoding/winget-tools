@@ -135,7 +135,7 @@ jobs:
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
         shell: pwsh
         run: |
-          $PSNativeCommandUseErrorActionPreference = $false
+          $PSNativeCommandUseErrorActionPreference = $true
           git config user.name  'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git pull --rebase --autostash
@@ -327,6 +327,19 @@ jobs:
           Write-Host ("Merged registry shards: {0}" -f (Get-ChildItem $mergedRegistry -Filter 'shard-*.json' | Measure-Object).Count)
           Write-Host ("Merged icon dirs: {0}" -f (Get-ChildItem $mergedIcons -Directory -ErrorAction SilentlyContinue | Measure-Object).Count)
 
+      - name: Rebase against latest master
+        shell: pwsh
+        run: |
+          $PSNativeCommandUseErrorActionPreference = $true
+          git config user.name  'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git pull --rebase --autostash
+
+          $conflicted = @(Select-String -Path 'data/registry/shard-*.json', 'data/icon-index.json' -Pattern '^(<<<<<<<|=======|>>>>>>>)' -AllMatches -ErrorAction SilentlyContinue)
+          if ($conflicted.Count -gt 0) {
+              throw 'Conflict markers detected after rebase; refusing to publish corrupted registry or index files.'
+          }
+
       - name: Build icon index + upload to release
         shell: pwsh
         env:
@@ -363,10 +376,15 @@ jobs:
       - name: Commit registry shards + index
         shell: pwsh
         run: |
-          $PSNativeCommandUseErrorActionPreference = $false
+          $PSNativeCommandUseErrorActionPreference = $true
           git config user.name  'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git pull --rebase --autostash
+
+          $conflicted = @(Select-String -Path 'data/registry/shard-*.json', 'data/icon-index.json' -Pattern '^(<<<<<<<|=======|>>>>>>>)' -AllMatches -ErrorAction SilentlyContinue)
+          if ($conflicted.Count -gt 0) {
+              throw 'Conflict markers detected before commit; refusing to push corrupted registry or index files.'
+          }
+
           git add data/registry/shard-*.json data/icon-index.json
           $cached = git diff --cached --name-only
           if (-not $cached) {

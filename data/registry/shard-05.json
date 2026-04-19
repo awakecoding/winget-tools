@@ -1,11 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 5/10). Migrated from icon-registry.json.",
-<<<<<<< Updated upstream
   "generated": "2026-04-19T16:06:51.0900087Z",
-=======
-  "generated": "2026-04-19T16:20:14.5663758Z",
->>>>>>> Stashed changes
   "entries": {
     "1sj.rrysj": {
       "status": "ExtractError",
@@ -519,23 +515,14 @@
     },
     "ADInstruments.LabChart.Module.PVLoop": {
       "status": "ExtractError",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:09.7759811Z",
       "lastCheckedUtc": "2026-04-19T16:03:09.7759811Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:15:33.4335215Z",
-      "lastCheckedUtc": "2026-04-19T16:15:33.4335215Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "2.6.1400",
       "manifestSha": "25ac66c4c12758f0fe52e3c398fd4bac438e8efeece5dd73270c40c8869bcebb",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 16,
-=======
-      "installSeconds": 32,
->>>>>>> Stashed changes
       "extractSeconds": 1,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -548,23 +535,14 @@
     },
     "ADInstruments.LabChartLightning": {
       "status": "NoIcon",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:32.6928318Z",
       "lastCheckedUtc": "2026-04-19T16:03:32.6928318Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:16:20.6685517Z",
-      "lastCheckedUtc": "2026-04-19T16:16:20.6685517Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.14.3",
       "manifestSha": "dfd067148d0687bddcf3216ef8a5d07d5d634227418b5e6e7ac0a11e14290b3c",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 15,
-=======
-      "installSeconds": 17,
->>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -577,23 +555,14 @@
     },
     "Adobe.Brackets": {
       "status": "NoIcon",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:03:55.8994726Z",
       "lastCheckedUtc": "2026-04-19T16:03:55.8994726Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:16:49.0361859Z",
-      "lastCheckedUtc": "2026-04-19T16:16:49.0361859Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.14.17770",
       "manifestSha": "ecad4f0250f25dd3332d1e133a67ef75a3f21a34071b4e5f8e4a665c28c6eb65",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 67,
-=======
-      "installSeconds": 68,
->>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -606,59 +575,34 @@
     },
     "AdoptOpenJDK.OpenJDK.11": {
       "status": "ExtractError",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:06:17.6906487Z",
       "lastCheckedUtc": "2026-04-19T16:06:17.6906487Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:19:22.2321772Z",
-      "lastCheckedUtc": "2026-04-19T16:19:22.2321772Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "11.0.11.9",
       "manifestSha": "d2a08aaa4b01ea08747df19d1a7691bef2e1add176161a0c6b5b846da72c1ba1",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 12,
       "extractSeconds": 1,
       "installExitCode": -2145844746,
       "installedByThisRun": false,
-=======
-      "installSeconds": 15,
-      "extractSeconds": 1,
-      "installExitCode": 0,
-      "installedByThisRun": true,
->>>>>>> Stashed changes
       "alreadyInstalled": false,
       "iconCount": 0,
       "iconBytes": 0,
       "icons": [],
-<<<<<<< Updated upstream
       "extractError": "Cannot convert value \"-2145844746\" to type \"System.UInt32\". Error: \"Value was either too large or too small for a UInt32.\"",
-=======
-      "extractError": "Could not retrieve manifest for 'AdoptOpenJDK.OpenJDK.11' (FileCache empty and 'winget show' did not populate it).",
->>>>>>> Stashed changes
       "installStdErr": null
     },
     "AdoptOpenJDK.OpenJDK.8": {
       "status": "ExtractError",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:06:30.7285450Z",
       "lastCheckedUtc": "2026-04-19T16:06:30.7285450Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:19:46.7550193Z",
-      "lastCheckedUtc": "2026-04-19T16:19:46.7550193Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "8.0.292.10",
       "manifestSha": "e391edd9f11639504f299e07fce22f458fa75d908213cadf7acc53d4c288ef87",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 9,
-=======
-      "installSeconds": 12,
->>>>>>> Stashed changes
       "extractSeconds": 1,
       "installExitCode": 0,
       "installedByThisRun": true,
@@ -671,23 +615,14 @@
     },
     "ahadulla.yoz": {
       "status": "NoIcon",
-<<<<<<< Updated upstream
       "firstSeenUtc": "2026-04-19T16:06:44.9185077Z",
       "lastCheckedUtc": "2026-04-19T16:06:44.9185077Z",
-=======
-      "firstSeenUtc": "2026-04-19T16:20:05.9438995Z",
-      "lastCheckedUtc": "2026-04-19T16:20:05.9438995Z",
->>>>>>> Stashed changes
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "0.1.0",
       "manifestSha": "151794253296e4969e5562ed91a92b1ebe3413b57d8b380d4f9ff62804e62183",
       "installerType": "unknown",
-<<<<<<< Updated upstream
       "installSeconds": 4,
-=======
-      "installSeconds": 5,
->>>>>>> Stashed changes
       "extractSeconds": 0,
       "installExitCode": 0,
       "installedByThisRun": true,
