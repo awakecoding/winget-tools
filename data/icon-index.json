@@ -1,14 +1,15 @@
 {
   "schema": 1,
-  "generated": "2026-04-19T15:37:04.2912712Z",
+  "generated": "2026-04-19T15:50:24.0254560Z",
   "repository": "awakecoding/winget-tools",
   "releaseTag": "icons-latest",
   "baseUrl": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/",
-  "count": 36,
+  "count": 48,
   "statusCounts": {
-    "ExtractError": 77,
-    "HasIcon": 36,
-    "NoIcon": 45
+    "NoIcon": 67,
+    "HasIcon": 48,
+    "ExtractError": 101,
+    "InstallTimeout": 2
   },
   "entries": {
     "0-don.clippy": {
@@ -281,6 +282,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:28:52.9009397Z"
     },
+    "ABC.ABCEBankAssistant": {
+      "version": "1.0.26.0311",
+      "sha256": "e655515984f1f36fa14c2a9b68ed77a4570ea6678f74d72f8ff996331cd86f11",
+      "sizeBytes": 25214,
+      "assetName": "ABC.ABCEBankAssistant.e6555159.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/ABC.ABCEBankAssistant.e6555159.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:42:04.1411539Z"
+    },
     "ABC.PowerExtension": {
       "version": "1.0",
       "sha256": "4b347eed6ce76cd3a2933406c320317f4b364928778f039cadfb654be62ffd4a",
@@ -290,6 +300,24 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:32:14.5947428Z"
     },
+    "AbdElMoniemElHifnawy.PidCat": {
+      "version": "2.5.6",
+      "sha256": "816da2f5c2fb7174d2a917fed72bf68943b3933a4d13564e8732504daa8bfeed",
+      "sizeBytes": 56669,
+      "assetName": "AbdElMoniemElHifnawy.PidCat.816da2f5.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AbdElMoniemElHifnawy.PidCat.816da2f5.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:40:40.0518286Z"
+    },
+    "Abyss.AbyssOverlay": {
+      "version": "2.0.3",
+      "sha256": "907a06685d958d40647f16183cb6f0eb1307d913c06c449835d806befecffae4",
+      "sizeBytes": 19315,
+      "assetName": "Abyss.AbyssOverlay.907a0668.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Abyss.AbyssOverlay.907a0668.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:40:34.5927075Z"
+    },
     "ACLAP.DownloadHelperCoApp": {
       "version": "2.0.19.0",
       "sha256": "26f513432c2a1a34fc29c109e4701a303c8860f1e0eee5449b21979ede872903",
@@ -298,6 +326,69 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/ACLAP.DownloadHelperCoApp.26f51343.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:31:27.7160424Z"
+    },
+    "AcroSoftware.CutePDFWriter": {
+      "version": "4.0",
+      "sha256": "b24e29cdc992531db2213e85f200e2e659eb78b0c91bff9c657269df7992b907",
+      "sizeBytes": 3638,
+      "assetName": "AcroSoftware.CutePDFWriter.b24e29cd.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AcroSoftware.CutePDFWriter.b24e29cd.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:40:42.0528504Z"
+    },
+    "acrosync.acrosync": {
+      "version": "1.7.611",
+      "sha256": "6a038b13f4fd269035bcf5b80f86edd0afbfdc8bd0d9d91187d8b4ddff4c4e05",
+      "sizeBytes": 15086,
+      "assetName": "acrosync.acrosync.6a038b13.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/acrosync.acrosync.6a038b13.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:43:49.0088405Z"
+    },
+    "acrosync.DuplicacyWeb": {
+      "version": "1.8.3",
+      "sha256": "10e422043661e350ad40a8c9fa44b4eb7f8d46f9301cbf27e4e792a9a3c682ee",
+      "sizeBytes": 21633,
+      "assetName": "acrosync.DuplicacyWeb.10e42204.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/acrosync.DuplicacyWeb.10e42204.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:42:20.0078487Z"
+    },
+    "ActiveDatabaseSoftware.FlySpeedSQLQuery": {
+      "version": "4.10.7.0",
+      "sha256": "b966cb1d197be5e74295aec9a6e575b39165af159440ac8ddd4179d9683fb049",
+      "sizeBytes": 22486,
+      "assetName": "ActiveDatabaseSoftware.FlySpeedSQLQuery.b966cb1d.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/ActiveDatabaseSoftware.FlySpeedSQLQuery.b966cb1d.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:43:02.8031291Z"
+    },
+    "ActivityWatch.ActivityWatch": {
+      "version": "0.13.2",
+      "sha256": "ace4ef75e89cf93e94c9c318d884e533a17a9bfb1ac9dacbcfbe63e7c17332b9",
+      "sizeBytes": 370070,
+      "assetName": "ActivityWatch.ActivityWatch.ace4ef75.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/ActivityWatch.ActivityWatch.ace4ef75.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:44:27.3040666Z"
+    },
+    "actualsolution.VolumeLock": {
+      "version": "2.4.1",
+      "sha256": "e026e7fb17d872a1c01849216fb13b3921097a683482c809dc1e7179fdc9ff14",
+      "sizeBytes": 3638,
+      "assetName": "actualsolution.VolumeLock.e026e7fb.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/actualsolution.VolumeLock.e026e7fb.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:41:46.9388147Z"
+    },
+    "AdaLang.Alire": {
+      "version": "2.1.0",
+      "sha256": "41212dfe02514cab5fbb497dd3862e4500867f6ddb0efa5188ef5c1398eb340c",
+      "sizeBytes": 27198,
+      "assetName": "AdaLang.Alire.41212dfe.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AdaLang.Alire.41212dfe.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:42:18.9124122Z"
     },
     "Adobe.Connect": {
       "version": "2026.3.125",
@@ -317,6 +408,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:28:30.3613299Z"
     },
+    "AGILELEAP.SlideBrowser": {
+      "version": "2.0.0",
+      "sha256": "3affdf8bf6366dd389d573479d5f9a5ec32efdea3e2864dcb1429964e433e5ab",
+      "sizeBytes": 424949,
+      "assetName": "AGILELEAP.SlideBrowser.3affdf8b.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AGILELEAP.SlideBrowser.3affdf8b.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:40:32.0173291Z"
+    },
     "ALCPU.CoreTemp": {
       "version": "1.20.0",
       "sha256": "77f26794a8c68c06643c83237a97b864e31d1849ad6b5c4064007af9fb18c7a2",
@@ -334,6 +434,15 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Alibaba.Taobao.8274d42d.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:27:57.4757763Z"
+    },
+    "altair-graphql.altair": {
+      "version": "8.5.0",
+      "sha256": "7cd06d77a3d5f1a3d4bd509086ada3ce4b526a9f13f52446db41d3cf9e911f15",
+      "sizeBytes": 370070,
+      "assetName": "altair-graphql.altair.7cd06d77.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/altair-graphql.altair.7cd06d77.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:40:05.6551484Z"
     }
   }
 }

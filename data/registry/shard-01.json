@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 1/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T15:31:38.6959591Z",
+  "generated": "2026-04-19T15:44:48.5932875Z",
   "entries": {
     "1IC.BPMN-RPAStudio": {
       "status": "ExtractError",
@@ -256,6 +256,144 @@
           "name": "DownloadHelper CoApp.DownloadHelper CoApp.ico",
           "bytes": 139832,
           "sha256": "26f513432c2a1a34fc29c109e4701a303c8860f1e0eee5449b21979ede872903"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "ACROSSecurity.0patch": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T15:40:25.3765206Z",
+      "lastCheckedUtc": "2026-04-19T15:40:25.3765206Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "22.11.11.10550",
+      "manifestSha": "b8f0193abded47196090d89735b92d1c5a0c6c931feb9eabd76a54ac2118b688",
+      "installerType": "unknown",
+      "installSeconds": 14,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "acrosync.DuplicacyWeb": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T15:42:20.0078487Z",
+      "lastCheckedUtc": "2026-04-19T15:42:20.0078487Z",
+      "lastUpdatedUtc": "2026-04-19T15:42:20.0078487Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.8.3",
+      "manifestSha": "ec20fdd33bc1e9153ede9a799dffb870d6e8178b1206491452e5dea84a3dff7f",
+      "installerType": "unknown",
+      "installSeconds": 7,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 21633.0,
+      "icons": [
+        {
+          "name": "Duplicacy Web Edition.Duplicacy Web Edition.ico",
+          "bytes": 21633,
+          "sha256": "10e422043661e350ad40a8c9fa44b4eb7f8d46f9301cbf27e4e792a9a3c682ee"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "ACS.UnifiedPCSCDriver": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T15:42:31.0266872Z",
+      "lastCheckedUtc": "2026-04-19T15:42:31.0266872Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "4.4.2.1",
+      "manifestSha": "9418bc625f37eafe819acb170a20858987aeea2a43638e5930e279abe4a49e8e",
+      "installerType": "unknown",
+      "installSeconds": 24,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "ActiveDatabaseSoftware.FlySpeedSQLQuery": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T15:43:02.8031291Z",
+      "lastCheckedUtc": "2026-04-19T15:43:02.8031291Z",
+      "lastUpdatedUtc": "2026-04-19T15:43:02.8031291Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "4.10.7.0",
+      "manifestSha": "672f6c709c56843ddc72f0fca36d10332960fbebcc5c2320ba2d8986651817a2",
+      "installerType": "unknown",
+      "installSeconds": 13,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 22486.0,
+      "icons": [
+        {
+          "name": "FlySpeed SQL Query (x64) 4.10.7.0.FlySpeed SQL Query (x64)_is1.ico",
+          "bytes": 22486,
+          "sha256": "b966cb1d197be5e74295aec9a6e575b39165af159440ac8ddd4179d9683fb049"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "ActiveState.KomodoEdit": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T15:43:20.6510359Z",
+      "lastCheckedUtc": "2026-04-19T15:43:20.6510359Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "12.0.1",
+      "manifestSha": "ae1e11e1c2aac66c38629ff6008d22f85c81530719f3a4f35d9d430177eb215e",
+      "installerType": "unknown",
+      "installSeconds": 31,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "ActivityWatch.ActivityWatch": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T15:44:27.3040666Z",
+      "lastCheckedUtc": "2026-04-19T15:44:27.3040666Z",
+      "lastUpdatedUtc": "2026-04-19T15:44:27.3040666Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "0.13.2",
+      "manifestSha": "fec4a86207f67df70a0881c86a1eaf492080e26a6bfee985e55e78db62637c12",
+      "installerType": "unknown",
+      "installSeconds": 17,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 370070.0,
+      "icons": [
+        {
+          "name": "ActivityWatch.{F226B8F4-3244-46E6-901D-0CE8035423E4}_is1.ico",
+          "bytes": 370070,
+          "sha256": "ace4ef75e89cf93e94c9c318d884e533a17a9bfb1ac9dacbcfbe63e7c17332b9"
         }
       ],
       "extractError": null,
