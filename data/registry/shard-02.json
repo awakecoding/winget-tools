@@ -1,8 +1,53 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 2/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-17T20:51:38.3852884Z",
-  "shardIndex": 2,
-  "shardCount": 10,
-  "entries": {}
+  "generated": "2026-04-19T14:47:28.2553790Z",
+  "entries": {
+    "360.NamiClaw": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T14:42:44.2279829Z",
+      "lastCheckedUtc": "2026-04-19T14:42:44.2279829Z",
+      "lastUpdatedUtc": "2026-04-19T14:42:44.2279829Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.2.1140.64",
+      "manifestSha": "f2d6a276ffbecf605689f891b08edb39b1211d77c068bd5a578ca284163c569c",
+      "installerType": "unknown",
+      "installSeconds": 72,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 55992.0,
+      "icons": [
+        {
+          "name": "360安全龙虾.namiclaw.ico",
+          "bytes": 55992,
+          "sha256": "b481c4a473bda9c6b397f3df2f01d70cd0131e3660f8b93d5befc706985d27ff"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "3CX.MultilineTAPI": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T14:47:00.2913685Z",
+      "lastCheckedUtc": "2026-04-19T14:47:00.2913685Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.0.33",
+      "manifestSha": "674d657a75d1ffe76fa1306adff46dba8c8c07c9c33afeff24dbaf6f48b0f783",
+      "installerType": "unknown",
+      "installSeconds": 13,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    }
+  }
 }

@@ -1,8 +1,47 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 6/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-17T20:51:38.3852884Z",
-  "shardIndex": 6,
-  "shardCount": 10,
-  "entries": {}
+  "generated": "2026-04-19T14:44:03.5472635Z",
+  "entries": {
+    "0x192.UniversalAndroidDebloaterGUI": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T14:42:39.7619325Z",
+      "lastCheckedUtc": "2026-04-19T14:42:39.7619325Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "0.5.1",
+      "manifestSha": "58fd111a4b1324f3684aaba12c90fcba84b0ce20cdb95579793e366e0d69c7e8",
+      "installerType": "unknown",
+      "installSeconds": 71,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "No ARP entries matched in scope 'Both' for '0x192.UniversalAndroidDebloaterGUI'. Is the package actually installed?",
+      "installStdErr": null
+    },
+    "0x4D44.mdmdview": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T14:43:55.0507525Z",
+      "lastCheckedUtc": "2026-04-19T14:43:55.0507525Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.14.2",
+      "manifestSha": "1289271e72ac73cee5d147a5c81d804ef2da7c8aebd6fa89c1a440a500db4dd3",
+      "installerType": "unknown",
+      "installSeconds": 5,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "No ARP entries matched in scope 'Both' for '0x4D44.mdmdview'. Is the package actually installed?",
+      "installStdErr": null
+    }
+  }
 }

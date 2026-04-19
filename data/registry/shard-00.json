@@ -1,8 +1,53 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 0/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-17T20:51:38.3852884Z",
-  "shardIndex": 0,
-  "shardCount": 10,
-  "entries": {}
+  "generated": "2026-04-19T14:43:21.0255055Z",
+  "entries": {
+    "0-don.clippy": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T14:42:50.1786969Z",
+      "lastCheckedUtc": "2026-04-19T14:42:50.1786969Z",
+      "lastUpdatedUtc": "2026-04-19T14:42:50.1786969Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.5.12",
+      "manifestSha": "ca794a04984f998c61cbcf66c8b4714eeaf8f558f761b9ec7643010ca235480e",
+      "installerType": "unknown",
+      "installSeconds": 8,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 55360.0,
+      "icons": [
+        {
+          "name": "clippy.clippy.ico",
+          "bytes": 55360,
+          "sha256": "d35726ff41720ec03e5b19ceb1a5f9757bcab1738c309b117ea94ef4ae6d0fff"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "1357310795.TboxWebdav": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T14:43:02.8567479Z",
+      "lastCheckedUtc": "2026-04-19T14:43:02.8567479Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.0.1",
+      "manifestSha": "3876106f6276ee4d1f5bd0956eff309b38e479ba4dcb47095030dbbfa7ff8993",
+      "installerType": "unknown",
+      "installSeconds": 15,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    }
+  }
 }

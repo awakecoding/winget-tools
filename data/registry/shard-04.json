@@ -1,8 +1,59 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 4/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-17T20:51:38.3852884Z",
-  "shardIndex": 4,
-  "shardCount": 10,
-  "entries": {}
+  "generated": "2026-04-19T14:44:02.4467097Z",
+  "entries": {
+    "123.123pan": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T14:42:33.2307992Z",
+      "lastCheckedUtc": "2026-04-19T14:42:33.2307992Z",
+      "lastUpdatedUtc": "2026-04-19T14:42:33.2307992Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "3.1.4.0",
+      "manifestSha": "4c09f5d5798068e82b8f9345eda671863b621aab5455cecfe55c98427f9cf99a",
+      "installerType": "unknown",
+      "installSeconds": 41,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 168173.0,
+      "icons": [
+        {
+          "name": "123云盘.123pan.ico",
+          "bytes": 168173,
+          "sha256": "2982a994560127faa2ff18c654843366333e31ab14b72b74f1a7381f91aa439d"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "1zilc.FishingFunds": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T14:43:19.6548869Z",
+      "lastCheckedUtc": "2026-04-19T14:43:19.6548869Z",
+      "lastUpdatedUtc": "2026-04-19T14:43:19.6548869Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "8.8.0",
+      "manifestSha": "ba8117a77b147b04e69889d9ba574907da7bf855fac1fed29da3205eed27fecf",
+      "installerType": "unknown",
+      "installSeconds": 40,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 361102.0,
+      "icons": [
+        {
+          "name": "Fishing Funds 8.8.0.ae35abb1-8d8b-57e0-bca5-967274c2df01.ico",
+          "bytes": 361102,
+          "sha256": "3834fb5dbfde9e45aa643c81d02b849e1d08bae21e3cdd4733ad23dce4677099"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    }
+  }
 }

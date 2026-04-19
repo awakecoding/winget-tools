@@ -1,8 +1,47 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 5/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-17T20:51:38.3852884Z",
-  "shardIndex": 5,
-  "shardCount": 10,
-  "entries": {}
+  "generated": "2026-04-19T14:44:56.9546949Z",
+  "entries": {
+    "1sj.rrysj": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T14:42:32.5362728Z",
+      "lastCheckedUtc": "2026-04-19T14:42:32.5362728Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "3.1.4",
+      "manifestSha": "714884613607aa491544e976d4eee35c459c2f0bd78426823d8d939053e62192",
+      "installerType": "unknown",
+      "installSeconds": 129,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "No ARP entries matched in scope 'Both' for '1sj.rrysj'. Is the package actually installed?",
+      "installStdErr": null
+    },
+    "2BrightSparks.SyncBackFree": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T14:44:47.1316449Z",
+      "lastCheckedUtc": "2026-04-19T14:44:47.1316449Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "12.0.0.0",
+      "manifestSha": "fe45b1c8f02c861554e5cbd9e7449321fb9cf612317f15ad1043f5a70df87f21",
+      "installerType": "unknown",
+      "installSeconds": 9,
+      "extractSeconds": 0,
+      "installExitCode": -1978335226,
+      "installedByThisRun": false,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "Cannot convert value \"-1978335226\" to type \"System.UInt32\". Error: \"Value was either too large or too small for a UInt32.\"",
+      "installStdErr": null
+    }
+  }
 }

@@ -1,8 +1,53 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 7/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-17T20:51:38.3852884Z",
-  "shardIndex": 7,
-  "shardCount": 10,
-  "entries": {}
+  "generated": "2026-04-19T14:43:21.9964330Z",
+  "entries": {
+    "108thecitizen.DesktopTileLauncher": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T14:42:33.6173292Z",
+      "lastCheckedUtc": "2026-04-19T14:42:33.6173292Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "0.3.4",
+      "manifestSha": "ee433fcd161f5cf74b4799bfe9d4e268b429fc633be8274d927408dbd693fd39",
+      "installerType": "unknown",
+      "installSeconds": 7,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "115.115Chrome": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T14:42:44.8688369Z",
+      "lastCheckedUtc": "2026-04-19T14:42:44.8688369Z",
+      "lastUpdatedUtc": "2026-04-19T14:42:44.8688369Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "36.0.0",
+      "manifestSha": "692b55a866dd0f179ca4302cd9a7b4a93a03e0bd9329021c1e6735e1d026ba44",
+      "installerType": "unknown",
+      "installSeconds": 34,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 63051.0,
+      "icons": [
+        {
+          "name": "115浏览器.115Chrome.ico",
+          "bytes": 63051,
+          "sha256": "fba0c364bb745bef18683be03f08b086cb5e46498b8c1dbd32ecdee6624303fe"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    }
+  }
 }

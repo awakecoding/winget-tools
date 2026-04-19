@@ -1,8 +1,53 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 8/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-17T20:51:38.3852884Z",
-  "shardIndex": 8,
-  "shardCount": 10,
-  "entries": {}
+  "generated": "2026-04-19T14:42:56.5236485Z",
+  "entries": {
+    "1357310795.JboxTransfer": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T14:42:33.8652078Z",
+      "lastCheckedUtc": "2026-04-19T14:42:33.8652078Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.0.4",
+      "manifestSha": "bdbee233b2e445e38950ae6a8868dc8b08dc0f7a7dcab7566b136e59ed6d998f",
+      "installerType": "unknown",
+      "installSeconds": 8,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "2BrightSparks.UndeleteOnClick": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T14:42:50.5591933Z",
+      "lastCheckedUtc": "2026-04-19T14:42:50.5591933Z",
+      "lastUpdatedUtc": "2026-04-19T14:42:50.5591933Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.12.11.0",
+      "manifestSha": "782827fa494daa275fcd88b7a1c912620ae73e628b0bd617451e3b67544d1447",
+      "installerType": "unknown",
+      "installSeconds": 3,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 26694.0,
+      "icons": [
+        {
+          "name": "UndeleteOnClick.UndeleteOnClick_is1.ico",
+          "bytes": 26694,
+          "sha256": "8255ecc31e5e0a0a34ce6b8bb9a873dd29d3e9bfdf3f246e10d56508c032de2e"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    }
+  }
 }

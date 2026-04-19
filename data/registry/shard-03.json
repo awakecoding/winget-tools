@@ -1,8 +1,53 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 3/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-17T20:51:38.3852884Z",
-  "shardIndex": 3,
-  "shardCount": 10,
-  "entries": {}
+  "generated": "2026-04-19T14:43:14.1261193Z",
+  "entries": {
+    "0xGingi.Browser": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T14:42:39.7774236Z",
+      "lastCheckedUtc": "2026-04-19T14:42:39.7774236Z",
+      "lastUpdatedUtc": "2026-04-19T14:42:39.7774236Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "115.0.5790.110",
+      "manifestSha": "cb1b6f6c1fb3e9d6bfca7766f0f6d01d7c57e082317627a5546f00f95552a9a4",
+      "installerType": "unknown",
+      "installSeconds": 19,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 7944.0,
+      "icons": [
+        {
+          "name": "0xGingi-Browser.Chromium.ico",
+          "bytes": 7944,
+          "sha256": "6f08424ee69d91ba0f1f1a2226d097b55b51cfba68e1d6211b1d848ee87d6dc5"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "1History.1History": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T14:43:04.9402786Z",
+      "lastCheckedUtc": "2026-04-19T14:43:04.9402786Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "0.3.3",
+      "manifestSha": "5736ee0f343531570af977fe1959e26ddeb9bfa237b739b43524b3fe645a6dc6",
+      "installerType": "unknown",
+      "installSeconds": 4,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    }
+  }
 }

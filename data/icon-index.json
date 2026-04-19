@@ -1,12 +1,87 @@
 {
   "schema": 1,
-  "generated": "2026-04-19T14:51:17.5851139Z",
+  "generated": "2026-04-19T15:01:46.7365657Z",
   "repository": "awakecoding/winget-tools",
   "releaseTag": "icons-latest",
   "baseUrl": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/",
-  "count": 0,
+  "count": 8,
   "statusCounts": {
-    "ExtractError": 40
+    "ExtractError": 45,
+    "HasIcon": 8,
+    "NoIcon": 5
   },
-  "entries": {}
+  "entries": {
+    "0-don.clippy": {
+      "version": "1.5.12",
+      "sha256": "d35726ff41720ec03e5b19ceb1a5f9757bcab1738c309b117ea94ef4ae6d0fff",
+      "sizeBytes": 55360,
+      "assetName": "0-don.clippy.d35726ff.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/0-don.clippy.d35726ff.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T14:42:50.1786969Z"
+    },
+    "0xGingi.Browser": {
+      "version": "115.0.5790.110",
+      "sha256": "6f08424ee69d91ba0f1f1a2226d097b55b51cfba68e1d6211b1d848ee87d6dc5",
+      "sizeBytes": 7944,
+      "assetName": "0xGingi.Browser.6f08424e.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/0xGingi.Browser.6f08424e.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T14:42:39.7774236Z"
+    },
+    "115.115Chrome": {
+      "version": "36.0.0",
+      "sha256": "fba0c364bb745bef18683be03f08b086cb5e46498b8c1dbd32ecdee6624303fe",
+      "sizeBytes": 63051,
+      "assetName": "115.115Chrome.fba0c364.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/115.115Chrome.fba0c364.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T14:42:44.8688369Z"
+    },
+    "123.123pan": {
+      "version": "3.1.4.0",
+      "sha256": "2982a994560127faa2ff18c654843366333e31ab14b72b74f1a7381f91aa439d",
+      "sizeBytes": 168173,
+      "assetName": "123.123pan.2982a994.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/123.123pan.2982a994.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T14:42:33.2307992Z"
+    },
+    "1zilc.FishingFunds": {
+      "version": "8.8.0",
+      "sha256": "3834fb5dbfde9e45aa643c81d02b849e1d08bae21e3cdd4733ad23dce4677099",
+      "sizeBytes": 361102,
+      "assetName": "1zilc.FishingFunds.3834fb5d.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/1zilc.FishingFunds.3834fb5d.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T14:43:19.6548869Z"
+    },
+    "2BrightSparks.UndeleteOnClick": {
+      "version": "1.12.11.0",
+      "sha256": "8255ecc31e5e0a0a34ce6b8bb9a873dd29d3e9bfdf3f246e10d56508c032de2e",
+      "sizeBytes": 26694,
+      "assetName": "2BrightSparks.UndeleteOnClick.8255ecc3.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/2BrightSparks.UndeleteOnClick.8255ecc3.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T14:42:50.5591933Z"
+    },
+    "360.360DesktopLite": {
+      "version": "11.0.0.2251",
+      "sha256": "bf209a70e899f04f010b37dd641a0d17b2c4002ebf958dc040f70963f6027a57",
+      "sizeBytes": 285478,
+      "assetName": "360.360DesktopLite.bf209a70.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/360.360DesktopLite.bf209a70.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T14:47:44.2959901Z"
+    },
+    "360.NamiClaw": {
+      "version": "2.2.1140.64",
+      "sha256": "b481c4a473bda9c6b397f3df2f01d70cd0131e3660f8b93d5befc706985d27ff",
+      "sizeBytes": 55992,
+      "assetName": "360.NamiClaw.b481c4a4.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/360.NamiClaw.b481c4a4.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T14:42:44.2279829Z"
+    }
+  }
 }

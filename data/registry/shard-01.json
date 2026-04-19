@@ -1,8 +1,53 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 1/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-17T20:51:38.3852884Z",
-  "shardIndex": 1,
-  "shardCount": 10,
-  "entries": {}
+  "generated": "2026-04-19T14:51:00.9482584Z",
+  "entries": {
+    "1IC.BPMN-RPAStudio": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T14:42:29.4296695Z",
+      "lastCheckedUtc": "2026-04-19T14:42:29.4296695Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "28.0.0",
+      "manifestSha": "ecebed9e192bebe47f6b8f61941ebad643ab3bdc2b38bad36ab6bc62eec52e22",
+      "installerType": "unknown",
+      "installSeconds": 312,
+      "extractSeconds": 1,
+      "installExitCode": -2147012867,
+      "installedByThisRun": false,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "Cannot convert value \"-2147012867\" to type \"System.UInt32\". Error: \"Value was either too large or too small for a UInt32.\"",
+      "installStdErr": null
+    },
+    "360.360DesktopLite": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T14:47:44.2959901Z",
+      "lastCheckedUtc": "2026-04-19T14:47:44.2959901Z",
+      "lastUpdatedUtc": "2026-04-19T14:47:44.2959901Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "11.0.0.2251",
+      "manifestSha": "71cd49fbca7e4bafad24cd3f51fa0cd8f37f31bbf9d757f9cb6904669985ab0f",
+      "installerType": "unknown",
+      "installSeconds": 15,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 285478.0,
+      "icons": [
+        {
+          "name": "桌面助手.360DesktopLite.ico",
+          "bytes": 285478,
+          "sha256": "bf209a70e899f04f010b37dd641a0d17b2c4002ebf958dc040f70963f6027a57"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    }
+  }
 }
