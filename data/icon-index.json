@@ -1,14 +1,14 @@
 {
   "schema": 1,
-  "generated": "2026-04-19T15:22:21.7203325Z",
+  "generated": "2026-04-19T15:37:04.2912712Z",
   "repository": "awakecoding/winget-tools",
   "releaseTag": "icons-latest",
   "baseUrl": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/",
-  "count": 23,
+  "count": 36,
   "statusCounts": {
-    "ExtractError": 59,
-    "NoIcon": 16,
-    "HasIcon": 23
+    "ExtractError": 77,
+    "HasIcon": 36,
+    "NoIcon": 45
   },
   "entries": {
     "0-don.clippy": {
@@ -128,6 +128,15 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:10:42.5114609Z"
     },
+    "360.360GT": {
+      "version": "13.6.1047.0",
+      "sha256": "3e7c51f75b04169981a2b0d98331c9a897b1a918e6de04d029190611ed63ff03",
+      "sizeBytes": 41868,
+      "assetName": "360.360GT.3e7c51f7.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/360.360GT.3e7c51f7.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:27:16.1515803Z"
+    },
     "360.360SE": {
       "version": "16.1.2000.64",
       "sha256": "536f15090cc082b2410fee735db630cab52d5188efe402699c42ccf78a1e09bb",
@@ -191,6 +200,24 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:15:06.7287933Z"
     },
+    "3TSoftwareLabs.Robo3T": {
+      "version": "1.4.4",
+      "sha256": "ab81c63dadf6a28ab4ebb846da5263abd22f64c9e073e97399ec2f8c1053ee08",
+      "sizeBytes": 131668,
+      "assetName": "3TSoftwareLabs.Robo3T.ab81c63d.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/3TSoftwareLabs.Robo3T.ab81c63d.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:27:29.7523551Z"
+    },
+    "3TSoftwareLabs.Studio3T": {
+      "version": "2026.7.0",
+      "sha256": "19041a6c6634643a526bacf62100b5e236a2b9c50b8bc70457ec7b62e92a8d9c",
+      "sizeBytes": 113438,
+      "assetName": "3TSoftwareLabs.Studio3T.19041a6c.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/3TSoftwareLabs.Studio3T.19041a6c.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:31:12.8341207Z"
+    },
     "4tNiagaraSoftware.4tTrayMinimizer": {
       "version": "6.07",
       "sha256": "5355fdd0b8d587f8eeb571b518d3f78084deb88c94855da229a8d90225ab2302",
@@ -199,6 +226,24 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/4tNiagaraSoftware.4tTrayMinimizer.5355fdd0.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:11:16.4181047Z"
+    },
+    "64Gram.64Gram": {
+      "version": "1.2.0",
+      "sha256": "6d27da5cf7669e32dc2cf09e331befe8e39045f75f95e0cbfe02c16e675d81bb",
+      "sizeBytes": 37882,
+      "assetName": "64Gram.64Gram.6d27da5c.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/64Gram.64Gram.6d27da5c.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:27:23.6212665Z"
+    },
+    "720kb.ndm": {
+      "version": "1.2.0",
+      "sha256": "4ebf92157c4d83f56251a97b68ff62204945fc430daa95a724be8df3de7a3797",
+      "sizeBytes": 370070,
+      "assetName": "720kb.ndm.4ebf9215.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/720kb.ndm.4ebf9215.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:31:54.5778947Z"
     },
     "7room.Aya": {
       "version": "0.10.5",
@@ -209,6 +254,69 @@
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:10:27.4191399Z"
     },
+    "7zip.7zip": {
+      "version": "26.00",
+      "sha256": "649c3c8780a116e625ee8124338642c2088b5153b4280bdf7a42b544fecf0730",
+      "sizeBytes": 4846,
+      "assetName": "7zip.7zip.649c3c87.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/7zip.7zip.649c3c87.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:27:45.9783158Z"
+    },
+    "990aa.Kivixa": {
+      "version": "0.8.9+8009",
+      "sha256": "572ac4350286df95e7399b257bf30421092a4c1819a58f71fee62dbabf8c8014",
+      "sizeBytes": 185420,
+      "assetName": "990aa.Kivixa.572ac435.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/990aa.Kivixa.572ac435.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:27:13.7360745Z"
+    },
+    "AAAInternetPublishing.WTFast": {
+      "version": "5.5.25.0",
+      "sha256": "d9a4e696154522e57e2e38ba0ac0d20ee3622e1ac1a9f9ff72cd196ce509302d",
+      "sizeBytes": 33012,
+      "assetName": "AAAInternetPublishing.WTFast.d9a4e696.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/AAAInternetPublishing.WTFast.d9a4e696.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:28:52.9009397Z"
+    },
+    "ABC.PowerExtension": {
+      "version": "1.0",
+      "sha256": "4b347eed6ce76cd3a2933406c320317f4b364928778f039cadfb654be62ffd4a",
+      "sizeBytes": 9662,
+      "assetName": "ABC.PowerExtension.4b347eed.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/ABC.PowerExtension.4b347eed.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:32:14.5947428Z"
+    },
+    "ACLAP.DownloadHelperCoApp": {
+      "version": "2.0.19.0",
+      "sha256": "26f513432c2a1a34fc29c109e4701a303c8860f1e0eee5449b21979ede872903",
+      "sizeBytes": 139832,
+      "assetName": "ACLAP.DownloadHelperCoApp.26f51343.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/ACLAP.DownloadHelperCoApp.26f51343.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:31:27.7160424Z"
+    },
+    "Adobe.Connect": {
+      "version": "2026.3.125",
+      "sha256": "31c02c15fc2dcbb39dd5534b5edcfbe4685f41f5d82390bff1a8679b2389a632",
+      "sizeBytes": 39931,
+      "assetName": "Adobe.Connect.31c02c15.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Adobe.Connect.31c02c15.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:28:01.513108Z"
+    },
+    "Adobe.Cryptr": {
+      "version": "0.6.0",
+      "sha256": "d270f9658c07d150ad088f1363809224749a993ae33e19f2eb4ef5c581ebce06",
+      "sizeBytes": 370070,
+      "assetName": "Adobe.Cryptr.d270f965.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Adobe.Cryptr.d270f965.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:28:30.3613299Z"
+    },
     "ALCPU.CoreTemp": {
       "version": "1.20.0",
       "sha256": "77f26794a8c68c06643c83237a97b864e31d1849ad6b5c4064007af9fb18c7a2",
@@ -217,6 +325,15 @@
       "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/ALCPU.CoreTemp.77f26794.ico",
       "installerType": "unknown",
       "updatedUtc": "2026-04-19T15:10:05.3358698Z"
+    },
+    "Alibaba.Taobao": {
+      "version": "1.3.4",
+      "sha256": "8274d42de402e71187d3f292e68d7e250796adaa47b4662968f54a595b756e7e",
+      "sizeBytes": 19180,
+      "assetName": "Alibaba.Taobao.8274d42d.ico",
+      "url": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/Alibaba.Taobao.8274d42d.ico",
+      "installerType": "unknown",
+      "updatedUtc": "2026-04-19T15:27:57.4757763Z"
     }
   }
 }

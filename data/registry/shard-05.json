@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 5/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T15:22:06.9108000Z",
+  "generated": "2026-04-19T15:28:18.2223485Z",
   "entries": {
     "1sj.rrysj": {
       "status": "ExtractError",
@@ -132,6 +132,138 @@
           "sha256": "536f15090cc082b2410fee735db630cab52d5188efe402699c42ccf78a1e09bb"
         }
       ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "63BeetleSmurf.PinnyNotes": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T15:27:14.6298620Z",
+      "lastCheckedUtc": "2026-04-19T15:27:14.6298620Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.17.0",
+      "manifestSha": "b2e9b3c289b63cc5116b6a657487c4eddddd635cfa389bec48dbec8e02962313",
+      "installerType": "unknown",
+      "installSeconds": 4,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "64Gram.64Gram": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T15:27:23.6212665Z",
+      "lastCheckedUtc": "2026-04-19T15:27:23.6212665Z",
+      "lastUpdatedUtc": "2026-04-19T15:27:23.6212665Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.2.0",
+      "manifestSha": "03c695302b2e645e2f6b5c541d8245674de5f4998e947e39dd304e8a5df06a2e",
+      "installerType": "unknown",
+      "installSeconds": 18,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 37882.0,
+      "icons": [
+        {
+          "name": "64Gram Desktop.{9DB6C981-7FD2-41B5-AEF2-20C933FD3F21}_is1.ico",
+          "bytes": 37882,
+          "sha256": "6d27da5cf7669e32dc2cf09e331befe8e39045f75f95e0cbfe02c16e675d81bb"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "7zip.7zip": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T15:27:45.9783158Z",
+      "lastCheckedUtc": "2026-04-19T15:27:45.9783158Z",
+      "lastUpdatedUtc": "2026-04-19T15:27:45.9783158Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "26.00",
+      "manifestSha": "3655479d255302fda780195afc3e1087067989e78e697d829299092abf0bd04b",
+      "installerType": "unknown",
+      "installSeconds": 0,
+      "extractSeconds": 0,
+      "installExitCode": null,
+      "installedByThisRun": false,
+      "alreadyInstalled": true,
+      "iconCount": 1,
+      "iconBytes": 4846.0,
+      "icons": [
+        {
+          "name": "7-Zip 26.00 (x64).7-Zip.ico",
+          "bytes": 4846,
+          "sha256": "649c3c8780a116e625ee8124338642c2088b5153b4280bdf7a42b544fecf0730"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "86Box.86Box": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T15:27:47.0226585Z",
+      "lastCheckedUtc": "2026-04-19T15:27:47.0226585Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "5.3",
+      "manifestSha": "be276efeae89a762e56fe30fbdf0ca0b488f08f2a2f52891c068c3bc91cc6d41",
+      "installerType": "unknown",
+      "installSeconds": 7,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AAS.WorldWideTelescope": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T15:27:57.5955852Z",
+      "lastCheckedUtc": "2026-04-19T15:27:57.5955852Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "6.1.2",
+      "manifestSha": "834591c3a338683cc2a889779ec533139781446d2a2395192519076ad8bc2a77",
+      "installerType": "unknown",
+      "installSeconds": 12,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Abelfubu.WindowsConfigBuilder": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T15:28:13.1050418Z",
+      "lastCheckedUtc": "2026-04-19T15:28:13.1050418Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "v0.0.2",
+      "manifestSha": "0acc9ac1871e0dfc6ae6dd19e2653ff0f0ab6c48cc58427b453f747ecc8f701a",
+      "installerType": "unknown",
+      "installSeconds": 3,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
       "extractError": null,
       "installStdErr": null
     }

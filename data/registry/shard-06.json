@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 6/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T15:11:19.7418190Z",
+  "generated": "2026-04-19T15:36:48.0149484Z",
   "entries": {
     "0x192.UniversalAndroidDebloaterGUI": {
       "status": "ExtractError",
@@ -126,6 +126,138 @@
           "sha256": "255af4ac04033826e20ea3ad0624061916553610a3519451650f92d1a737fd40"
         }
       ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "360.360GT": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T15:27:16.1515803Z",
+      "lastCheckedUtc": "2026-04-19T15:27:16.1515803Z",
+      "lastUpdatedUtc": "2026-04-19T15:27:16.1515803Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "13.6.1047.0",
+      "manifestSha": "8f4143847bcc5515d2aa7330328de291911a4aa2206cb428ee25f55e3c948d1b",
+      "installerType": "unknown",
+      "installSeconds": 40,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 41868.0,
+      "icons": [
+        {
+          "name": "360游戏浏览器.360gt.ico",
+          "bytes": 41868,
+          "sha256": "3e7c51f75b04169981a2b0d98331c9a897b1a918e6de04d029190611ed63ff03"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "3CX.CallFlowDesigner": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T15:30:59.9659753Z",
+      "lastCheckedUtc": "2026-04-19T15:30:59.9659753Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "20.2.84",
+      "manifestSha": "0436860385486a33a46f4082c29a2f3b3a5132d0e0af69c0c6a90e1b1e63aa70",
+      "installerType": "unknown",
+      "installSeconds": 9,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "3TSoftwareLabs.Studio3T": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T15:31:12.8341207Z",
+      "lastCheckedUtc": "2026-04-19T15:31:12.8341207Z",
+      "lastUpdatedUtc": "2026-04-19T15:31:12.8341207Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2026.7.0",
+      "manifestSha": "26cd734d6b07e57b5b2dca6fc77752f1576c18a501e184f1d678d89d730f0708",
+      "installerType": "unknown",
+      "installSeconds": 51,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 113438.0,
+      "icons": [
+        {
+          "name": "Studio 3T.0526-4458-1435-8154.ico",
+          "bytes": 113438,
+          "sha256": "19041a6c6634643a526bacf62100b5e236a2b9c50b8bc70457ec7b62e92a8d9c"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AB0WV.PinPoint": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T15:35:05.4954853Z",
+      "lastCheckedUtc": "2026-04-19T15:35:05.4954853Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.0-230511",
+      "manifestSha": "356ea4116b25a5e04c456078540d02adcb646a7ef1f160723f11c43e040bcab3",
+      "installerType": "unknown",
+      "installSeconds": 5,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "No ARP entries matched in scope 'Both' for 'AB0WV.PinPoint'. Is the package actually installed?",
+      "installStdErr": null
+    },
+    "ABB.e-Design": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T15:35:14.4001010Z",
+      "lastCheckedUtc": "2026-04-19T15:35:14.4001010Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.15.0.0010",
+      "manifestSha": "aec0374d6cea9c31427eb11decc909ce79f0850df9e769e04558578063d34f9d",
+      "installerType": "unknown",
+      "installSeconds": 73,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "abhimanyu003.pttr": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T15:36:41.6761059Z",
+      "lastCheckedUtc": "2026-04-19T15:36:41.6761059Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "0.0.3",
+      "manifestSha": "e1648bcaf0c1512286fb8cd3d76dcf4e829fcaa052b2f9e180fd1fad2ec0c8c5",
+      "installerType": "unknown",
+      "installSeconds": 3,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
       "extractError": null,
       "installStdErr": null
     }
