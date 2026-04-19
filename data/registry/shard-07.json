@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 7/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T20:01:45.7863531Z",
+  "generated": "2026-04-19T21:54:44.1547708Z",
   "entries": {
     "108thecitizen.DesktopTileLauncher": {
       "status": "NoIcon",
@@ -1543,6 +1543,144 @@
       "iconBytes": 0,
       "icons": [],
       "extractError": "No ARP entries matched in scope 'Both' for 'Appeon.PowerBuilderRuntime2022R3'. Is the package actually installed?",
+      "installStdErr": null
+    },
+    "AppiumDevelopers.AppiumInspector": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T21:46:26.0265032Z",
+      "lastCheckedUtc": "2026-04-19T21:46:26.0265032Z",
+      "lastUpdatedUtc": "2026-04-19T21:46:26.0265032Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2026.2.1",
+      "manifestSha": "8d61420cb93bd480a06079fae1a837708775ac9b46b5e2017471bb8ea9b1fd1d",
+      "installerType": "unknown",
+      "installSeconds": 20,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 49987.0,
+      "icons": [
+        {
+          "name": "Appium Inspector 2026.2.1.5335de9f-10e5-5584-90c5-274c050b3ea9.ico",
+          "bytes": 49987,
+          "sha256": "808a60c5158a677026f8e6f2906275fcbee88dbd98626fd37218a5f6e4ff6398"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Apple.iTunes": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T21:46:51.6873604Z",
+      "lastCheckedUtc": "2026-04-19T21:46:51.6873604Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "12.13.10.3",
+      "manifestSha": "778a8df20b39e6d741b89e2e241ccac4fb6db66310b4602e12114d5e709ed42e",
+      "installerType": "unknown",
+      "installSeconds": 37,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Approximatrix.SimplyFortran": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T21:48:03.7018854Z",
+      "lastCheckedUtc": "2026-04-19T21:48:03.7018854Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "3.33.4069",
+      "manifestSha": "e284ef2864a270eb0a5428a4e75cf5e26bec39927465c902f897e1253b724d8d",
+      "installerType": "unknown",
+      "installSeconds": 40,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AppSolves.TikTok-LIVE-Automation": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T21:49:25.8654830Z",
+      "lastCheckedUtc": "2026-04-19T21:49:25.8654830Z",
+      "lastUpdatedUtc": "2026-04-19T21:49:25.8654830Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.0.8",
+      "manifestSha": "73963fe2600de8b48ffb9ed6e2c42e645f8398c58fcdec24256ea546e3238fb8",
+      "installerType": "unknown",
+      "installSeconds": 31,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 93199.0,
+      "icons": [
+        {
+          "name": "TikTok-LIVE-Automation.{D3BBB6F8-19F4-4612-A6F1-385AE31859AF}_is1.ico",
+          "bytes": 93199,
+          "sha256": "cfdb0c179421d26bb99693282a616670bdfd3167a5db0d21a7fca334d3259c02"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Apryse.XodoPDFStudio": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T21:50:01.9602360Z",
+      "lastCheckedUtc": "2026-04-19T21:50:01.9602360Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2026.0.0",
+      "manifestSha": "37485779ba4f157de3034eb59fc1848a01295d531c9c491d969ddd5730c6764f",
+      "installerType": "unknown",
+      "installSeconds": 83,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "No ARP entries matched in scope 'Both' for 'Apryse.XodoPDFStudio'. Is the package actually installed?",
+      "installStdErr": null
+    },
+    "archisman-panigrahi.QuickBib": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T21:54:27.4852221Z",
+      "lastCheckedUtc": "2026-04-19T21:54:27.4852221Z",
+      "lastUpdatedUtc": "2026-04-19T21:54:27.4852221Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "0.7.2",
+      "manifestSha": "69e459f0a73e9f799c17a90f50f07afbaabf10ddcf19ce4d31b44664584ec1dd",
+      "installerType": "unknown",
+      "installSeconds": 14,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 16958.0,
+      "icons": [
+        {
+          "name": "QuickBib.QuickBib.ico",
+          "bytes": 16958,
+          "sha256": "cab2c4ddd0bef67bdaf7878e5b29e893755979c0ad3ab68d3fab0e88acad2a12"
+        }
+      ],
+      "extractError": null,
       "installStdErr": null
     }
   }

@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 2/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T19:57:01.3954657Z",
+  "generated": "2026-04-19T21:48:33.3834023Z",
   "entries": {
     "360.NamiClaw": {
       "status": "HasIcon",
@@ -1495,8 +1495,8 @@
     },
     "Astronomer.Astro": {
       "status": "NoIcon",
-      "firstSeenUtc": "2026-04-19T19:56:26.5041160Z",
-      "lastCheckedUtc": "2026-04-19T19:56:26.5041160Z",
+      "firstSeenUtc": "2026-04-19T19:56:26.504116Z",
+      "lastCheckedUtc": "2026-04-19T19:56:26.504116Z",
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "1.40.1",
@@ -1531,6 +1531,144 @@
       "iconBytes": 0,
       "icons": [],
       "extractError": "Could not retrieve manifest for 'atagon.com.kogiQA' (FileCache empty and 'winget show' did not populate it).",
+      "installStdErr": null
+    },
+    "atom0s.Steamless": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T21:46:18.4080579Z",
+      "lastCheckedUtc": "2026-04-19T21:46:18.4080579Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "3.1.0.5",
+      "manifestSha": "036b16f77825e2df39c51bab5fbd4ad089ffadfffd4b413db180f8f768a1bb87",
+      "installerType": "unknown",
+      "installSeconds": 4,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Audient.iD": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T21:46:27.2054623Z",
+      "lastCheckedUtc": "2026-04-19T21:46:27.2054623Z",
+      "lastUpdatedUtc": "2026-04-19T21:46:27.2054623Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "4.4.0.0",
+      "manifestSha": "a6e3b8539092d3d9801995c4d7922cfeb2cd0aceb197f2601bada6b270884dca",
+      "installerType": "unknown",
+      "installSeconds": 21,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 36700.0,
+      "icons": [
+        {
+          "name": "iD.iD.ico",
+          "bytes": 36700,
+          "sha256": "d789f16128f0d9902ba71b85d4548501ba55721640264f8710cb58f1f6e187ab"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AuraMarker.Lattics": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T21:46:50.9719259Z",
+      "lastCheckedUtc": "2026-04-19T21:46:50.9719259Z",
+      "lastUpdatedUtc": "2026-04-19T21:46:50.9719259Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "3.4.10",
+      "manifestSha": "db33b193923090e8c02a438df742e4ab76cbd3c1b306215ddde32e7223187a3b",
+      "installerType": "unknown",
+      "installSeconds": 14,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 98324.0,
+      "icons": [
+        {
+          "name": "Lattics 3.4.10.4f8bf0ca-03d4-5fd8-b740-20148a6f9cd9.ico",
+          "bytes": 98324,
+          "sha256": "f188d7c8b4b9d86a3362b52dc8612ec32b486e5030a30c4184c042d67dd50fb0"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Auslogics.BitReplica": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T21:47:07.4257942Z",
+      "lastCheckedUtc": "2026-04-19T21:47:07.4257942Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.6.0.2",
+      "manifestSha": "210cf11ae581e456e3b206b93dc41246b14589faa278d5a5b95978f924cc28ed",
+      "installerType": "unknown",
+      "installSeconds": 4,
+      "extractSeconds": 0,
+      "installExitCode": -1978335215,
+      "installedByThisRun": false,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "Cannot convert value \"-1978335215\" to type \"System.UInt32\". Error: \"Value was either too large or too small for a UInt32.\"",
+      "installStdErr": null
+    },
+    "AustinLeath.R6RC": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T21:47:13.1597921Z",
+      "lastCheckedUtc": "2026-04-19T21:47:13.1597921Z",
+      "lastUpdatedUtc": "2026-04-19T21:47:13.1597921Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "0.4.6",
+      "manifestSha": "880fecc50bec3f9bbbf52f855ad75b902d2689066961b8f8cef1a52325c74b85",
+      "installerType": "unknown",
+      "installSeconds": 6,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 108427.0,
+      "icons": [
+        {
+          "name": "R6RC 0.4.6.{be38c512-cd2a-5fe4-8a28-9f540daf1f04}.ico",
+          "bytes": 108427,
+          "sha256": "5e104814d1181759787837fff50be650721f740d7e88d2f7b21e5c6758faa8b5"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Autodesk.DesktopConnector": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-19T21:47:21.3385841Z",
+      "lastCheckedUtc": "2026-04-19T21:47:21.3385841Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "17.1.0.16",
+      "manifestSha": "10d596d1b7863c95403da97ee0e5b4990f8691491df57265b2dd0da57b12ba83",
+      "installerType": "unknown",
+      "installSeconds": 70,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "No ARP entries matched in scope 'Both' for 'Autodesk.DesktopConnector'. Is the package actually installed?",
       "installStdErr": null
     }
   }

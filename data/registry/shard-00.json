@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 0/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T19:57:53.8589818Z",
+  "generated": "2026-04-19T21:55:01.7229102Z",
   "entries": {
     "0-don.clippy": {
       "status": "HasIcon",
@@ -1563,8 +1563,8 @@
     },
     "Apache.Groovy.5": {
       "status": "ExtractError",
-      "firstSeenUtc": "2026-04-19T19:57:34.4219070Z",
-      "lastCheckedUtc": "2026-04-19T19:57:34.4219070Z",
+      "firstSeenUtc": "2026-04-19T19:57:34.421907Z",
+      "lastCheckedUtc": "2026-04-19T19:57:34.421907Z",
       "lastUpdatedUtc": null,
       "wingetVersion": "v1.11.510",
       "packageVersion": "5.0.4",
@@ -1579,6 +1579,144 @@
       "iconBytes": 0,
       "icons": [],
       "extractError": "Could not retrieve manifest for 'Apache.Groovy.5' (FileCache empty and 'winget show' did not populate it).",
+      "installStdErr": null
+    },
+    "Appeon.PowerBuilder-2025-3683-EN-GA": {
+      "status": "InstallTimeout",
+      "firstSeenUtc": "2026-04-19T21:46:11.0433252Z",
+      "lastCheckedUtc": "2026-04-19T21:46:11.0433252Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "25.0.0.3683",
+      "manifestSha": "420109be55c1b0d1677329ecb34f5dd7caead44666ce2a2ad4ccf22aab6b809c",
+      "installerType": "unknown",
+      "installSeconds": 181,
+      "extractSeconds": 1,
+      "installExitCode": -1,
+      "installedByThisRun": false,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Appest.Dida": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T21:49:16.0347632Z",
+      "lastCheckedUtc": "2026-04-19T21:49:16.0347632Z",
+      "lastUpdatedUtc": "2026-04-19T21:49:16.0347632Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "8.0.5.0",
+      "manifestSha": "24c4dd9b3e42f16dd24edfc20582868b9c06ace43624fec70a254375383f2f00",
+      "installerType": "unknown",
+      "installSeconds": 29,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 370070.0,
+      "icons": [
+        {
+          "name": "滴答清单 v8.0.5.0.{1A434D02-8C9A-41A2-9BBE-C97A1E31ABC1}_is1.ico",
+          "bytes": 370070,
+          "sha256": "92b7a70114daf97b884555bd3d74ca5aa99688883e2611e7c4bd8ec29edb2f87"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Apple.ProResRAWforWindows": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T21:49:51.6626851Z",
+      "lastCheckedUtc": "2026-04-19T21:49:51.6626851Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.3",
+      "manifestSha": "980993cdcbc0e7f3422751812396be5321ddd2bdee5aeb4e7c95e16067493f8b",
+      "installerType": "unknown",
+      "installSeconds": 4,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AppWork.JDownloader": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T21:49:58.4752942Z",
+      "lastCheckedUtc": "2026-04-19T21:49:58.4752942Z",
+      "lastUpdatedUtc": "2026-04-19T21:49:58.4752942Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "2.0",
+      "manifestSha": "4c1d9df10e2c2cfe69823ef052902ada331d72abe2c17854f367c8d70bddce74",
+      "installerType": "unknown",
+      "installSeconds": 35,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 187105.0,
+      "icons": [
+        {
+          "name": "JDownloader 2.jdownloader2.ico",
+          "bytes": 187105,
+          "sha256": "ca4422f74242954350de35efa9db4f92ff748ad278b56cecf02c0ca9192460f2"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Aptivi.BassBoom": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-19T21:53:35.3153982Z",
+      "lastCheckedUtc": "2026-04-19T21:53:35.3153982Z",
+      "lastUpdatedUtc": "2026-04-19T21:53:35.3153982Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "0.2.13.4",
+      "manifestSha": "803dbcbc52947026ed2b6687c83cd7d9af0104f4be803f782e49ae2f41ddaf74",
+      "installerType": "unknown",
+      "installSeconds": 17,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 1143206.0,
+      "icons": [
+        {
+          "name": "BassBoom.{93C3A64B-675C-45D7-A63F-66109110137F}.ico",
+          "bytes": 1143206,
+          "sha256": "a4a7cdc5e5de2b6fefbcfe79b05b9a3be2603a5cd733bed57c50d8adef50294c"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "Arm.ArmGnuToolchain": {
+      "status": "NoIcon",
+      "firstSeenUtc": "2026-04-19T21:53:59.1755816Z",
+      "lastCheckedUtc": "2026-04-19T21:53:59.1755816Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "12.2.MPACBTI-Rel1",
+      "manifestSha": "bfdda10fd6fd905c65750ddec3609c1c8b2e5dd6c8c8c1fa8e2351ca70a05708",
+      "installerType": "unknown",
+      "installSeconds": 60,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": null,
       "installStdErr": null
     }
   }
