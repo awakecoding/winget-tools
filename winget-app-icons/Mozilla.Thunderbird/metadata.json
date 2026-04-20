@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "packageId": "Mozilla.Thunderbird",
+  "status": "HasIcon",
+  "hasIcon": true,
+  "firstSeenUtc": "2026-04-20T17:52:39.0349921Z",
+  "lastCheckedUtc": "2026-04-20T17:52:39.0349921Z",
+  "lastUpdatedUtc": "2026-04-20T17:52:39.0349921Z",
+  "wingetVersion": "v1.11.510",
+  "packageVersion": null,
+  "manifestSha": null,
+  "installerType": null,
+  "alreadyInstalled": false,
+  "installedByThisRun": true,
+  "installSeconds": 14,
+  "extractSeconds": 0,
+  "uninstallSeconds": 2,
+  "durationSeconds": 18,
+  "installExitCode": 0,
+  "installTimedOut": false,
+  "uninstallExitCode": 0,
+  "uninstallTimedOut": false,
+  "iconCount": 1,
+  "iconBytes": 118835.0,
+  "appIconFile": "app-icon.ico",
+  "canonicalIconSourceName": "Mozilla Thunderbird (x64 en-US).Mozilla Thunderbird 149.0.2 (x64 en-US).ico",
+  "canonicalIconBytes": 118835,
+  "canonicalIconSha256": "0ab51c4c151ab23601d714040c819fe9b17414a1e11c18373ac532cd904b1211",
+  "extractError": null,
+  "installStdErr": null,
+  "icons": {
+    "name": "Mozilla Thunderbird (x64 en-US).Mozilla Thunderbird 149.0.2 (x64 en-US).ico",
+    "bytes": 118835,
+    "sha256": "0ab51c4c151ab23601d714040c819fe9b17414a1e11c18373ac532cd904b1211"
+  },
+  "run": {
+    "startedAtUtc": "2026-04-20T17:52:39.0349921Z",
+    "runId": "24681728306",
+    "runAttempt": "1",
+    "repository": "awakecoding/winget-tools"
+  }
+}
