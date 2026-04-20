@@ -208,20 +208,21 @@ jobs:
                   $lastSourceFailure = $update
               }
               else {
-                  $report = [ordered]@{
+                    $eventItems = @($events.ToArray())
+                    $report = [pscustomobject]@{
                       generatedAtUtc    = (Get-Date).ToUniversalTime().ToString('o')
                       ready             = $false
                       repairCount       = $repairCount
                       maxAttempts       = $maxAttempts
                       validationPackage = $canaryPackage
                       failureMode       = 'UnexpectedValidationFailure'
-                      lastFailure       = [ordered]@{
+                      lastFailure       = [pscustomobject]@{
                           exitCode  = $validate.exitCode
                           exitHex   = $validate.exitHex
                           errorName = $validate.errorName
                           output    = $validate.output
                       }
-                      events            = @($events)
+                      events            = $eventItems
                   }
                   $report | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath out/source-bootstrap.json -Encoding UTF8
                   "ready=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
@@ -235,9 +236,10 @@ jobs:
               }
           }
 
+            $eventItems = @($events.ToArray())
             $lastFailureReport = $null
             if ($lastSourceFailure) {
-              $lastFailureReport = [ordered]@{
+              $lastFailureReport = [pscustomobject]@{
                 exitCode  = $lastSourceFailure.exitCode
                 exitHex   = $lastSourceFailure.exitHex
                 errorName = $lastSourceFailure.errorName
@@ -245,14 +247,14 @@ jobs:
               }
             }
 
-            $report = [ordered]@{
+            $report = [pscustomobject]@{
               generatedAtUtc    = (Get-Date).ToUniversalTime().ToString('o')
               ready             = $sourceReady
               repairCount       = $repairCount
               maxAttempts       = $maxAttempts
               validationPackage = $canaryPackage
               lastFailure       = $lastFailureReport
-              events            = @($events)
+              events            = $eventItems
           }
 
           $report | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath out/source-bootstrap.json -Encoding UTF8
@@ -261,7 +263,9 @@ jobs:
           "canary_package=$canaryPackage" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
 
           if (-not $sourceReady) {
-              throw ("WinGet source validation failed after {0} attempt(s). Last failure: {1} ({2})" -f $maxAttempts, $lastSourceFailure.exitHex, $lastSourceFailure.errorName)
+              $lastExitHex = if ($lastSourceFailure) { $lastSourceFailure.exitHex } else { 'unknown' }
+              $lastErrorName = if ($lastSourceFailure) { $lastSourceFailure.errorName } else { 'unknown' }
+              throw ("WinGet source validation failed after {0} attempt(s). Last failure: {1} ({2})" -f $maxAttempts, $lastExitHex, $lastErrorName)
           }
 
       - name: Install Yayaml PowerShell module
