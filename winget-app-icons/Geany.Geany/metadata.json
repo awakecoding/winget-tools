@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "packageId": "Geany.Geany",
+  "status": "HasIcon",
+  "hasIcon": true,
+  "firstSeenUtc": "2026-04-20T17:03:36.9175590Z",
+  "lastCheckedUtc": "2026-04-20T17:03:36.9175590Z",
+  "lastUpdatedUtc": "2026-04-20T17:03:36.9175590Z",
+  "wingetVersion": "v1.11.510",
+  "packageVersion": null,
+  "manifestSha": null,
+  "installerType": null,
+  "alreadyInstalled": false,
+  "installedByThisRun": true,
+  "installSeconds": 22,
+  "extractSeconds": 0,
+  "uninstallSeconds": 2,
+  "durationSeconds": 28,
+  "installExitCode": 0,
+  "installTimedOut": false,
+  "uninstallExitCode": 0,
+  "uninstallTimedOut": false,
+  "iconCount": 1,
+  "iconBytes": 72517.0,
+  "appIconFile": "app-icon.ico",
+  "canonicalIconSourceName": "Geany 2.1.Geany.ico",
+  "canonicalIconBytes": 72517,
+  "canonicalIconSha256": "f64d412e9de3a588c7e68f6d42a5b4407c77c1ba3c12155327cdb52240f1e086",
+  "extractError": null,
+  "installStdErr": null,
+  "icons": {
+    "name": "Geany 2.1.Geany.ico",
+    "bytes": 72517,
+    "sha256": "f64d412e9de3a588c7e68f6d42a5b4407c77c1ba3c12155327cdb52240f1e086"
+  },
+  "run": {
+    "startedAtUtc": "2026-04-20T17:03:36.9175590Z",
+    "runId": "24679586725",
+    "runAttempt": "1",
+    "repository": "awakecoding/winget-tools"
+  }
+}
