@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "packageId": "MHNexus.HxD",
+  "status": "HasIcon",
+  "hasIcon": true,
+  "firstSeenUtc": "2026-04-20T17:46:17.0791085Z",
+  "lastCheckedUtc": "2026-04-20T17:46:17.0791085Z",
+  "lastUpdatedUtc": "2026-04-20T17:46:17.0791085Z",
+  "wingetVersion": "v1.11.510",
+  "packageVersion": null,
+  "manifestSha": null,
+  "installerType": null,
+  "alreadyInstalled": false,
+  "installedByThisRun": true,
+  "installSeconds": 7,
+  "extractSeconds": 0,
+  "uninstallSeconds": 2,
+  "durationSeconds": 9,
+  "installExitCode": 0,
+  "installTimedOut": false,
+  "uninstallExitCode": 0,
+  "uninstallTimedOut": false,
+  "iconCount": 1,
+  "iconBytes": 3262.0,
+  "appIconFile": "app-icon.ico",
+  "canonicalIconSourceName": "HxD Hex Editor 2.5.HxD_is1.ico",
+  "canonicalIconBytes": 3262,
+  "canonicalIconSha256": "9f7886ac0ca0d94233c92c5b68b3df0b744976757f4b33363d8d14614976413c",
+  "extractError": null,
+  "installStdErr": null,
+  "icons": {
+    "name": "HxD Hex Editor 2.5.HxD_is1.ico",
+    "bytes": 3262,
+    "sha256": "9f7886ac0ca0d94233c92c5b68b3df0b744976757f4b33363d8d14614976413c"
+  },
+  "run": {
+    "startedAtUtc": "2026-04-20T17:46:17.0791085Z",
+    "runId": "24681371931",
+    "runAttempt": "1",
+    "repository": "awakecoding/winget-tools"
+  }
+}

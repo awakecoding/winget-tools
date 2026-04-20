@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "packageId": "Notion.Notion",
+  "status": "HasIcon",
+  "hasIcon": true,
+  "firstSeenUtc": "2026-04-20T17:49:41.5743453Z",
+  "lastCheckedUtc": "2026-04-20T17:49:41.5743453Z",
+  "lastUpdatedUtc": "2026-04-20T17:49:41.5743453Z",
+  "wingetVersion": "v1.11.510",
+  "packageVersion": null,
+  "manifestSha": null,
+  "installerType": null,
+  "alreadyInstalled": false,
+  "installedByThisRun": true,
+  "installSeconds": 22,
+  "extractSeconds": 0,
+  "uninstallSeconds": 2,
+  "durationSeconds": 26,
+  "installExitCode": 0,
+  "installTimedOut": false,
+  "uninstallExitCode": 0,
+  "uninstallTimedOut": false,
+  "iconCount": 1,
+  "iconBytes": 112843.0,
+  "appIconFile": "app-icon.ico",
+  "canonicalIconSourceName": "Notion 7.11.0.661f0cc6-343a-59cb-a5e8-8f6324cc6998.ico",
+  "canonicalIconBytes": 112843,
+  "canonicalIconSha256": "0dafbea01d228422627b4331b8e065b381005f043a75f959b53400f7e36d6c11",
+  "extractError": null,
+  "installStdErr": null,
+  "icons": {
+    "name": "Notion 7.11.0.661f0cc6-343a-59cb-a5e8-8f6324cc6998.ico",
+    "bytes": 112843,
+    "sha256": "0dafbea01d228422627b4331b8e065b381005f043a75f959b53400f7e36d6c11"
+  },
+  "run": {
+    "startedAtUtc": "2026-04-20T17:49:41.5743453Z",
+    "runId": "24681371931",
+    "runAttempt": "1",
+    "repository": "awakecoding/winget-tools"
+  }
+}
