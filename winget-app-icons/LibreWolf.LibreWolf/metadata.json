@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "packageId": "LibreWolf.LibreWolf",
+  "status": "HasIcon",
+  "hasIcon": true,
+  "firstSeenUtc": "2026-04-20T18:02:43.6842589Z",
+  "lastCheckedUtc": "2026-04-20T18:02:43.6842589Z",
+  "lastUpdatedUtc": "2026-04-20T18:02:43.6842589Z",
+  "wingetVersion": "v1.11.510",
+  "packageVersion": null,
+  "manifestSha": null,
+  "installerType": null,
+  "alreadyInstalled": false,
+  "installedByThisRun": true,
+  "installSeconds": 14,
+  "extractSeconds": 0,
+  "uninstallSeconds": 3,
+  "durationSeconds": 18,
+  "installExitCode": 0,
+  "installTimedOut": false,
+  "uninstallExitCode": 0,
+  "uninstallTimedOut": false,
+  "iconCount": 1,
+  "iconBytes": 21221.0,
+  "appIconFile": "app-icon.ico",
+  "canonicalIconSourceName": "LibreWolf.LibreWolf LibreWolf.ico",
+  "canonicalIconBytes": 21221,
+  "canonicalIconSha256": "c52edc5c53b0b68a4acb1e0ac1ab8abe46953dfc538aa6e161c05b9e51cfa392",
+  "extractError": null,
+  "installStdErr": null,
+  "icons": {
+    "name": "LibreWolf.LibreWolf LibreWolf.ico",
+    "bytes": 21221,
+    "sha256": "c52edc5c53b0b68a4acb1e0ac1ab8abe46953dfc538aa6e161c05b9e51cfa392"
+  },
+  "run": {
+    "startedAtUtc": "2026-04-20T18:02:43.6842589Z",
+    "runId": "24681908043",
+    "runAttempt": "1",
+    "repository": "awakecoding/winget-tools"
+  }
+}
