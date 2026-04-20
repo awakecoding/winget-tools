@@ -241,14 +241,18 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
-          $zipPath = Join-Path (Resolve-Path 'import').Path "winget-app-icons-batch-${env:GITHUB_RUN_ID}.zip"
-          $requestPath = Join-Path (Resolve-Path 'import').Path 'requested-packages.json'
-          if (-not (Test-Path -LiteralPath $zipPath)) {
-              throw "Batch archive not found: $zipPath"
+          $importRoot = (Resolve-Path 'import').Path
+          $zipMatch = Get-ChildItem -LiteralPath $importRoot -Recurse -File -Filter "winget-app-icons-batch-${env:GITHUB_RUN_ID}.zip" -ErrorAction Stop | Select-Object -First 1
+          $requestMatch = Get-ChildItem -LiteralPath $importRoot -Recurse -File -Filter 'requested-packages.json' -ErrorAction Stop | Select-Object -First 1
+          if (-not $zipMatch) {
+            throw "Batch archive not found under $importRoot"
           }
-          if (-not (Test-Path -LiteralPath $requestPath)) {
-              throw "Requested package manifest not found: $requestPath"
+          if (-not $requestMatch) {
+            throw "Requested package manifest not found under $importRoot"
           }
+
+          $zipPath = $zipMatch.FullName
+          $requestPath = $requestMatch.FullName
           git config user.name  'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git pull --rebase
