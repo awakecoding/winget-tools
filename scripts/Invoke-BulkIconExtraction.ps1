@@ -540,6 +540,9 @@ function Get-EntryField {
     if ($Entry -is [hashtable]) {
         if ($Entry.ContainsKey($Field)) { return $Entry[$Field] } else { return $null }
     }
+    if ($Entry -is [System.Collections.Specialized.OrderedDictionary]) {
+        if ($Entry.Contains($Field)) { return $Entry[$Field] } else { return $null }
+    }
     if ($Entry.PSObject.Properties[$Field]) { return $Entry.$Field }
     return $null
 }

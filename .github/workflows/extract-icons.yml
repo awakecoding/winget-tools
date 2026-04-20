@@ -197,7 +197,10 @@ jobs:
 
               $dest = Join-Path $batchRoot $pkg
               [void](New-Item -ItemType Directory -Path $dest -Force)
-              Copy-Item -LiteralPath (Join-Path $src '*') -Destination $dest -Recurse -Force -ErrorAction Stop
+              Get-ChildItem -LiteralPath $src -Force -ErrorAction Stop |
+                ForEach-Object {
+                  Copy-Item -LiteralPath $_.FullName -Destination $dest -Recurse -Force -ErrorAction Stop
+                }
           }
 
           $zipPath = Join-Path $zipDir $env:BATCH_ZIP_NAME
