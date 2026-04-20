@@ -47,22 +47,6 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'winget CLI not available.' }
           Write-Host "winget version: $v"
 
-      - name: Update winget sources
-        shell: pwsh
-        continue-on-error: true
-        run: |
-          $PSNativeCommandUseErrorActionPreference = $false
-          winget source update --accept-source-agreements --disable-interactivity
-          exit 0
-
-      - name: Install Yayaml PowerShell module
-        shell: pwsh
-        run: |
-          if (-not (Get-Module -ListAvailable -Name Yayaml)) {
-              Install-Module -Name Yayaml -Scope CurrentUser -Force -AcceptLicense -Repository PSGallery
-          }
-          Import-Module Yayaml -ErrorAction Stop
-
       - name: Validate requested packages
         id: packages
         shell: pwsh
@@ -120,6 +104,171 @@ jobs:
               "- ``$pkg``" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
           }
 
+      - name: Prepare and validate winget sources
+        id: source_bootstrap
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $requested = Get-Content -LiteralPath out/requested-packages.json -Raw -Encoding UTF8 | ConvertFrom-Json
+
+          $sourceErrorCodes = @{
+              '-1978335221' = 'APPINSTALLER_CLI_ERROR_SOURCES_INVALID'
+              '-1978335217' = 'APPINSTALLER_CLI_ERROR_SOURCE_DATA_MISSING'
+              '-1978335211' = 'APPINSTALLER_CLI_ERROR_NO_SOURCES_DEFINED'
+              '-1978335174' = 'APPINSTALLER_CLI_ERROR_RESTAPI_INTERNAL_ERROR'
+              '-1978335169' = 'APPINSTALLER_CLI_ERROR_SOURCE_DATA_INTEGRITY_FAILURE'
+              '-1978335163' = 'APPINSTALLER_CLI_ERROR_SOURCE_OPEN_FAILED'
+              '-1978335157' = 'APPINSTALLER_CLI_ERROR_FAILED_TO_OPEN_ALL_SOURCES'
+          }
+
+          function Get-ExitHex {
+              param([Parameter(Mandatory)] [int] $ExitCode)
+              return ('0x{0:X8}' -f ([uint32]([int64]$ExitCode -band 0xffffffffL)))
+          }
+
+          function Invoke-WingetCapture {
+              param(
+                  [Parameter(Mandatory)] [string[]] $Arguments,
+                  [Parameter(Mandatory)] [string] $Tag
+              )
+
+              $lines = @(& winget @Arguments 2>&1)
+              $exitCode = $LASTEXITCODE
+              $output = ($lines | ForEach-Object { $_.ToString() }) -join "`n"
+              $key = [string]$exitCode
+
+              return [pscustomobject]@{
+                  tag           = $Tag
+                  arguments     = @($Arguments)
+                  exitCode      = $exitCode
+                  exitHex       = Get-ExitHex -ExitCode $exitCode
+                  errorName     = if ($sourceErrorCodes.ContainsKey($key)) { $sourceErrorCodes[$key] } else { $null }
+                  isSourceError = $sourceErrorCodes.ContainsKey($key)
+                  output        = if ($output) { $output.Trim() } else { '' }
+              }
+          }
+
+          function Invoke-SourceRepair {
+              param([Parameter(Mandatory)] [string] $Reason)
+
+              $script:repairCount++
+              $script:events.Add([pscustomobject]@{
+                  type         = 'repair'
+                  reason       = $Reason
+                  repairCount  = $script:repairCount
+                  startedAtUtc = (Get-Date).ToUniversalTime().ToString('o')
+              }) | Out-Null
+
+              foreach ($operation in @(
+                  @{ Tag = 'source-list-before-repair'; Arguments = @('source', 'list') },
+                  @{ Tag = 'source-reset'; Arguments = @('source', 'reset', '--force') },
+                  @{ Tag = 'source-update-after-reset'; Arguments = @('source', 'update', '--accept-source-agreements', '--disable-interactivity') },
+                  @{ Tag = 'source-list-after-repair'; Arguments = @('source', 'list') }
+              )) {
+                  $script:events.Add((Invoke-WingetCapture -Arguments $operation.Arguments -Tag $operation.Tag)) | Out-Null
+              }
+          }
+
+          $events = New-Object System.Collections.Generic.List[object]
+          $repairCount = 0
+          $maxAttempts = 3
+          $canaryPackage = '7zip.7zip'
+          $sourceReady = $false
+          $lastSourceFailure = $null
+
+          $events.Add([pscustomobject]@{
+              type              = 'bootstrap'
+              requestedCount    = @($requested.packages).Count
+              validationPackage = $canaryPackage
+              startedAtUtc      = (Get-Date).ToUniversalTime().ToString('o')
+          }) | Out-Null
+
+          for ($attempt = 1; $attempt -le $maxAttempts -and -not $sourceReady; $attempt++) {
+              $events.Add([pscustomobject]@{
+                  type         = 'attempt'
+                  attempt      = $attempt
+                  startedAtUtc = (Get-Date).ToUniversalTime().ToString('o')
+              }) | Out-Null
+
+              $update = Invoke-WingetCapture -Arguments @('source', 'update', '--accept-source-agreements', '--disable-interactivity') -Tag 'source-update'
+              $events.Add($update) | Out-Null
+
+              $validate = Invoke-WingetCapture -Arguments @('show', '--id', $canaryPackage, '--exact', '--source', 'winget', '--accept-source-agreements', '--disable-interactivity') -Tag 'source-validate-canary'
+              $events.Add($validate) | Out-Null
+
+              if ($validate.exitCode -eq 0) {
+                  $sourceReady = $true
+                  break
+              }
+
+              if ($validate.isSourceError) {
+                  $lastSourceFailure = $validate
+              }
+              elseif ($update.isSourceError) {
+                  $lastSourceFailure = $update
+              }
+              else {
+                  $report = [ordered]@{
+                      generatedAtUtc    = (Get-Date).ToUniversalTime().ToString('o')
+                      ready             = $false
+                      repairCount       = $repairCount
+                      maxAttempts       = $maxAttempts
+                      validationPackage = $canaryPackage
+                      failureMode       = 'UnexpectedValidationFailure'
+                      lastFailure       = [ordered]@{
+                          exitCode  = $validate.exitCode
+                          exitHex   = $validate.exitHex
+                          errorName = $validate.errorName
+                          output    = $validate.output
+                      }
+                      events            = @($events)
+                  }
+                  $report | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath out/source-bootstrap.json -Encoding UTF8
+                  "ready=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+                  "repair_count=$repairCount" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+                  "canary_package=$canaryPackage" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+                  throw ("WinGet source canary validation failed unexpectedly with exit {0}. Output: {1}" -f $validate.exitHex, $validate.output)
+              }
+
+              if ($attempt -lt $maxAttempts) {
+                  Invoke-SourceRepair -Reason ("Attempt {0} failed with {1} ({2})" -f $attempt, $lastSourceFailure.exitHex, $lastSourceFailure.errorName)
+              }
+          }
+
+          $report = [ordered]@{
+              generatedAtUtc    = (Get-Date).ToUniversalTime().ToString('o')
+              ready             = $sourceReady
+              repairCount       = $repairCount
+              maxAttempts       = $maxAttempts
+              validationPackage = $canaryPackage
+              lastFailure       = if ($lastSourceFailure) {
+                  [ordered]@{
+                      exitCode  = $lastSourceFailure.exitCode
+                      exitHex   = $lastSourceFailure.exitHex
+                      errorName = $lastSourceFailure.errorName
+                      output    = $lastSourceFailure.output
+                  }
+              } else { $null }
+              events            = @($events)
+          }
+
+          $report | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath out/source-bootstrap.json -Encoding UTF8
+          "ready=$($sourceReady.ToString().ToLowerInvariant())" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "repair_count=$repairCount" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "canary_package=$canaryPackage" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+          if (-not $sourceReady) {
+              throw ("WinGet source validation failed after {0} attempt(s). Last failure: {1} ({2})" -f $maxAttempts, $lastSourceFailure.exitHex, $lastSourceFailure.errorName)
+          }
+
+      - name: Install Yayaml PowerShell module
+        shell: pwsh
+        run: |
+          if (-not (Get-Module -ListAvailable -Name Yayaml)) {
+              Install-Module -Name Yayaml -Scope CurrentUser -Force -AcceptLicense -Repository PSGallery
+          }
+          Import-Module Yayaml -ErrorAction Stop
+
       - name: Run extraction batch
         id: extract_batch
         shell: pwsh
@@ -154,6 +303,27 @@ jobs:
 
             "script_failed=$($scriptFailed.ToString().ToLowerInvariant())" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
 
+      - name: Render source bootstrap summary
+        if: always()
+        shell: pwsh
+        run: |
+          if (-not (Test-Path -LiteralPath 'out/source-bootstrap.json')) {
+              return
+          }
+
+          $bootstrap = Get-Content -LiteralPath 'out/source-bootstrap.json' -Raw -Encoding UTF8 | ConvertFrom-Json
+          $lines = New-Object System.Collections.Generic.List[string]
+          $lines.Add('## WinGet source bootstrap')
+          $lines.Add('')
+          $lines.Add(("- Ready: **{0}**" -f $bootstrap.ready))
+          $lines.Add(("- Repair attempts: **{0}**" -f $bootstrap.repairCount))
+          $lines.Add(("- Validation package: **{0}**" -f $bootstrap.validationPackage))
+          if ($bootstrap.lastFailure) {
+              $lines.Add(("- Last source failure: **{0}** ({1})" -f $bootstrap.lastFailure.exitHex, $bootstrap.lastFailure.errorName))
+          }
+          $lines.Add('')
+          $lines -join "`n" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+
       - name: Render extraction summary
         if: always()
         shell: pwsh
@@ -180,6 +350,14 @@ jobs:
           foreach ($prop in $payload.StatusCounts.PSObject.Properties) {
               $lines.Add(("| {0} | {1} |" -f $prop.Name, $prop.Value))
           }
+            if ($payload.FailureCategoryCounts -and $payload.FailureCategoryCounts.PSObject.Properties.Count -gt 0) {
+              $lines.Add('')
+              $lines.Add('| Failure Category | Count |')
+              $lines.Add('| --- | ---: |')
+              foreach ($prop in $payload.FailureCategoryCounts.PSObject.Properties) {
+                $lines.Add(("| {0} | {1} |" -f $prop.Name, $prop.Value))
+              }
+            }
           $lines -join "`n" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
 
       - name: Build merge-ready batch archive
@@ -232,6 +410,7 @@ jobs:
             out/artifacts/winget-app-icons-batch-${{ github.run_id }}.zip
             out/summary.json
             out/requested-packages.json
+            out/source-bootstrap.json
           if-no-files-found: error
           retention-days: 14
 

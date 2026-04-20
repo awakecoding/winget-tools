@@ -211,20 +211,110 @@ function Invoke-IconExtraction {
     param(
         [Parameter(Mandatory)] [string] $PackageId,
         [Parameter(Mandatory)] [string] $PkgOutDir,
+        [ValidateSet('User', 'Machine', 'Both')]
+        [string] $Scope = 'Both',
+        [switch] $RefreshManifest,
         [switch] $Force
     )
 
     # Returns @{ Files = FileInfo[]; Error = string }.
     [void](New-Item -ItemType Directory -Path $PkgOutDir -Force)
     $err = ''
+
+    if ($RefreshManifest) {
+        try {
+            $null = Show-WinGetPackage -PackageId $PackageId -TimeoutSeconds 60
+        }
+        catch {
+            Write-Verbose "Manifest refresh failed for '$PackageId': $($_.Exception.Message)"
+        }
+    }
+
     try {
-        $null = & $script:iconScript -PackageId $PackageId -OutDir $PkgOutDir -Force:$Force 2>&1
+        $null = & $script:iconScript -PackageId $PackageId -OutDir $PkgOutDir -Scope $Scope -Force:$Force 2>&1
     }
     catch {
         $err = $_.Exception.Message
     }
     $files = @(Get-ChildItem -LiteralPath $PkgOutDir -Filter '*.ico' -File -ErrorAction SilentlyContinue)
-    return [pscustomobject]@{ Files = $files; Error = $err }
+    return [pscustomobject]@{ Files = $files; Error = $err; Scope = $Scope }
+}
+
+function Get-IconExtractionFailureCategory {
+    param([string] $Message)
+
+    if ([string]::IsNullOrWhiteSpace($Message)) { return $null }
+    if ($Message -like 'No ARP entries matched*') { return 'ArpNotFound' }
+    if ($Message -like 'Could not retrieve manifest*') { return 'ManifestUnavailable' }
+    if ($Message -like 'Manifest for *provides neither ProductCode*') { return 'UnsupportedPackage' }
+    return 'Other'
+}
+
+function Invoke-IconExtractionWithRetry {
+    param(
+        [Parameter(Mandatory)] [string] $PackageId,
+        [Parameter(Mandatory)] [string] $PkgOutDir,
+        [switch] $Force,
+        [switch] $AfterInstall
+    )
+
+    $attemptPlan = @(
+        [pscustomobject]@{ Scope = 'Both'; DelaySeconds = 0; RefreshManifest = $false }
+    )
+
+    if ($AfterInstall) {
+        $attemptPlan += @(
+            [pscustomobject]@{ Scope = 'User'; DelaySeconds = 5; RefreshManifest = $true },
+            [pscustomobject]@{ Scope = 'Machine'; DelaySeconds = 10; RefreshManifest = $false },
+            [pscustomobject]@{ Scope = 'Both'; DelaySeconds = 15; RefreshManifest = $true }
+        )
+    }
+
+    $attemptRecords = New-Object System.Collections.Generic.List[object]
+    $last = $null
+    foreach ($attempt in $attemptPlan) {
+        if ($attempt.DelaySeconds -gt 0) {
+            Write-Host ("  Waiting {0}s before extraction retry in scope '{1}'..." -f $attempt.DelaySeconds, $attempt.Scope) -ForegroundColor Gray
+            Start-Sleep -Seconds $attempt.DelaySeconds
+        }
+
+        $result = Invoke-IconExtraction -PackageId $PackageId -PkgOutDir $PkgOutDir -Scope $attempt.Scope -RefreshManifest:$attempt.RefreshManifest -Force:$Force
+        $last = $result
+        $attemptRecords.Add([pscustomobject]@{
+            scope           = $attempt.Scope
+            delaySeconds    = $attempt.DelaySeconds
+            refreshManifest = [bool]$attempt.RefreshManifest
+            filesFound      = $result.Files.Count
+            failureCategory = Get-IconExtractionFailureCategory -Message $result.Error
+            error           = if ($result.Error) { $result.Error } else { $null }
+        }) | Out-Null
+
+        if ($result.Files.Count -gt 0) {
+            return [pscustomobject]@{
+                Files           = $result.Files
+                Error           = $result.Error
+                Scope           = $result.Scope
+                FailureCategory = Get-IconExtractionFailureCategory -Message $result.Error
+                Attempts        = @($attemptRecords)
+            }
+        }
+
+        if (-not $AfterInstall) {
+            break
+        }
+
+        if ((Get-IconExtractionFailureCategory -Message $result.Error) -eq 'UnsupportedPackage') {
+            break
+        }
+    }
+
+    return [pscustomobject]@{
+        Files           = if ($last) { $last.Files } else { @() }
+        Error           = if ($last) { $last.Error } else { '' }
+        Scope           = if ($last) { $last.Scope } else { 'Both' }
+        FailureCategory = if ($last) { Get-IconExtractionFailureCategory -Message $last.Error } else { $null }
+        Attempts        = @($attemptRecords)
+    }
 }
 
 function Invoke-WinGetCommand {
@@ -272,6 +362,72 @@ function Invoke-WinGetCommand {
     }
 }
 
+$script:wingetSourceErrorNames = [ordered]@{
+    '-1978335221' = 'APPINSTALLER_CLI_ERROR_SOURCES_INVALID'
+    '-1978335217' = 'APPINSTALLER_CLI_ERROR_SOURCE_DATA_MISSING'
+    '-1978335211' = 'APPINSTALLER_CLI_ERROR_NO_SOURCES_DEFINED'
+    '-1978335174' = 'APPINSTALLER_CLI_ERROR_RESTAPI_INTERNAL_ERROR'
+    '-1978335169' = 'APPINSTALLER_CLI_ERROR_SOURCE_DATA_INTEGRITY_FAILURE'
+    '-1978335163' = 'APPINSTALLER_CLI_ERROR_SOURCE_OPEN_FAILED'
+    '-1978335157' = 'APPINSTALLER_CLI_ERROR_FAILED_TO_OPEN_ALL_SOURCES'
+}
+
+function Get-WinGetExitHex {
+    param([Parameter(Mandatory)] [int] $ExitCode)
+
+    return ('0x{0:X8}' -f ([uint32]([int64]$ExitCode -band 0xffffffffL)))
+}
+
+function Get-WinGetErrorName {
+    param([Nullable[int]] $ExitCode)
+
+    if ($null -eq $ExitCode) { return $null }
+    $key = [string]$ExitCode
+    if ($script:wingetSourceErrorNames.Contains($key)) {
+        return $script:wingetSourceErrorNames[$key]
+    }
+
+    return $null
+}
+
+function Test-WinGetSourceError {
+    param([Nullable[int]] $ExitCode)
+
+    if ($null -eq $ExitCode) { return $false }
+    return $script:wingetSourceErrorNames.Contains([string]$ExitCode)
+}
+
+function New-WinGetAttemptRecord {
+    param([Parameter(Mandatory)] $Result)
+
+    return [pscustomobject]@{
+        tag             = $Result.Tag
+        exitCode        = $Result.ExitCode
+        exitHex         = if ($Result.TimedOut) { $null } else { Get-WinGetExitHex -ExitCode $Result.ExitCode }
+        timedOut        = $Result.TimedOut
+        errorName       = Get-WinGetErrorName -ExitCode $Result.ExitCode
+        failureCategory = if ($Result.TimedOut) { 'Timeout' } elseif (Test-WinGetSourceError -ExitCode $Result.ExitCode) { 'Source' } elseif ($Result.ExitCode -eq 0) { $null } else { 'Install' }
+    }
+}
+
+function New-WinGetOutcome {
+    param(
+        [Parameter(Mandatory)] $Result,
+        [Parameter(Mandatory)] [object[]] $Attempts
+    )
+
+    return [pscustomobject]@{
+        Tag             = $Result.Tag
+        ExitCode        = $Result.ExitCode
+        TimedOut        = $Result.TimedOut
+        StdOut          = $Result.StdOut
+        StdErr          = $Result.StdErr
+        ExitCodeName    = Get-WinGetErrorName -ExitCode $Result.ExitCode
+        FailureCategory = if ($Result.TimedOut) { 'Timeout' } elseif (Test-WinGetSourceError -ExitCode $Result.ExitCode) { 'Source' } elseif ($Result.ExitCode -eq 0) { $null } else { 'Install' }
+        Attempts        = @($Attempts)
+    }
+}
+
 function Install-WinGetPackage {
     param(
         [Parameter(Mandatory)] [string] $PackageId,
@@ -286,20 +442,43 @@ function Install-WinGetPackage {
         '--disable-interactivity'
     )
 
+    $attempts = New-Object System.Collections.Generic.List[object]
+    $machineArgs = $commonArgs + @('--scope', 'machine')
+
     # Try machine scope first (more likely to write to ARP HKLM).
-    $r = Invoke-WinGetCommand -Arguments ($commonArgs + @('--scope', 'machine')) `
+    $r = Invoke-WinGetCommand -Arguments $machineArgs `
                               -TimeoutSeconds $TimeoutSeconds `
                               -Tag 'install-machine'
+    $attempts.Add((New-WinGetAttemptRecord -Result $r)) | Out-Null
 
-    if ($r.TimedOut) { return $r }
-    if ($r.ExitCode -eq 0) { return $r }
+    if ($r.TimedOut) { return New-WinGetOutcome -Result $r -Attempts @($attempts) }
+    if ($r.ExitCode -eq 0) { return New-WinGetOutcome -Result $r -Attempts @($attempts) }
+
+    if (Test-WinGetSourceError -ExitCode $r.ExitCode) {
+        $r = Invoke-WinGetCommand -Arguments $machineArgs `
+                                  -TimeoutSeconds $TimeoutSeconds `
+                                  -Tag 'install-machine-retry'
+        $attempts.Add((New-WinGetAttemptRecord -Result $r)) | Out-Null
+
+        if ($r.TimedOut) { return New-WinGetOutcome -Result $r -Attempts @($attempts) }
+        if ($r.ExitCode -eq 0) { return New-WinGetOutcome -Result $r -Attempts @($attempts) }
+    }
 
     # Common fall-back: --scope machine is unsupported (exit 0x8a15010d) for
     # user-scoped installers. Retry without --scope.
     $r2 = Invoke-WinGetCommand -Arguments $commonArgs `
                                -TimeoutSeconds $TimeoutSeconds `
                                -Tag 'install-default'
-    return $r2
+    $attempts.Add((New-WinGetAttemptRecord -Result $r2)) | Out-Null
+
+    if ((-not $r2.TimedOut) -and (Test-WinGetSourceError -ExitCode $r2.ExitCode)) {
+        $r2 = Invoke-WinGetCommand -Arguments $commonArgs `
+                                   -TimeoutSeconds $TimeoutSeconds `
+                                   -Tag 'install-default-retry'
+        $attempts.Add((New-WinGetAttemptRecord -Result $r2)) | Out-Null
+    }
+
+    return New-WinGetOutcome -Result $r2 -Attempts @($attempts)
 }
 
 function Uninstall-WinGetPackage {
@@ -442,6 +621,11 @@ function Write-PackageState {
         installTimedOut         = $Record.InstallTimedOut
         uninstallExitCode       = $Record.UninstallExitCode
         uninstallTimedOut       = $Record.UninstallTimedOut
+        failureCategory         = if ($Record.FailureCategory) { $Record.FailureCategory } else { $null }
+        installAttemptTag       = if ($Record.InstallAttemptTag) { $Record.InstallAttemptTag } else { $null }
+        extractAttemptCount     = $Record.ExtractAttemptCount
+        extractAttemptScopes    = if ($Record.ExtractAttemptScopes.Count -gt 0) { @($Record.ExtractAttemptScopes) } else { $null }
+        extractFailureCategory  = if ($Record.ExtractFailureCategory) { $Record.ExtractFailureCategory } else { $null }
         iconCount               = (Get-EntryField -Entry $Entry -Field 'iconCount')
         iconBytes               = (Get-EntryField -Entry $Entry -Field 'iconBytes')
         appIconFile             = if ($hasIcon) { 'app-icon.ico' } else { $null }
@@ -450,6 +634,7 @@ function Write-PackageState {
         canonicalIconSha256     = if ($hasIcon) { Get-FileSha256 -Path $canonicalIconPath } else { $null }
         extractError            = if ($Record.ExtractError) { $Record.ExtractError } else { $null }
         installStdErr           = if ($Record.InstallStdErr) { $Record.InstallStdErr } else { $null }
+        installAttempts         = if ($Record.InstallAttempts.Count -gt 0) { @($Record.InstallAttempts) } else { $null }
         icons                   = (Get-EntryField -Entry $Entry -Field 'icons')
         run                     = [ordered]@{
             startedAtUtc = $Record.StartedAt
@@ -504,13 +689,19 @@ foreach ($pkg in $todo) {
     $record = [ordered]@{
         PackageId          = $pkg
         Status             = 'Unknown'
+        FailureCategory    = ''
         AlreadyInstalled   = $false
         InstallExitCode    = $null
         InstallTimedOut    = $false
+        InstallAttemptTag  = ''
+        InstallAttempts    = @()
         InstallStdErr      = ''
         InstalledByThisRun = $false
         InstallSeconds     = 0
         ExtractSeconds     = 0
+        ExtractAttemptCount = 0
+        ExtractAttemptScopes = @()
+        ExtractFailureCategory = ''
         IconCount          = 0
         IconBytes          = 0
         IconFiles          = @()
@@ -535,8 +726,11 @@ foreach ($pkg in $todo) {
         # installed locally (e.g. dev box, preinstalled on runner).
         Write-Host "  Probing for existing icon..." -ForegroundColor Gray
         $extStart = Get-Date
-        $probe = Invoke-IconExtraction -PackageId $pkg -PkgOutDir $pkgOutDir -Force:$Force
+        $probe = Invoke-IconExtractionWithRetry -PackageId $pkg -PkgOutDir $pkgOutDir -Force:$Force
         $record.ExtractSeconds = [int]((Get-Date) - $extStart).TotalSeconds
+        $record.ExtractAttemptCount = @($probe.Attempts).Count
+        $record.ExtractAttemptScopes = @($probe.Attempts | ForEach-Object { $_.scope })
+        $record.ExtractFailureCategory = if ($probe.FailureCategory) { $probe.FailureCategory } else { '' }
 
         if ($probe.Files.Count -gt 0) {
             $record.AlreadyInstalled = $true
@@ -554,6 +748,9 @@ foreach ($pkg in $todo) {
 
             $record.InstallExitCode = $install.ExitCode
             $record.InstallTimedOut = $install.TimedOut
+            $record.InstallAttemptTag = $install.Tag
+            $record.InstallAttempts = @($install.Attempts)
+            $record.FailureCategory = if ($install.FailureCategory) { $install.FailureCategory } else { '' }
             if ($install.StdErr) {
                 $record.InstallStdErr = ($install.StdErr.Substring(0, [Math]::Min(512, $install.StdErr.Length)))
             }
@@ -567,28 +764,43 @@ foreach ($pkg in $todo) {
             if ($install.TimedOut) {
                 Write-Warning "  Install TIMED OUT after ${PerPackageTimeoutSeconds}s."
                 $record.Status = 'InstallTimeout'
+                $record.FailureCategory = 'Timeout'
             }
             elseif ($install.ExitCode -eq 0) {
                 Write-Host ("  Install OK ({0}s)." -f $record.InstallSeconds) -ForegroundColor Green
                 $record.Status = 'Installed'
                 $record.InstalledByThisRun = $true
+                $record.FailureCategory = ''
             }
             elseif ($alreadyInstalledCodes -contains $install.ExitCode) {
                 Write-Host "  winget reports already installed." -ForegroundColor Gray
                 $record.Status = 'AlreadyInstalled'
                 $record.AlreadyInstalled = $true
+                $record.FailureCategory = ''
             }
             else {
-                $installHex = '{0:X8}' -f ([uint32]([int64]$install.ExitCode -band 0xffffffffL))
-                Write-Warning ("  Install FAILED (exit 0x{0})." -f $installHex)
+                $installHex = Get-WinGetExitHex -ExitCode $install.ExitCode
+                if (Test-WinGetSourceError -ExitCode $install.ExitCode) {
+                    Write-Warning ("  Install FAILED due to WinGet source error ({0}; {1})." -f $installHex, $install.ExitCodeName)
+                    $record.FailureCategory = 'Source'
+                }
+                else {
+                    Write-Warning ("  Install FAILED (exit {0})." -f $installHex)
+                    if (-not $record.FailureCategory) {
+                        $record.FailureCategory = 'Install'
+                    }
+                }
                 $record.Status = 'InstallFailed'
             }
 
             if ($record.Status -in @('Installed', 'AlreadyInstalled')) {
                 Write-Host "  Extracting icon..." -ForegroundColor Gray
                 $extStart = Get-Date
-                $ex = Invoke-IconExtraction -PackageId $pkg -PkgOutDir $pkgOutDir -Force:$Force
+                $ex = Invoke-IconExtractionWithRetry -PackageId $pkg -PkgOutDir $pkgOutDir -Force:$Force -AfterInstall
                 $record.ExtractSeconds = [int]((Get-Date) - $extStart).TotalSeconds
+                $record.ExtractAttemptCount = @($ex.Attempts).Count
+                $record.ExtractAttemptScopes = @($ex.Attempts | ForEach-Object { $_.scope })
+                $record.ExtractFailureCategory = if ($ex.FailureCategory) { $ex.FailureCategory } else { '' }
                 if ($ex.Files.Count -gt 0) {
                     $record.IconCount = $ex.Files.Count
                     $record.IconBytes = ($ex.Files | Measure-Object Length -Sum).Sum
@@ -598,6 +810,9 @@ foreach ($pkg in $todo) {
                 }
                 elseif ($ex.Error) {
                     $record.Status = 'ExtractError'
+                    if (-not $record.FailureCategory) {
+                        $record.FailureCategory = 'Extraction'
+                    }
                     $record.ExtractError = ($ex.Error.Substring(0, [Math]::Min(512, $ex.Error.Length)))
                     Write-Warning "  Extractor threw: $($ex.Error)"
                 }
@@ -633,6 +848,9 @@ foreach ($pkg in $todo) {
     }
     catch {
         $record.Status = 'ExtractError'
+        if (-not $record.FailureCategory) {
+            $record.FailureCategory = 'Extraction'
+        }
         $record.ExtractError = $_.Exception.Message
         Write-Warning "  Iteration error: $($_.Exception.Message)"
     }
@@ -737,9 +955,13 @@ $payload = [ordered]@{
     Skipped       = 0
     Processed     = $todo.Count
     StatusCounts  = @{}
+    FailureCategoryCounts = @{}
     Results       = $results
 }
 foreach ($g in $grouped) { $payload.StatusCounts[$g.Name] = $g.Count }
+foreach ($g in ($results | Where-Object { $_.FailureCategory } | Group-Object FailureCategory | Sort-Object Name)) {
+    $payload.FailureCategoryCounts[$g.Name] = $g.Count
+}
 
 $payload | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $SummaryPath -Encoding UTF8
 Write-Host "Summary written to: $SummaryPath" -ForegroundColor Cyan
