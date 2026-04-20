@@ -3,6 +3,42 @@
 A small collection of PowerShell utilities for working with the Windows Package
 Manager (winget) beyond what the official CLI exposes.
 
+## GitHub Actions batch extraction
+
+The repository now includes a manual sandbox workflow at `.github/workflows/extract-icons.yml` for installing packages inside GitHub Actions, extracting icons there, and bringing the results back into git without installing those packages on your local machine.
+
+### Workflow inputs
+
+| Input | Description |
+|---|---|
+| `package_ids_csv` | Required comma-separated list of exact winget package IDs. Maximum 25 package IDs per run. |
+| `uninstall_after` | When `true`, the workflow uninstalls each package after extraction. |
+| `per_package_timeout` | Install timeout in seconds for each package. |
+| `auto_commit_results` | When `true`, the workflow also commits the refreshed package folders back to the repository. |
+
+### Output layout
+
+Every processed package gets its own folder under `winget-app-icons/<PackageId>/`.
+
+Files written per package:
+
+- `metadata.json` is always written. Its presence means that package has already gone through the extraction pipeline at least once.
+- `app-icon.ico` is written only when the latest run extracted a canonical icon successfully.
+
+`metadata.json` includes the latest attempt status, timestamps, install and extract timings, uninstall timing, exit codes, icon hashes, and other run details. If a package is refreshed and the new run does not find an icon, any stale `app-icon.ico` is removed so the folder reflects the latest result.
+
+### Artifact-first import flow
+
+The workflow always uploads a batch artifact containing:
+
+- `winget-app-icons-batch-<run_id>.zip`
+- `summary.json`
+- `requested-packages.json`
+
+The zip contains only the `winget-app-icons/<PackageId>/...` folders for that batch, so you can extract it at the repository root and overwrite the existing `winget-app-icons` tree.
+
+When `auto_commit_results` is enabled, the workflow imports that same batch artifact and commits only the refreshed package folders.
+
 ## Scripts
 
 ### `scripts/Get-WinGetManifest.ps1`

@@ -76,6 +76,11 @@
     across runs. When supplied, packages whose registry entry is fresh enough
     are skipped entirely (no install/extract). Updated and rewritten at end.
 
+.PARAMETER PackageStateRoot
+    Root directory for the git-backed per-package output layout.
+    Each processed package gets a folder at <PackageStateRoot>\<PackageId>\
+    containing metadata.json and, when extraction succeeds, app-icon.ico.
+
 .PARAMETER MaxNew
     Cap on the number of NEW packages processed per run, AFTER skipping cached
     ones. 0 = no cap. Use to spread work across multiple CI runs.
@@ -126,6 +131,8 @@ param(
     [string] $SummaryPath,
 
     [string] $RegistryPath,
+
+    [string] $PackageStateRoot,
 
     [Parameter(HelpMessage = '0-based shard index. Used with -ShardCount to deterministically slice the package list.')]
     [ValidateRange(0, 999)]
@@ -268,6 +275,11 @@ if (-not $SummaryPath) {
     $SummaryPath = Join-Path $OutDir 'summary.json'
 }
 $SummaryPath = [IO.Path]::GetFullPath($SummaryPath)
+
+if ($PackageStateRoot) {
+    $PackageStateRoot = [IO.Path]::GetFullPath($PackageStateRoot)
+    [void](New-Item -ItemType Directory -Path $PackageStateRoot -Force)
+}
 
 # Resolve sharded registry path: when -RegistryPath points to a directory and
 # we're sharding, append shard-NN.json automatically.
@@ -538,6 +550,93 @@ function Get-FileSha256 {
     return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
 }
 
+function Get-PackageStateDirPath {
+    param(
+        [Parameter(Mandatory)] [string] $Root,
+        [Parameter(Mandatory)] [string] $PackageId
+    )
+
+    $invalidChars = [IO.Path]::GetInvalidFileNameChars()
+    if ($PackageId.IndexOfAny($invalidChars) -ge 0 -or $PackageId.EndsWith(' ') -or $PackageId.EndsWith('.')) {
+        throw "PackageId '$PackageId' cannot be used as a folder name under '$Root'."
+    }
+
+    return Join-Path $Root $PackageId
+}
+
+function Write-PackageState {
+    param(
+        [Parameter(Mandatory)] [string] $Root,
+        [Parameter(Mandatory)] [string] $PackageId,
+        [Parameter(Mandatory)] $Entry,
+        [Parameter(Mandatory)] $Record,
+        [Parameter(Mandatory)] [string] $PkgOutDir
+    )
+
+    $pkgStateDir = Get-PackageStateDirPath -Root $Root -PackageId $PackageId
+    [void](New-Item -ItemType Directory -Path $pkgStateDir -Force)
+
+    $metadataPath = Join-Path $pkgStateDir 'metadata.json'
+    $canonicalIconPath = Join-Path $pkgStateDir 'app-icon.ico'
+    $currentIcons = @()
+    if (Test-Path -LiteralPath $PkgOutDir) {
+        $currentIcons = @(
+            Get-ChildItem -LiteralPath $PkgOutDir -Filter '*.ico' -File -ErrorAction SilentlyContinue |
+                Sort-Object -Property @{ Expression = 'Length'; Descending = $true }, @{ Expression = 'Name'; Descending = $false }
+        )
+    }
+
+    $canonicalIcon = if ($currentIcons.Count -gt 0) { $currentIcons[0] } else { $null }
+    if ($canonicalIcon) {
+        Copy-Item -LiteralPath $canonicalIcon.FullName -Destination $canonicalIconPath -Force
+    }
+    elseif (Test-Path -LiteralPath $canonicalIconPath) {
+        Remove-Item -LiteralPath $canonicalIconPath -Force
+    }
+
+    $hasIcon = Test-Path -LiteralPath $canonicalIconPath
+    $metadata = [ordered]@{
+        schema                  = 1
+        packageId               = $PackageId
+        status                  = (Get-EntryField -Entry $Entry -Field 'status')
+        hasIcon                 = $hasIcon
+        firstSeenUtc            = (Get-EntryField -Entry $Entry -Field 'firstSeenUtc')
+        lastCheckedUtc          = (Get-EntryField -Entry $Entry -Field 'lastCheckedUtc')
+        lastUpdatedUtc          = (Get-EntryField -Entry $Entry -Field 'lastUpdatedUtc')
+        wingetVersion           = (Get-EntryField -Entry $Entry -Field 'wingetVersion')
+        packageVersion          = (Get-EntryField -Entry $Entry -Field 'packageVersion')
+        manifestSha             = (Get-EntryField -Entry $Entry -Field 'manifestSha')
+        installerType           = (Get-EntryField -Entry $Entry -Field 'installerType')
+        alreadyInstalled        = $Record.AlreadyInstalled
+        installedByThisRun      = $Record.InstalledByThisRun
+        installSeconds          = $Record.InstallSeconds
+        extractSeconds          = $Record.ExtractSeconds
+        uninstallSeconds        = $Record.UninstallSeconds
+        durationSeconds         = $Record.DurationSeconds
+        installExitCode         = $Record.InstallExitCode
+        installTimedOut         = $Record.InstallTimedOut
+        uninstallExitCode       = $Record.UninstallExitCode
+        uninstallTimedOut       = $Record.UninstallTimedOut
+        iconCount               = (Get-EntryField -Entry $Entry -Field 'iconCount')
+        iconBytes               = (Get-EntryField -Entry $Entry -Field 'iconBytes')
+        appIconFile             = if ($hasIcon) { 'app-icon.ico' } else { $null }
+        canonicalIconSourceName = if ($canonicalIcon) { $canonicalIcon.Name } else { $null }
+        canonicalIconBytes      = if ($canonicalIcon) { $canonicalIcon.Length } else { $null }
+        canonicalIconSha256     = if ($hasIcon) { Get-FileSha256 -Path $canonicalIconPath } else { $null }
+        extractError            = if ($Record.ExtractError) { $Record.ExtractError } else { $null }
+        installStdErr           = if ($Record.InstallStdErr) { $Record.InstallStdErr } else { $null }
+        icons                   = (Get-EntryField -Entry $Entry -Field 'icons')
+        run                     = [ordered]@{
+            startedAtUtc = $Record.StartedAt
+            runId        = if ($env:GITHUB_RUN_ID) { $env:GITHUB_RUN_ID } else { $null }
+            runAttempt   = if ($env:GITHUB_RUN_ATTEMPT) { $env:GITHUB_RUN_ATTEMPT } else { $null }
+            repository   = if ($env:GITHUB_REPOSITORY) { $env:GITHUB_REPOSITORY } else { $null }
+        }
+    }
+
+    $metadata | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $metadataPath -Encoding UTF8
+}
+
 # -----------------------------------------------------------------------------
 # Main loop
 # -----------------------------------------------------------------------------
@@ -659,13 +758,14 @@ foreach ($pkg in $todo) {
         ExtractError       = ''
         UninstallExitCode  = $null
         UninstallTimedOut  = $false
+        UninstallSeconds   = 0
         DurationSeconds    = 0
         StartedAt          = $started.ToUniversalTime().ToString('o')
     }
 
-    try {
-        $pkgOutDir = Join-Path $OutDir $pkg
+    $pkgOutDir = Join-Path $OutDir $pkg
 
+    try {
         # Always warm the manifest FileCache up front so the extractor can read
         # ProductCode / DisplayName / Publisher hints even when the package was
         # preinstalled on the runner.
@@ -752,7 +852,9 @@ foreach ($pkg in $todo) {
         if ($UninstallAfter -and $record.InstalledByThisRun) {
             Write-Host "  Uninstalling..." -ForegroundColor Gray
             try {
+                $uninstallStart = Get-Date
                 $uninst = Uninstall-WinGetPackage -PackageId $pkg -TimeoutSeconds $UninstallTimeoutSeconds
+                $record.UninstallSeconds = [int]((Get-Date) - $uninstallStart).TotalSeconds
                 $record.UninstallExitCode = $uninst.ExitCode
                 $record.UninstallTimedOut = $uninst.TimedOut
                 if ($uninst.TimedOut) {
@@ -817,9 +919,13 @@ foreach ($pkg in $todo) {
             installerType       = if ($candidateMeta.ContainsKey($pkg) -and $candidateMeta[$pkg].ContainsKey('installerType')) { $candidateMeta[$pkg]['installerType'] } else { (Get-EntryField -Entry $prev -Field 'installerType') }
             installSeconds      = $record.InstallSeconds
             extractSeconds      = $record.ExtractSeconds
+            uninstallSeconds    = $record.UninstallSeconds
             installExitCode     = $record.InstallExitCode
+            uninstallExitCode   = $record.UninstallExitCode
+            uninstallTimedOut   = $record.UninstallTimedOut
             installedByThisRun  = $record.InstalledByThisRun
             alreadyInstalled    = $record.AlreadyInstalled
+            durationSeconds     = $record.DurationSeconds
             iconCount           = $record.IconCount
             iconBytes           = $record.IconBytes
             icons               = $iconRecords
@@ -834,6 +940,15 @@ foreach ($pkg in $todo) {
         }
 
         Set-RegistryEntry -Registry $registry -PackageId $pkg -Entry $newEntry
+
+        if ($PackageStateRoot) {
+            try {
+                Write-PackageState -Root $PackageStateRoot -PackageId $pkg -Entry $newEntry -Record ([pscustomobject]$record) -PkgOutDir $pkgOutDir
+            }
+            catch {
+                Write-Warning "  Failed to write package state for '$pkg': $($_.Exception.Message)"
+            }
+        }
     }
 }
 

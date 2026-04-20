@@ -3,15 +3,9 @@ name: Extract WinGet icons
 on:
   workflow_dispatch:
     inputs:
-      max_packages_per_shard:
-        description: 'Cap candidate slice per shard (0 = all). Use small value (e.g., 50) for smoke tests.'
-        required: false
-        default: '0'
-        type: string
-      max_new_per_shard:
-        description: 'Cap NEW packages per shard after registry skips (0 = no cap)'
-        required: false
-        default: '500'
+      package_ids_csv:
+        description: 'Comma-separated winget package IDs to process (maximum 25).'
+        required: true
         type: string
       uninstall_after:
         description: 'Uninstall each package after icon extraction'
@@ -23,160 +17,34 @@ on:
         required: false
         default: '600'
         type: string
-      ignore_registry:
-        description: 'Ignore registry freshness; reprocess every candidate'
+      auto_commit_results:
+        description: 'Commit the refreshed winget-app-icons package folders back to the repo'
         required: false
         default: false
         type: boolean
-      shard_count:
-        description: 'Number of parallel extract shards'
-        required: false
-        default: '10'
-        type: string
-      refresh_candidates:
-        description: 'Regenerate data/candidates.json instead of reusing the committed copy'
-        required: false
-        default: false
-        type: boolean
-      skip_publish:
-        description: 'Skip the publish job (no GitHub Release upload, no commit)'
-        required: false
-        default: false
-        type: boolean
-  schedule:
-    # Mondays at 06:00 UTC.
-    - cron: '0 6 * * 1'
 
 permissions:
   contents: write
 
-# Don't cancel an in-flight extraction sweep when a new run is queued; the
-# winget-pkgs catalog only changes slowly, and shards already running waste
-# install/uninstall cycles if killed.
 concurrency:
   group: extract-icons-${{ github.ref }}
   cancel-in-progress: false
 
-env:
-  SHARD_COUNT: ${{ inputs.shard_count || '10' }}
-  RELEASE_TAG: icons-latest
-
 jobs:
-  # ---------------------------------------------------------------------------
-  # 1) DISCOVER: walk the winget-pkgs manifests, build candidates.json
-  # ---------------------------------------------------------------------------
-  discover:
-    name: Discover candidates
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    outputs:
-      shard_count: ${{ env.SHARD_COUNT }}
-      shard_matrix: ${{ steps.matrix.outputs.json }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install Yayaml PowerShell module
-        shell: pwsh
-        run: |
-          if (-not (Get-Module -ListAvailable -Name Yayaml)) {
-              Install-Module -Name Yayaml -Scope CurrentUser -Force -AcceptLicense -Repository PSGallery
-          }
-          Import-Module Yayaml
-
-      - name: Ensure candidate list
-        shell: pwsh
-        env:
-          REFRESH_CANDIDATES: ${{ github.event_name == 'schedule' && 'true' || inputs.refresh_candidates && 'true' || 'false' }}
-        run: |
-          $PSNativeCommandUseErrorActionPreference = $false
-          $refreshCandidates = $env:REFRESH_CANDIDATES -eq 'true'
-
-          if ((-not $refreshCandidates) -and (Test-Path -LiteralPath 'data/candidates.json')) {
-              Write-Host 'Reusing committed data/candidates.json for this run.'
-              return
-          }
-
-          & ./scripts/Update-CandidateList.ps1 `
-              -OutputPath data/candidates.json `
-              -WorkDir $env:RUNNER_TEMP/winget-pkgs
-
-      - name: Summarize candidates
-        shell: pwsh
-        run: |
-          $payload = Get-Content -LiteralPath data/candidates.json -Raw | ConvertFrom-Json
-          "## Candidate discovery"               | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
-          ""                                      | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
-          "- Generated: ``$($payload.generated)``" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
-          "- Source: ``$($payload.source)``"       | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
-          "- Total: **$($payload.count)**"         | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
-          "- Eligible: **$($payload.eligibleCount)**" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
-          "- Denied installer types: ``$($payload.deniedInstallerTypes -join ', ')``" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
-
-      - name: Build shard matrix
-        id: matrix
-        shell: pwsh
-        run: |
-          $count = [int]$env:SHARD_COUNT
-          $arr = @(0..($count - 1))
-          # Force array form for ConvertTo-Json even when single-element.
-          $json = ConvertTo-Json -InputObject $arr -Compress
-          if ($count -eq 1) { $json = "[0]" }
-          "json=$json" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-
-      - name: Upload candidates artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: candidates-${{ github.run_id }}
-          path: data/candidates.json
-          retention-days: 14
-
-      - name: Commit candidates if changed
-        if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
-        shell: pwsh
-        run: |
-          $PSNativeCommandUseErrorActionPreference = $true
-          git config user.name  'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git pull --rebase --autostash
-          git add data/candidates.json
-          $cached = git diff --cached --name-only
-          if (-not $cached) {
-              Write-Host 'Candidates unchanged; nothing to commit.'
-              return
-          }
-          git commit -m "chore: refresh winget-pkgs candidate list (run $env:GITHUB_RUN_ID) [skip ci]"
-          git push
-
-  # ---------------------------------------------------------------------------
-  # 2) EXTRACT: parallel matrix of windows shards
-  # ---------------------------------------------------------------------------
   extract:
-    name: Extract shard ${{ matrix.shard }}
-    needs: discover
+    name: Extract requested package batch
     runs-on: windows-latest
-    timeout-minutes: 350
-    strategy:
-      fail-fast: false
-      max-parallel: 10
-      matrix:
-        shard: ${{ fromJson(needs.discover.outputs.shard_matrix) }}
+    timeout-minutes: 360
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Download candidates
-        uses: actions/download-artifact@v4
-        with:
-          name: candidates-${{ github.run_id }}
-          path: data
 
       - name: Verify winget
         shell: pwsh
         run: |
           $PSNativeCommandUseErrorActionPreference = $false
           $v = winget --version 2>$null
-          if ($LASTEXITCODE -ne 0) { throw "winget CLI not available." }
+          if ($LASTEXITCODE -ne 0) { throw 'winget CLI not available.' }
           Write-Host "winget version: $v"
 
       - name: Update winget sources
@@ -195,52 +63,103 @@ jobs:
           }
           Import-Module Yayaml -ErrorAction Stop
 
-      - name: Run extraction for this shard
-        id: extract
+      - name: Validate requested packages
+        id: packages
         shell: pwsh
-        continue-on-error: true
         env:
-          SHARD_INDEX: ${{ matrix.shard }}
-          SHARD_TOTAL: ${{ needs.discover.outputs.shard_count }}
-          MAX_PKG: ${{ inputs.max_packages_per_shard || '0' }}
-          MAX_NEW: ${{ inputs.max_new_per_shard || '500' }}
-          PKG_TIMEOUT: ${{ inputs.per_package_timeout || '600' }}
-          UNINSTALL_AFTER: ${{ inputs.uninstall_after && 'true' || 'true' }}
-          IGNORE_REGISTRY: ${{ inputs.ignore_registry && 'true' || 'false' }}
+          PACKAGE_IDS_CSV: ${{ inputs.package_ids_csv }}
         run: |
-          $PSNativeCommandUseErrorActionPreference = $false
+          $ErrorActionPreference = 'Stop'
+          [void](New-Item -ItemType Directory -Path out -Force)
+
+          $packages = @($env:PACKAGE_IDS_CSV -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+          if (-not $packages -or $packages.Count -eq 0) {
+              throw 'Provide at least one winget package ID.'
+          }
+
+          $duplicates = @($packages | Group-Object -CaseSensitive | Where-Object Count -gt 1 | Select-Object -ExpandProperty Name)
+          if ($duplicates.Count -gt 0) {
+              throw ("Duplicate package IDs are not allowed: {0}" -f ($duplicates -join ', '))
+          }
+
+          if ($packages.Count -gt 25) {
+              throw ("At most 25 package IDs are allowed per run. Received {0}." -f $packages.Count)
+          }
+
+          $invalidChars = [System.IO.Path]::GetInvalidFileNameChars()
+          $invalidPackages = @(
+              $packages | Where-Object {
+                  $_.IndexOfAny($invalidChars) -ge 0 -or
+                  $_.EndsWith(' ') -or
+                  $_.EndsWith('.')
+              }
+          )
+          if ($invalidPackages.Count -gt 0) {
+              throw ("These package IDs are not safe as folder names: {0}" -f ($invalidPackages -join ', '))
+          }
+
+          $payload = [ordered]@{
+              generatedAtUtc = (Get-Date).ToUniversalTime().ToString('o')
+              count          = $packages.Count
+              packages       = $packages
+          }
+
+          $payload | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath out/requested-packages.json -Encoding UTF8
+          $packages | Set-Content -LiteralPath out/requested-packages.txt -Encoding UTF8
+
+          "count=$($packages.Count)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "artifact_name=winget-icon-batch-${{ github.run_id }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+          "## Requested packages" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "- Count: **$($packages.Count)**" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "- Auto-commit: **${{ inputs.auto_commit_results }}**" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "- Uninstall after extraction: **${{ inputs.uninstall_after }}**" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          foreach ($pkg in $packages) {
+              "- ``$pkg``" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          }
+
+      - name: Run extraction batch
+        shell: pwsh
+        env:
+          PKG_TIMEOUT: ${{ inputs.per_package_timeout || '600' }}
+          UNINSTALL_AFTER: ${{ inputs.uninstall_after && 'true' || 'false' }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $requested = Get-Content -LiteralPath out/requested-packages.json -Raw -Encoding UTF8 | ConvertFrom-Json
+
           $params = @{
-              CandidateFile            = 'data/candidates.json'
-              OutDir                   = "out/icons"
-              SummaryPath              = "out/summary.json"
-              RegistryPath             = 'data/registry'
-              ShardIndex               = [int]$env:SHARD_INDEX
-              ShardCount               = [int]$env:SHARD_TOTAL
+              Packages                 = @($requested.packages)
+              OutDir                   = 'out/icons'
+              SummaryPath              = 'out/summary.json'
+              PackageStateRoot         = 'winget-app-icons'
               PerPackageTimeoutSeconds = [int]$env:PKG_TIMEOUT
               Force                    = $true
           }
-          if ([int]$env:MAX_PKG -gt 0)         { $params['MaxPackages']    = [int]$env:MAX_PKG }
-          if ([int]$env:MAX_NEW -gt 0)         { $params['MaxNew']         = [int]$env:MAX_NEW }
-          if ($env:UNINSTALL_AFTER -eq 'true') { $params['UninstallAfter'] = $true }
-          if ($env:IGNORE_REGISTRY -eq 'true') { $params['IgnoreRegistry'] = $true }
+          if ($env:UNINSTALL_AFTER -eq 'true') {
+              $params['UninstallAfter'] = $true
+          }
 
           & ./scripts/Invoke-BulkIconExtraction.ps1 @params
 
-      - name: Render shard summary
+      - name: Render extraction summary
         if: always()
         shell: pwsh
         run: |
-          $summaryPath = 'out/summary.json'
-          if (-not (Test-Path -LiteralPath $summaryPath)) {
-              "## Shard ${{ matrix.shard }}: no summary produced" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          if (-not (Test-Path -LiteralPath 'out/summary.json')) {
+              "## Extraction summary" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+              "" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+              "No summary was produced." | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
               return
           }
-          $payload = Get-Content -LiteralPath $summaryPath -Raw | ConvertFrom-Json
+
+          $payload = Get-Content -LiteralPath 'out/summary.json' -Raw -Encoding UTF8 | ConvertFrom-Json
           $lines = New-Object System.Collections.Generic.List[string]
-          $lines.Add("## Shard ${{ matrix.shard }} / ${{ needs.discover.outputs.shard_count }}")
+          $lines.Add('## Extraction summary')
           $lines.Add('')
-          $lines.Add(("- Candidates in shard: **{0}**" -f ($payload.Total + $payload.Skipped + $payload.Unsupported)))
-          $lines.Add(("- Processed: **{0}**, skipped (cache): **{1}**, unsupported: **{2}**" -f $payload.Processed, $payload.Skipped, $payload.Unsupported))
+          $lines.Add(("- Processed: **{0}**" -f $payload.Processed))
+          $lines.Add(("- Total result rows: **{0}**" -f $payload.Total))
           $lines.Add('')
           $lines.Add('| Status | Count |')
           $lines.Add('| --- | ---: |')
@@ -249,148 +168,112 @@ jobs:
           }
           $lines -join "`n" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
 
-      - name: Upload shard artifact
+      - name: Build merge-ready batch archive
+        if: always()
+        shell: pwsh
+        env:
+          BATCH_ZIP_NAME: winget-app-icons-batch-${{ github.run_id }}.zip
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $requested = Get-Content -LiteralPath out/requested-packages.json -Raw -Encoding UTF8 | ConvertFrom-Json
+
+          $repoRoot = (Resolve-Path '.').Path
+          $stageRoot = Join-Path $repoRoot 'out/artifact-root'
+          $batchRoot = Join-Path $stageRoot 'winget-app-icons'
+          $zipDir = Join-Path $repoRoot 'out/artifacts'
+
+          if (Test-Path -LiteralPath $stageRoot) {
+              Remove-Item -LiteralPath $stageRoot -Recurse -Force
+          }
+          [void](New-Item -ItemType Directory -Path $batchRoot -Force)
+          [void](New-Item -ItemType Directory -Path $zipDir -Force)
+
+          foreach ($pkg in $requested.packages) {
+              $src = Join-Path (Join-Path $repoRoot 'winget-app-icons') $pkg
+              if (-not (Test-Path -LiteralPath $src -PathType Container)) {
+                  Write-Warning "Processed package folder '$pkg' was not created."
+                  continue
+              }
+
+              $dest = Join-Path $batchRoot $pkg
+              [void](New-Item -ItemType Directory -Path $dest -Force)
+              Copy-Item -LiteralPath (Join-Path $src '*') -Destination $dest -Recurse -Force -ErrorAction Stop
+          }
+
+          $zipPath = Join-Path $zipDir $env:BATCH_ZIP_NAME
+          if (Test-Path -LiteralPath $zipPath) {
+              Remove-Item -LiteralPath $zipPath -Force
+          }
+          Compress-Archive -Path $batchRoot -DestinationPath $zipPath -CompressionLevel Optimal
+
+      - name: Upload batch artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: winget-icons-shard-${{ matrix.shard }}-${{ github.run_id }}
+          name: ${{ steps.packages.outputs.artifact_name }}
           path: |
-            out/icons/
+            out/artifacts/winget-app-icons-batch-${{ github.run_id }}.zip
             out/summary.json
-            data/registry/shard-*.json
-          if-no-files-found: warn
+            out/requested-packages.json
+          if-no-files-found: error
           retention-days: 14
 
-  # ---------------------------------------------------------------------------
-  # 3) PUBLISH: merge all shard artifacts, build index, upload release
-  # ---------------------------------------------------------------------------
-  publish:
-    name: Publish icon index + release
-    needs: [discover, extract]
-    if: ${{ !cancelled() && needs.discover.result == 'success' && (github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') && !inputs.skip_publish }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
+  commit-results:
+    name: Commit extracted package folders
+    needs: extract
+    if: ${{ !cancelled() && needs.extract.result == 'success' && inputs.auto_commit_results }}
+    runs-on: windows-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download all shard artifacts
+      - name: Download batch artifact
         uses: actions/download-artifact@v4
         with:
-          pattern: winget-icons-shard-*-${{ github.run_id }}
-          path: shards
-          merge-multiple: false
+          name: winget-icon-batch-${{ github.run_id }}
+          path: import
 
-      - name: Merge shard outputs
+      - name: Import batch and commit
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
-          $mergedRegistry = 'data/registry'
-          $mergedIcons    = 'out/merged'
-          [void](New-Item -ItemType Directory -Path $mergedRegistry -Force)
-          [void](New-Item -ItemType Directory -Path $mergedIcons    -Force)
-
-          $shardDirs = Get-ChildItem -LiteralPath shards -Directory -ErrorAction SilentlyContinue
-          Write-Host ("Found {0} shard artifacts." -f $shardDirs.Count)
-
-          foreach ($d in $shardDirs) {
-              # Each shard artifact currently contains all shard JSON files from
-              # the repo checkout, but only one of them was updated by that job.
-              # Copy just the shard file that matches the artifact name so a
-              # later artifact cannot overwrite fresh data with stale copies.
-              if ($d.Name -match '^winget-icons-shard-(\d+)-') {
-                $shardName = ('shard-{0:D2}.json' -f [int]$Matches[1])
-                $srcRegistry = Join-Path $d.FullName (Join-Path 'data/registry' $shardName)
-                if (Test-Path -LiteralPath $srcRegistry) {
-                  Copy-Item -LiteralPath $srcRegistry -Destination (Join-Path $mergedRegistry $shardName) -Force
-                }
-                else {
-                  Write-Warning "Expected registry file '$shardName' not found in artifact '$($d.Name)'."
-                }
-              }
-              else {
-                Write-Warning "Could not infer shard index from artifact directory '$($d.Name)'; skipping registry merge for this artifact."
-              }
-
-              # Icon directories (one per package)
-              $iconRoot = Join-Path $d.FullName 'out/icons'
-              if (Test-Path -LiteralPath $iconRoot) {
-                  $pkgDirs = Get-ChildItem -LiteralPath $iconRoot -Directory -ErrorAction SilentlyContinue
-                  foreach ($p in $pkgDirs) {
-                      $dest = Join-Path $mergedIcons $p.Name
-                      [void](New-Item -ItemType Directory -Path $dest -Force)
-                      Copy-Item -LiteralPath (Join-Path $p.FullName '*') -Destination $dest -Recurse -Force -ErrorAction SilentlyContinue
-                  }
-              }
+          $zipPath = Join-Path (Resolve-Path 'import').Path "winget-app-icons-batch-${env:GITHUB_RUN_ID}.zip"
+          $requestPath = Join-Path (Resolve-Path 'import').Path 'requested-packages.json'
+          if (-not (Test-Path -LiteralPath $zipPath)) {
+              throw "Batch archive not found: $zipPath"
           }
-
-          Write-Host ("Merged registry shards: {0}" -f (Get-ChildItem $mergedRegistry -Filter 'shard-*.json' | Measure-Object).Count)
-          Write-Host ("Merged icon dirs: {0}" -f (Get-ChildItem $mergedIcons -Directory -ErrorAction SilentlyContinue | Measure-Object).Count)
-
-      - name: Rebase against latest master
-        shell: pwsh
-        run: |
-          $PSNativeCommandUseErrorActionPreference = $true
+          if (-not (Test-Path -LiteralPath $requestPath)) {
+              throw "Requested package manifest not found: $requestPath"
+          }
           git config user.name  'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git pull --rebase --autostash
+          git pull --rebase
 
-          $conflicted = @(Select-String -Path 'data/registry/shard-*.json', 'data/icon-index.json' -Pattern '^(<<<<<<<|=======|>>>>>>>)' -AllMatches -ErrorAction SilentlyContinue)
-          if ($conflicted.Count -gt 0) {
-              throw 'Conflict markers detected after rebase; refusing to publish corrupted registry or index files.'
+          Expand-Archive -LiteralPath $zipPath -DestinationPath (Resolve-Path '.').Path -Force
+
+          $requested = Get-Content -LiteralPath $requestPath -Raw -Encoding UTF8 | ConvertFrom-Json
+
+          foreach ($pkg in $requested.packages) {
+              $pkgPath = Join-Path 'winget-app-icons' $pkg
+              if (Test-Path -LiteralPath $pkgPath) {
+                  git add -- "$pkgPath"
+              }
           }
 
-      - name: Build icon index + upload to release
-        shell: pwsh
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          $PSNativeCommandUseErrorActionPreference = $false
-          & ./scripts/Build-IconIndex.ps1 `
-              -RegistryDir data/registry `
-              -IconsDir    out/merged `
-              -OutputIndex data/icon-index.json `
-              -Repository  $env:GITHUB_REPOSITORY `
-              -ReleaseTag  $env:RELEASE_TAG `
-              -CommitAssets
-
-      - name: Render publish summary
-        shell: pwsh
-        run: |
-          if (-not (Test-Path data/icon-index.json)) { return }
-          $idx = Get-Content -LiteralPath data/icon-index.json -Raw | ConvertFrom-Json
-          $lines = New-Object System.Collections.Generic.List[string]
-          $lines.Add("## Published icon index")
-          $lines.Add('')
-          $lines.Add(("- Generated: ``{0}``" -f $idx.generated))
-          $lines.Add(("- Release tag: ``{0}``" -f $idx.releaseTag))
-          $lines.Add(("- Public icons: **{0}**" -f $idx.count))
-          $lines.Add('')
-          $lines.Add('| Status | Count |')
-          $lines.Add('| --- | ---: |')
-          foreach ($prop in $idx.statusCounts.PSObject.Properties) {
-              $lines.Add(("| {0} | {1} |" -f $prop.Name, $prop.Value))
-          }
-          $lines -join "`n" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
-
-      - name: Commit registry shards + index
-        shell: pwsh
-        run: |
-          $PSNativeCommandUseErrorActionPreference = $true
-          git config user.name  'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-
-          $conflicted = @(Select-String -Path 'data/registry/shard-*.json', 'data/icon-index.json' -Pattern '^(<<<<<<<|=======|>>>>>>>)' -AllMatches -ErrorAction SilentlyContinue)
-          if ($conflicted.Count -gt 0) {
-              throw 'Conflict markers detected before commit; refusing to push corrupted registry or index files.'
-          }
-
-          git add data/registry/shard-*.json data/icon-index.json
           $cached = git diff --cached --name-only
           if (-not $cached) {
-              Write-Host 'No changes to commit.'
+              Write-Host 'No package folder changes to commit.'
               return
           }
-          git commit -m "chore: update icon registry + index (run $env:GITHUB_RUN_ID) [skip ci]"
+
+          git commit -m "chore: refresh winget icon batch ($($requested.packages.Count) packages, run $env:GITHUB_RUN_ID) [skip ci]"
           git push
-          Write-Host 'Registry + index committed and pushed.'
+
+      - name: Render commit summary
+        if: always()
+        shell: pwsh
+        run: |
+          "## Auto-commit" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "- Enabled for this run." | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
