@@ -234,21 +234,28 @@ function Invoke-IconExtraction {
         $null = & $script:iconScript -PackageId $PackageId -OutDir $PkgOutDir -Scope $Scope -Force:$Force 2>&1
     }
     catch {
-        $detailParts = New-Object System.Collections.Generic.List[string]
-        $detailParts.Add($_.Exception.Message) | Out-Null
-        if ($_.InvocationInfo -and $_.InvocationInfo.ScriptName) {
-            $detailParts.Add(("Script={0}:{1}" -f $_.InvocationInfo.ScriptName, $_.InvocationInfo.ScriptLineNumber)) | Out-Null
-        }
-        if ($_.InvocationInfo -and $_.InvocationInfo.Line) {
-            $detailParts.Add(("Line={0}" -f $_.InvocationInfo.Line.Trim())) | Out-Null
-        }
-        if ($_.ScriptStackTrace) {
-            $detailParts.Add(("Stack={0}" -f ($_.ScriptStackTrace -replace "`r?`n", ' | '))) | Out-Null
-        }
-        $err = ($detailParts -join '; ')
+        $err = Format-ExceptionDetails -ErrorRecord $_
     }
     $files = @(Get-ChildItem -LiteralPath $PkgOutDir -Filter '*.ico' -File -ErrorAction SilentlyContinue)
     return [pscustomobject]@{ Files = $files; Error = $err; Scope = $Scope }
+}
+
+function Format-ExceptionDetails {
+    param([Parameter(Mandatory)] $ErrorRecord)
+
+    $detailParts = New-Object System.Collections.Generic.List[string]
+    $detailParts.Add($ErrorRecord.Exception.Message) | Out-Null
+    if ($ErrorRecord.InvocationInfo -and $ErrorRecord.InvocationInfo.ScriptName) {
+        $detailParts.Add(("Script={0}:{1}" -f $ErrorRecord.InvocationInfo.ScriptName, $ErrorRecord.InvocationInfo.ScriptLineNumber)) | Out-Null
+    }
+    if ($ErrorRecord.InvocationInfo -and $ErrorRecord.InvocationInfo.Line) {
+        $detailParts.Add(("Line={0}" -f $ErrorRecord.InvocationInfo.Line.Trim())) | Out-Null
+    }
+    if ($ErrorRecord.ScriptStackTrace) {
+        $detailParts.Add(("Stack={0}" -f ($ErrorRecord.ScriptStackTrace -replace "`r?`n", ' | '))) | Out-Null
+    }
+
+    return ($detailParts -join '; ')
 }
 
 function Get-IconExtractionFailureCategory {
@@ -283,64 +290,75 @@ function Invoke-IconExtractionWithRetry {
 
     $attemptRecords = New-Object System.Collections.Generic.List[object]
     $last = $null
-    foreach ($attempt in $attemptPlan) {
-        if ($attempt.DelaySeconds -gt 0) {
-            Write-Host ("  Waiting {0}s before extraction retry in scope '{1}'..." -f $attempt.DelaySeconds, $attempt.Scope) -ForegroundColor Gray
-            Start-Sleep -Seconds $attempt.DelaySeconds
-        }
+    try {
+        foreach ($attempt in $attemptPlan) {
+            if ($attempt.DelaySeconds -gt 0) {
+                Write-Host ("  Waiting {0}s before extraction retry in scope '{1}'..." -f $attempt.DelaySeconds, $attempt.Scope) -ForegroundColor Gray
+                Start-Sleep -Seconds $attempt.DelaySeconds
+            }
 
-        $result = Invoke-IconExtraction -PackageId $PackageId -PkgOutDir $PkgOutDir -Scope $attempt.Scope -RefreshManifest:$attempt.RefreshManifest -Force:$Force
-        $last = $result
-        $attemptError = $null
-        if ($result.Error) {
-            $attemptError = $result.Error
-        }
-        $attemptFailureCategory = Get-IconExtractionFailureCategory -Message $result.Error
-        $attemptRecords.Add([pscustomobject]@{
-            scope           = $attempt.Scope
-            delaySeconds    = $attempt.DelaySeconds
-            refreshManifest = [bool]$attempt.RefreshManifest
-            filesFound      = $result.Files.Count
-            failureCategory = $attemptFailureCategory
-            error           = $attemptError
-        }) | Out-Null
+            $result = Invoke-IconExtraction -PackageId $PackageId -PkgOutDir $PkgOutDir -Scope $attempt.Scope -RefreshManifest:$attempt.RefreshManifest -Force:$Force
+            $last = $result
+            $attemptError = $null
+            if ($result.Error) {
+                $attemptError = $result.Error
+            }
+            $attemptFailureCategory = Get-IconExtractionFailureCategory -Message $result.Error
+            $attemptRecords.Add([pscustomobject]@{
+                scope           = $attempt.Scope
+                delaySeconds    = $attempt.DelaySeconds
+                refreshManifest = [bool]$attempt.RefreshManifest
+                filesFound      = $result.Files.Count
+                failureCategory = $attemptFailureCategory
+                error           = $attemptError
+            }) | Out-Null
 
-        if ($result.Files.Count -gt 0) {
-            return [pscustomobject]@{
-                Files           = $result.Files
-                Error           = $result.Error
-                Scope           = $result.Scope
-                FailureCategory = $attemptFailureCategory
-                Attempts        = @($attemptRecords)
+            if ($result.Files.Count -gt 0) {
+                return [pscustomobject]@{
+                    Files           = $result.Files
+                    Error           = $result.Error
+                    Scope           = $result.Scope
+                    FailureCategory = $attemptFailureCategory
+                    Attempts        = @($attemptRecords)
+                }
+            }
+
+            if (-not $AfterInstall) {
+                break
+            }
+
+            if ((Get-IconExtractionFailureCategory -Message $result.Error) -eq 'UnsupportedPackage') {
+                break
             }
         }
 
-        if (-not $AfterInstall) {
-            break
+        $finalFiles = @()
+        $finalError = ''
+        $finalScope = 'Both'
+        $finalFailureCategory = $null
+        if ($last) {
+            $finalFiles = $last.Files
+            $finalError = $last.Error
+            $finalScope = $last.Scope
+            $finalFailureCategory = Get-IconExtractionFailureCategory -Message $last.Error
         }
 
-        if ((Get-IconExtractionFailureCategory -Message $result.Error) -eq 'UnsupportedPackage') {
-            break
+        return [pscustomobject]@{
+            Files           = $finalFiles
+            Error           = $finalError
+            Scope           = $finalScope
+            FailureCategory = $finalFailureCategory
+            Attempts        = @($attemptRecords)
         }
     }
-
-    $finalFiles = @()
-    $finalError = ''
-    $finalScope = 'Both'
-    $finalFailureCategory = $null
-    if ($last) {
-        $finalFiles = $last.Files
-        $finalError = $last.Error
-        $finalScope = $last.Scope
-        $finalFailureCategory = Get-IconExtractionFailureCategory -Message $last.Error
-    }
-
-    return [pscustomobject]@{
-        Files           = $finalFiles
-        Error           = $finalError
-        Scope           = $finalScope
-        FailureCategory = $finalFailureCategory
-        Attempts        = @($attemptRecords)
+    catch {
+        return [pscustomobject]@{
+            Files           = @()
+            Error           = Format-ExceptionDetails -ErrorRecord $_
+            Scope           = 'Both'
+            FailureCategory = 'Other'
+            Attempts        = @($attemptRecords)
+        }
     }
 }
 
