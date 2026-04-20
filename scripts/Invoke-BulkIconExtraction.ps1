@@ -280,13 +280,18 @@ function Invoke-IconExtractionWithRetry {
 
         $result = Invoke-IconExtraction -PackageId $PackageId -PkgOutDir $PkgOutDir -Scope $attempt.Scope -RefreshManifest:$attempt.RefreshManifest -Force:$Force
         $last = $result
+        $attemptError = $null
+        if ($result.Error) {
+            $attemptError = $result.Error
+        }
+        $attemptFailureCategory = Get-IconExtractionFailureCategory -Message $result.Error
         $attemptRecords.Add([pscustomobject]@{
             scope           = $attempt.Scope
             delaySeconds    = $attempt.DelaySeconds
             refreshManifest = [bool]$attempt.RefreshManifest
             filesFound      = $result.Files.Count
-            failureCategory = Get-IconExtractionFailureCategory -Message $result.Error
-            error           = if ($result.Error) { $result.Error } else { $null }
+            failureCategory = $attemptFailureCategory
+            error           = $attemptError
         }) | Out-Null
 
         if ($result.Files.Count -gt 0) {
@@ -294,7 +299,7 @@ function Invoke-IconExtractionWithRetry {
                 Files           = $result.Files
                 Error           = $result.Error
                 Scope           = $result.Scope
-                FailureCategory = Get-IconExtractionFailureCategory -Message $result.Error
+                FailureCategory = $attemptFailureCategory
                 Attempts        = @($attemptRecords)
             }
         }
@@ -308,11 +313,22 @@ function Invoke-IconExtractionWithRetry {
         }
     }
 
+    $finalFiles = @()
+    $finalError = ''
+    $finalScope = 'Both'
+    $finalFailureCategory = $null
+    if ($last) {
+        $finalFiles = $last.Files
+        $finalError = $last.Error
+        $finalScope = $last.Scope
+        $finalFailureCategory = Get-IconExtractionFailureCategory -Message $last.Error
+    }
+
     return [pscustomobject]@{
-        Files           = if ($last) { $last.Files } else { @() }
-        Error           = if ($last) { $last.Error } else { '' }
-        Scope           = if ($last) { $last.Scope } else { 'Both' }
-        FailureCategory = if ($last) { Get-IconExtractionFailureCategory -Message $last.Error } else { $null }
+        Files           = $finalFiles
+        Error           = $finalError
+        Scope           = $finalScope
+        FailureCategory = $finalFailureCategory
         Attempts        = @($attemptRecords)
     }
 }
