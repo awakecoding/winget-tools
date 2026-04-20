@@ -314,12 +314,13 @@ function Invoke-IconExtractionWithRetry {
             }) | Out-Null
 
             if ($result.Files.Count -gt 0) {
+                $successAttempts = @($attemptRecords.ToArray())
                 return [pscustomobject]@{
                     Files           = $result.Files
                     Error           = $result.Error
                     Scope           = $result.Scope
                     FailureCategory = $attemptFailureCategory
-                    Attempts        = @($attemptRecords)
+                    Attempts        = $successAttempts
                 }
             }
 
@@ -343,21 +344,25 @@ function Invoke-IconExtractionWithRetry {
             $finalFailureCategory = Get-IconExtractionFailureCategory -Message $last.Error
         }
 
+        $finalAttempts = @($attemptRecords.ToArray())
+
         return [pscustomobject]@{
             Files           = $finalFiles
             Error           = $finalError
             Scope           = $finalScope
             FailureCategory = $finalFailureCategory
-            Attempts        = @($attemptRecords)
+            Attempts        = $finalAttempts
         }
     }
     catch {
+        $caughtError = Format-ExceptionDetails -ErrorRecord $_
+        $caughtAttempts = @($attemptRecords.ToArray())
         return [pscustomobject]@{
             Files           = @()
-            Error           = Format-ExceptionDetails -ErrorRecord $_
+            Error           = $caughtError
             Scope           = 'Both'
             FailureCategory = 'Other'
-            Attempts        = @($attemptRecords)
+            Attempts        = $caughtAttempts
         }
     }
 }
@@ -896,8 +901,8 @@ foreach ($pkg in $todo) {
         if (-not $record.FailureCategory) {
             $record.FailureCategory = 'Extraction'
         }
-        $record.ExtractError = $_.Exception.Message
-        Write-Warning "  Iteration error: $($_.Exception.Message)"
+        $record.ExtractError = Format-ExceptionDetails -ErrorRecord $_
+        Write-Warning "  Iteration error: $($record.ExtractError)"
     }
     finally {
         $record.DurationSeconds = [int]((Get-Date) - $started).TotalSeconds
