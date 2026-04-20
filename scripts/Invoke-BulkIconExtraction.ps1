@@ -234,7 +234,18 @@ function Invoke-IconExtraction {
         $null = & $script:iconScript -PackageId $PackageId -OutDir $PkgOutDir -Scope $Scope -Force:$Force 2>&1
     }
     catch {
-        $err = $_.Exception.Message
+        $detailParts = New-Object System.Collections.Generic.List[string]
+        $detailParts.Add($_.Exception.Message) | Out-Null
+        if ($_.InvocationInfo -and $_.InvocationInfo.ScriptName) {
+            $detailParts.Add(("Script={0}:{1}" -f $_.InvocationInfo.ScriptName, $_.InvocationInfo.ScriptLineNumber)) | Out-Null
+        }
+        if ($_.InvocationInfo -and $_.InvocationInfo.Line) {
+            $detailParts.Add(("Line={0}" -f $_.InvocationInfo.Line.Trim())) | Out-Null
+        }
+        if ($_.ScriptStackTrace) {
+            $detailParts.Add(("Stack={0}" -f ($_.ScriptStackTrace -replace "`r?`n", ' | '))) | Out-Null
+        }
+        $err = ($detailParts -join '; ')
     }
     $files = @(Get-ChildItem -LiteralPath $PkgOutDir -Filter '*.ico' -File -ErrorAction SilentlyContinue)
     return [pscustomobject]@{ Files = $files; Error = $err; Scope = $Scope }
