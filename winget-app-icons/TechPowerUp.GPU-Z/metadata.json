@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "packageId": "TechPowerUp.GPU-Z",
+  "status": "HasIcon",
+  "hasIcon": true,
+  "firstSeenUtc": "2026-04-20T17:42:10.1554020Z",
+  "lastCheckedUtc": "2026-04-20T17:42:10.1554020Z",
+  "lastUpdatedUtc": "2026-04-20T17:42:10.1554020Z",
+  "wingetVersion": "v1.11.510",
+  "packageVersion": null,
+  "manifestSha": null,
+  "installerType": null,
+  "alreadyInstalled": false,
+  "installedByThisRun": true,
+  "installSeconds": 8,
+  "extractSeconds": 0,
+  "uninstallSeconds": 2,
+  "durationSeconds": 11,
+  "installExitCode": 0,
+  "installTimedOut": false,
+  "uninstallExitCode": 0,
+  "uninstallTimedOut": false,
+  "iconCount": 1,
+  "iconBytes": 43648.0,
+  "appIconFile": "app-icon.ico",
+  "canonicalIconSourceName": "TechPowerUp GPU-Z.{8B0F211E-5846-4FB2-B0B9-4EB31546FDF9}}_is1.ico",
+  "canonicalIconBytes": 43648,
+  "canonicalIconSha256": "cf965b74562b9647f1cb5c64e0fe73380a49d71f39c8114c922c799c06ebdec9",
+  "extractError": null,
+  "installStdErr": null,
+  "icons": {
+    "name": "TechPowerUp GPU-Z.{8B0F211E-5846-4FB2-B0B9-4EB31546FDF9}}_is1.ico",
+    "bytes": 43648,
+    "sha256": "cf965b74562b9647f1cb5c64e0fe73380a49d71f39c8114c922c799c06ebdec9"
+  },
+  "run": {
+    "startedAtUtc": "2026-04-20T17:42:10.1554020Z",
+    "runId": "24681134847",
+    "runAttempt": "1",
+    "repository": "awakecoding/winget-tools"
+  }
+}

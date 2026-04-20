@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "packageId": "WiresharkFoundation.Wireshark",
+  "status": "HasIcon",
+  "hasIcon": true,
+  "firstSeenUtc": "2026-04-20T17:39:07.3198560Z",
+  "lastCheckedUtc": "2026-04-20T17:39:07.3198560Z",
+  "lastUpdatedUtc": "2026-04-20T17:39:07.3198560Z",
+  "wingetVersion": "v1.11.510",
+  "packageVersion": null,
+  "manifestSha": null,
+  "installerType": null,
+  "alreadyInstalled": false,
+  "installedByThisRun": true,
+  "installSeconds": 26,
+  "extractSeconds": 0,
+  "uninstallSeconds": 2,
+  "durationSeconds": 29,
+  "installExitCode": 0,
+  "installTimedOut": false,
+  "uninstallExitCode": 0,
+  "uninstallTimedOut": false,
+  "iconCount": 1,
+  "iconBytes": 287934.0,
+  "appIconFile": "app-icon.ico",
+  "canonicalIconSourceName": "Wireshark 4.6.4 x64.Wireshark.ico",
+  "canonicalIconBytes": 287934,
+  "canonicalIconSha256": "b82f7d64e872a939339fcad5e1f65b189415a16b20ca49c392a3510d376f409c",
+  "extractError": null,
+  "installStdErr": null,
+  "icons": {
+    "name": "Wireshark 4.6.4 x64.Wireshark.ico",
+    "bytes": 287934,
+    "sha256": "b82f7d64e872a939339fcad5e1f65b189415a16b20ca49c392a3510d376f409c"
+  },
+  "run": {
+    "startedAtUtc": "2026-04-20T17:39:07.3198560Z",
+    "runId": "24681134847",
+    "runAttempt": "1",
+    "repository": "awakecoding/winget-tools"
+  }
+}

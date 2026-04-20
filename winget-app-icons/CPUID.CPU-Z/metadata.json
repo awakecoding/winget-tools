@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "packageId": "CPUID.CPU-Z",
+  "status": "HasIcon",
+  "hasIcon": true,
+  "firstSeenUtc": "2026-04-20T17:41:58.9186333Z",
+  "lastCheckedUtc": "2026-04-20T17:41:58.9186333Z",
+  "lastUpdatedUtc": "2026-04-20T17:41:58.9186333Z",
+  "wingetVersion": "v1.11.510",
+  "packageVersion": null,
+  "manifestSha": null,
+  "installerType": null,
+  "alreadyInstalled": false,
+  "installedByThisRun": true,
+  "installSeconds": 7,
+  "extractSeconds": 0,
+  "uninstallSeconds": 3,
+  "durationSeconds": 11,
+  "installExitCode": 0,
+  "installTimedOut": false,
+  "uninstallExitCode": 0,
+  "uninstallTimedOut": false,
+  "iconCount": 1,
+  "iconBytes": 113442.0,
+  "appIconFile": "app-icon.ico",
+  "canonicalIconSourceName": "CPUID CPU-Z 2.19.CPUID CPU-Z_is1.ico",
+  "canonicalIconBytes": 113442,
+  "canonicalIconSha256": "1a32cb13a63ab61d608518f65313c5bd922cc7478205b29d5e33df502af3b023",
+  "extractError": null,
+  "installStdErr": null,
+  "icons": {
+    "name": "CPUID CPU-Z 2.19.CPUID CPU-Z_is1.ico",
+    "bytes": 113442,
+    "sha256": "1a32cb13a63ab61d608518f65313c5bd922cc7478205b29d5e33df502af3b023"
+  },
+  "run": {
+    "startedAtUtc": "2026-04-20T17:41:58.9186333Z",
+    "runId": "24681134847",
+    "runAttempt": "1",
+    "repository": "awakecoding/winget-tools"
+  }
+}
