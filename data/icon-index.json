@@ -1,15 +1,15 @@
 {
   "schema": 1,
-  "generated": "2026-04-20T00:39:30.5938745Z",
+  "generated": "2026-04-20T12:45:33.3348350Z",
   "repository": "awakecoding/winget-tools",
   "releaseTag": "icons-latest",
   "baseUrl": "https://github.com/awakecoding/winget-tools/releases/download/icons-latest/",
   "count": 194,
   "statusCounts": {
-    "ExtractError": 376,
     "InstallTimeout": 24,
-    "HasIcon": 194,
-    "NoIcon": 284
+    "ExtractError": 376,
+    "NoIcon": 284,
+    "HasIcon": 194
   },
   "entries": {
     "0-don.clippy": {
