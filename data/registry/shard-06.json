@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "description": "Per-package WinGet icon-extraction registry (shard 6/10). Migrated from icon-registry.json.",
-  "generated": "2026-04-19T21:48:41.1124278Z",
+  "generated": "2026-04-20T00:32:17.5367945Z",
   "entries": {
     "0x192.UniversalAndroidDebloaterGUI": {
       "status": "ExtractError",
@@ -1639,6 +1639,144 @@
         }
       ],
       "extractError": null,
+      "installStdErr": null
+    },
+    "AndresMorelos.Invoncify": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-20T00:30:43.6420010Z",
+      "lastCheckedUtc": "2026-04-20T00:30:43.6420010Z",
+      "lastUpdatedUtc": "2026-04-20T00:30:43.6420010Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "1.30.4",
+      "manifestSha": "842e76e2061b1d92dbfc8f81950264690be7294a01048cf4dc85bb5ff8b6826f",
+      "installerType": "unknown",
+      "installSeconds": 21,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 114758.0,
+      "icons": [
+        {
+          "name": "Invoncify 1.30.4.b7603d56-4110-500f-ae18-68092031153b.ico",
+          "bytes": 114758,
+          "sha256": "ef97b9901d8ad4c8aa33c106e8db562ff9276f8d260a74c3274fcd99e0397d91"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AntibodySoftware.WizTree": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-20T00:31:09.4116521Z",
+      "lastCheckedUtc": "2026-04-20T00:31:09.4116521Z",
+      "lastUpdatedUtc": "2026-04-20T00:31:09.4116521Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "4.31",
+      "manifestSha": "3c89117b5aab98464f0be4bb34d35d06c6ad7732d180a517685332b3fe890d38",
+      "installerType": "unknown",
+      "installSeconds": 6,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 291478.0,
+      "icons": [
+        {
+          "name": "WizTree v4.31.WizTree_is1.ico",
+          "bytes": 291478,
+          "sha256": "986fa75eb1595da7ce0bc75584fe8bd4f51ad66b42e5cb27ba0ff706984dd501"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "AntonyCourtney.Tad": {
+      "status": "HasIcon",
+      "firstSeenUtc": "2026-04-20T00:31:20.7582816Z",
+      "lastCheckedUtc": "2026-04-20T00:31:20.7582816Z",
+      "lastUpdatedUtc": "2026-04-20T00:31:20.7582816Z",
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "0.14.0",
+      "manifestSha": "3464dec25628c794ecd3b9228ba76bc819ed77f7d53f2e985701761da33037c1",
+      "installerType": "unknown",
+      "installSeconds": 33,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 1,
+      "iconBytes": 14091.0,
+      "icons": [
+        {
+          "name": "Tad 0.14.0.9df11049-b1d9-5c40-a372-f0103bb2e073.ico",
+          "bytes": 14091,
+          "sha256": "14d0b2948d2158f58dbf81809a5108439df008eb561b4c7b49c1185c724293cd"
+        }
+      ],
+      "extractError": null,
+      "installStdErr": null
+    },
+    "anycam-io.AnyCam": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-20T00:31:55.4629665Z",
+      "lastCheckedUtc": "2026-04-20T00:31:55.4629665Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "6.0.5.4",
+      "manifestSha": "00922ba00b28d23646ebe10d51503b9e73aea16917b71bf4faea379f5415df36",
+      "installerType": "unknown",
+      "installSeconds": 4,
+      "extractSeconds": 0,
+      "installExitCode": -1978335215,
+      "installedByThisRun": false,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "Cannot convert value \"-1978335215\" to type \"System.UInt32\". Error: \"Value was either too large or too small for a UInt32.\"",
+      "installStdErr": null
+    },
+    "AOMEI.PartitionAssistant": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-20T00:32:00.5184914Z",
+      "lastCheckedUtc": "2026-04-20T00:32:00.5184914Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "10.10.0",
+      "manifestSha": "184812da49d6d3ff1a56b0caea6f2b1fca5ee82758cca47b5920361d24c2b24d",
+      "installerType": "unknown",
+      "installSeconds": 7,
+      "extractSeconds": 0,
+      "installExitCode": -1978335215,
+      "installedByThisRun": false,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "Cannot convert value \"-1978335215\" to type \"System.UInt32\". Error: \"Value was either too large or too small for a UInt32.\"",
+      "installStdErr": null
+    },
+    "Apple.AirPort": {
+      "status": "ExtractError",
+      "firstSeenUtc": "2026-04-20T00:32:08.0953369Z",
+      "lastCheckedUtc": "2026-04-20T00:32:08.0953369Z",
+      "lastUpdatedUtc": null,
+      "wingetVersion": "v1.11.510",
+      "packageVersion": "5.6.1.2",
+      "manifestSha": "3c7bf167668f1f5a184eb9a992df5848a70b62a67cf5525e526cdba1b0e23e60",
+      "installerType": "unknown",
+      "installSeconds": 6,
+      "extractSeconds": 0,
+      "installExitCode": 0,
+      "installedByThisRun": true,
+      "alreadyInstalled": false,
+      "iconCount": 0,
+      "iconBytes": 0,
+      "icons": [],
+      "extractError": "No ARP entries matched in scope 'Both' for 'Apple.AirPort'. Is the package actually installed?",
       "installStdErr": null
     }
   }
