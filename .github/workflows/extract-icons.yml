@@ -172,7 +172,7 @@ jobs:
           $events = New-Object System.Collections.Generic.List[object]
           $repairCount = 0
           $maxAttempts = 3
-          $canaryPackage = '7zip.7zip'
+          $canaryPackage = if (@($requested.packages).Count -gt 0) { [string]$requested.packages[0] } else { '7zip.7zip' }
           $sourceReady = $false
           $lastSourceFailure = $null
 
@@ -235,20 +235,23 @@ jobs:
               }
           }
 
-          $report = [ordered]@{
+            $lastFailureReport = $null
+            if ($lastSourceFailure) {
+              $lastFailureReport = [ordered]@{
+                exitCode  = $lastSourceFailure.exitCode
+                exitHex   = $lastSourceFailure.exitHex
+                errorName = $lastSourceFailure.errorName
+                output    = $lastSourceFailure.output
+              }
+            }
+
+            $report = [ordered]@{
               generatedAtUtc    = (Get-Date).ToUniversalTime().ToString('o')
               ready             = $sourceReady
               repairCount       = $repairCount
               maxAttempts       = $maxAttempts
               validationPackage = $canaryPackage
-              lastFailure       = if ($lastSourceFailure) {
-                  [ordered]@{
-                      exitCode  = $lastSourceFailure.exitCode
-                      exitHex   = $lastSourceFailure.exitHex
-                      errorName = $lastSourceFailure.errorName
-                      output    = $lastSourceFailure.output
-                  }
-              } else { $null }
+              lastFailure       = $lastFailureReport
               events            = @($events)
           }
 
