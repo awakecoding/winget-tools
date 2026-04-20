@@ -123,6 +123,7 @@ jobs:
       - name: Run extraction batch
         id: extract_batch
         shell: pwsh
+        continue-on-error: true
         env:
           PKG_TIMEOUT: ${{ inputs.per_package_timeout || '600' }}
           UNINSTALL_AFTER: ${{ inputs.uninstall_after && 'true' || 'false' }}
