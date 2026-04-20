@@ -7,6 +7,8 @@ Manager (winget) beyond what the official CLI exposes.
 
 The repository now includes a manual sandbox workflow at `.github/workflows/extract-icons.yml` for installing packages inside GitHub Actions, extracting icons there, and bringing the results back into git without installing those packages on your local machine.
 
+The workflow is best-effort by design: package-level install or extraction failures are recorded in `metadata.json` for the affected package, but they do not block the rest of the batch from being published or auto-committed.
+
 ### Workflow inputs
 
 | Input | Description |

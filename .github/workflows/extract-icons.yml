@@ -121,6 +121,7 @@ jobs:
           }
 
       - name: Run extraction batch
+        id: extract_batch
         shell: pwsh
         env:
           PKG_TIMEOUT: ${{ inputs.per_package_timeout || '600' }}
@@ -141,7 +142,16 @@ jobs:
               $params['UninstallAfter'] = $true
           }
 
-          & ./scripts/Invoke-BulkIconExtraction.ps1 @params
+            $scriptFailed = $false
+            try {
+              & ./scripts/Invoke-BulkIconExtraction.ps1 @params
+            }
+            catch {
+              $scriptFailed = $true
+              Write-Warning "Extraction script terminated early, but batch outputs will still be published: $($_.Exception.Message)"
+            }
+
+            "script_failed=$($scriptFailed.ToString().ToLowerInvariant())" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
 
       - name: Render extraction summary
         if: always()
@@ -158,6 +168,9 @@ jobs:
           $lines = New-Object System.Collections.Generic.List[string]
           $lines.Add('## Extraction summary')
           $lines.Add('')
+            if ('${{ steps.extract_batch.outputs.script_failed }}' -eq 'true') {
+              $lines.Add('- Script exit: **non-fatal failure**')
+            }
           $lines.Add(("- Processed: **{0}**" -f $payload.Processed))
           $lines.Add(("- Total result rows: **{0}**" -f $payload.Total))
           $lines.Add('')

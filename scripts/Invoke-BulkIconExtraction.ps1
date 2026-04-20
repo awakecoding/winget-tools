@@ -30,21 +30,13 @@
       NoIcon            - extractor ran but produced 0 files (e.g., MSI with no
                           ProductIcon, or DisplayIcon pointed at a missing file)
       ExtractError      - extractor threw an exception
-      Unsupported       - candidate-flagged installer type (msix, portable...)
-                          NOT attempted; recorded for skip purposes
       Skipped           - blank/comment line in the input file
 
 .PARAMETER Packages
-    Inline list of WinGet PackageIds. Mutually exclusive with -PackageListFile
-    and -CandidateFile.
+    Inline list of WinGet PackageIds. Mutually exclusive with -PackageListFile.
 
 .PARAMETER PackageListFile
     Path to a text file with one PackageId per line. '#' starts a comment.
-
-.PARAMETER CandidateFile
-    Path to a JSON file (produced by Update-CandidateList.ps1) with per-package
-    metadata (version, installerType, eligible, manifestSha). Enables installer-
-    type pre-filter and version-aware refresh.
 
 .PARAMETER ShardIndex
     0-based shard index. Used with -ShardCount to deterministically slice the
@@ -71,31 +63,10 @@
     If > 0, only process the first N PackageIds from the list. Useful for
     smoke tests.
 
-.PARAMETER RegistryPath
-    Path to a JSON registry file that records per-package extraction outcomes
-    across runs. When supplied, packages whose registry entry is fresh enough
-    are skipped entirely (no install/extract). Updated and rewritten at end.
-
 .PARAMETER PackageStateRoot
     Root directory for the git-backed per-package output layout.
     Each processed package gets a folder at <PackageStateRoot>\<PackageId>\
     containing metadata.json and, when extraction succeeds, app-icon.ico.
-
-.PARAMETER MaxNew
-    Cap on the number of NEW packages processed per run, AFTER skipping cached
-    ones. 0 = no cap. Use to spread work across multiple CI runs.
-
-.PARAMETER RefreshAfterDays
-    Re-check packages whose status is HasIcon/NoIcon after this many days.
-    Default: 30.
-
-.PARAMETER RetryFailedAfterDays
-    Re-check packages whose status is InstallFailed/InstallTimeout/ExtractError
-    after this many days. Default: 7.
-
-.PARAMETER IgnoreRegistry
-    Process every candidate, ignoring registry freshness (registry is still
-    updated).
 
 .PARAMETER Force
     Forwarded to Get-WinGetIcon.ps1 to overwrite existing .ico files.
@@ -104,8 +75,7 @@
     .\scripts\Invoke-BulkIconExtraction.ps1 `
         -PackageListFile .\tests\popular-packages.txt `
         -OutDir .\out\bulk-icons `
-        -RegistryPath .\data\icon-registry.json `
-        -MaxNew 100 `
+        -PackageStateRoot .\winget-app-icons `
         -UninstallAfter
 
 .EXAMPLE
@@ -115,7 +85,7 @@
         -OutDir .\out\smoke
 #>
 
-[CmdletBinding(DefaultParameterSetName = 'List')]
+[CmdletBinding(DefaultParameterSetName = 'Inline')]
 param(
     [Parameter(Mandatory, ParameterSetName = 'Inline')]
     [string[]] $Packages,
@@ -123,14 +93,9 @@ param(
     [Parameter(Mandatory, ParameterSetName = 'File')]
     [string]   $PackageListFile,
 
-    [Parameter(Mandatory, ParameterSetName = 'Candidate')]
-    [string]   $CandidateFile,
-
     [string] $OutDir,
 
     [string] $SummaryPath,
-
-    [string] $RegistryPath,
 
     [string] $PackageStateRoot,
 
@@ -153,21 +118,6 @@ param(
     [ValidateRange(0, 100000)]
     [int]    $MaxPackages = 0,
 
-    [Parameter(HelpMessage = 'Cap the number of NEW packages processed per run (after skipping cached ones). 0 = no cap.')]
-    [ValidateRange(0, 100000)]
-    [int]    $MaxNew = 0,
-
-    [Parameter(HelpMessage = 'Skip packages whose registry entry is HasIcon/NoIcon/Unsupported and was checked within this many days.')]
-    [ValidateRange(0, 3650)]
-    [int]    $RefreshAfterDays = 30,
-
-    [Parameter(HelpMessage = 'Retry packages whose registry entry is InstallFailed/InstallTimeout/ExtractError after this many days.')]
-    [ValidateRange(0, 3650)]
-    [int]    $RetryFailedAfterDays = 7,
-
-    [Parameter(HelpMessage = 'Ignore the registry entirely and re-process every candidate.')]
-    [switch] $IgnoreRegistry,
-
     [switch] $Force
 )
 
@@ -189,9 +139,6 @@ if (-not (Test-Path -LiteralPath $iconScript)) {
 # Resolve inputs
 # -----------------------------------------------------------------------------
 
-# $candidateMeta[packageId] = @{ version, installerType, eligible, manifestSha, publisher?, moniker? }
-$candidateMeta = @{}
-
 if ($PSCmdlet.ParameterSetName -eq 'File') {
     if (-not (Test-Path -LiteralPath $PackageListFile)) {
         throw "Package list file not found: $PackageListFile"
@@ -207,37 +154,12 @@ if ($PSCmdlet.ParameterSetName -eq 'File') {
             if ($line) { $line }
         }
 }
-elseif ($PSCmdlet.ParameterSetName -eq 'Candidate') {
-    if (-not (Test-Path -LiteralPath $CandidateFile)) {
-        throw "Candidate file not found: $CandidateFile"
-    }
-    $candidates = Get-Content -LiteralPath $CandidateFile -Raw -Encoding UTF8 | ConvertFrom-Json
-    if (-not $candidates -or -not $candidates.entries) {
-        throw "Candidate file '$CandidateFile' has no .entries property."
-    }
-    $pkgList = New-Object System.Collections.Generic.List[string]
-    foreach ($c in $candidates.entries) {
-        if (-not $c.packageId) { continue }
-        $pkgList.Add([string]$c.packageId) | Out-Null
-        $meta = @{
-            version       = if ($c.PSObject.Properties['version'])       { [string]$c.version }       else { '' }
-            installerType = if ($c.PSObject.Properties['installerType']) { [string]$c.installerType } else { '' }
-            eligible      = if ($c.PSObject.Properties['eligible'])      { [bool]$c.eligible }        else { $true }
-            manifestSha   = if ($c.PSObject.Properties['manifestSha'])   { [string]$c.manifestSha }   else { '' }
-        }
-        if ($c.PSObject.Properties['publisher'] -and $c.publisher) { $meta['publisher'] = [string]$c.publisher }
-        if ($c.PSObject.Properties['moniker']   -and $c.moniker)   { $meta['moniker']   = [string]$c.moniker }
-        $candidateMeta[[string]$c.packageId] = $meta
-    }
-    $Packages = $pkgList.ToArray()
-}
 
 if (-not $Packages -or $Packages.Count -eq 0) {
     throw 'No packages to process.'
 }
 
-# Apply sharding BEFORE any other truncation so each shard sees the same slice
-# regardless of MaxPackages/MaxNew.
+# Apply sharding BEFORE any truncation so each shard sees the same slice.
 if ($ShardCount -gt 1) {
     if ($ShardIndex -ge $ShardCount) {
         throw "ShardIndex ($ShardIndex) must be less than ShardCount ($ShardCount)."
@@ -279,19 +201,6 @@ $SummaryPath = [IO.Path]::GetFullPath($SummaryPath)
 if ($PackageStateRoot) {
     $PackageStateRoot = [IO.Path]::GetFullPath($PackageStateRoot)
     [void](New-Item -ItemType Directory -Path $PackageStateRoot -Force)
-}
-
-# Resolve sharded registry path: when -RegistryPath points to a directory and
-# we're sharding, append shard-NN.json automatically.
-if ($RegistryPath) {
-    $RegistryPath = [IO.Path]::GetFullPath($RegistryPath)
-    $isDir = Test-Path -LiteralPath $RegistryPath -PathType Container
-    if ($ShardCount -gt 1 -and ($isDir -or $RegistryPath -notmatch '\.json$')) {
-        if (-not (Test-Path -LiteralPath $RegistryPath)) {
-            [void](New-Item -ItemType Directory -Path $RegistryPath -Force)
-        }
-        $RegistryPath = Join-Path $RegistryPath ("shard-{0:D2}.json" -f $ShardIndex)
-    }
 }
 
 # -----------------------------------------------------------------------------
@@ -426,112 +335,25 @@ function Show-WinGetPackage {
     return Invoke-WinGetCommand -Arguments $showArgs -TimeoutSeconds $TimeoutSeconds -Tag 'show'
 }
 
-# -----------------------------------------------------------------------------
-# Registry helpers
-# -----------------------------------------------------------------------------
+function Read-PackageStateMetadata {
+    param(
+        [Parameter(Mandatory)] [string] $Root,
+        [Parameter(Mandatory)] [string] $PackageId
+    )
 
-function Read-IconRegistry {
-    param([string] $Path)
-
-    $empty = [pscustomobject]@{
-        schema      = 1
-        description = ''
-        generated   = $null
-        entries     = @{}   # internal: real Hashtable for easy add/remove under StrictMode
+    $pkgStateDir = Get-PackageStateDirPath -Root $Root -PackageId $PackageId
+    $metadataPath = Join-Path $pkgStateDir 'metadata.json'
+    if (-not (Test-Path -LiteralPath $metadataPath)) {
+        return $null
     }
-    if (-not $Path -or -not (Test-Path -LiteralPath $Path)) { return $empty }
+
     try {
-        $obj = Get-Content -LiteralPath $Path -Raw -Encoding UTF8 | ConvertFrom-Json -AsHashtable
-        if (-not $obj) { throw 'Registry file is empty.' }
-        if (-not $obj.ContainsKey('entries') -or -not $obj['entries']) { $obj['entries'] = @{} }
-        return [pscustomobject]@{
-            schema      = if ($obj.ContainsKey('schema'))      { $obj['schema'] }      else { 1 }
-            description = if ($obj.ContainsKey('description')) { $obj['description'] } else { '' }
-            generated   = if ($obj.ContainsKey('generated'))   { $obj['generated'] }   else { $null }
-            entries     = [hashtable]$obj['entries']
-        }
+        return Get-Content -LiteralPath $metadataPath -Raw -Encoding UTF8 | ConvertFrom-Json
     }
     catch {
-        Write-Warning "Failed to read registry at '$Path': $($_.Exception.Message). Starting fresh."
-        return $empty
+        Write-Warning "Failed to read package metadata at '$metadataPath': $($_.Exception.Message)"
+        return $null
     }
-}
-
-function Write-IconRegistry {
-    param(
-        [Parameter(Mandatory)] $Registry,
-        [Parameter(Mandatory)] [string] $Path
-    )
-
-    $Registry.generated = (Get-Date).ToUniversalTime().ToString('o')
-    $dir = Split-Path -Parent $Path
-    if ($dir -and -not (Test-Path -LiteralPath $dir)) {
-        [void](New-Item -ItemType Directory -Path $dir -Force)
-    }
-
-    # Sort entries alphabetically by PackageId for stable diffs.
-    $sortedEntries = [ordered]@{}
-    foreach ($key in ($Registry.entries.Keys | Sort-Object)) {
-        $sortedEntries[$key] = $Registry.entries[$key]
-    }
-
-    $payload = [ordered]@{
-        schema      = $Registry.schema
-        description = $Registry.description
-        generated   = $Registry.generated
-        entries     = $sortedEntries
-    }
-
-    $payload | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $Path -Encoding UTF8
-}
-
-function Get-RegistryEntry {
-    param($Registry, [string] $PackageId)
-    if ($Registry.entries.ContainsKey($PackageId)) { return $Registry.entries[$PackageId] }
-    return $null
-}
-
-function Set-RegistryEntry {
-    param($Registry, [string] $PackageId, $Entry)
-    $Registry.entries[$PackageId] = $Entry
-}
-
-function Test-EntryFresh {
-    param(
-        $Entry,
-        [hashtable] $CandidateMeta,    # optional: { version, manifestSha, eligible, ... }
-        [int] $RefreshAfterDays,
-        [int] $RetryFailedAfterDays
-    )
-
-    if (-not $Entry) { return $false }
-    if ($Entry -isnot [hashtable] -and -not ($Entry.PSObject.Properties['lastCheckedUtc'])) { return $false }
-
-    $checkedRaw = if ($Entry -is [hashtable]) { $Entry['lastCheckedUtc'] } else { $Entry.lastCheckedUtc }
-    $statusRaw  = if ($Entry -is [hashtable]) { $Entry['status'] }         else { $Entry.status }
-    if (-not $checkedRaw) { return $false }
-
-    $checked = $null
-    try { $checked = [datetime]::Parse([string]$checkedRaw) } catch { return $false }
-    $age = (Get-Date).ToUniversalTime() - $checked.ToUniversalTime()
-
-    # Version-aware invalidation: if the candidate's version or manifest sha
-    # differs from what we last recorded, the entry is stale regardless of age.
-    if ($CandidateMeta) {
-        $entryVer = Get-EntryField -Entry $Entry -Field 'packageVersion'
-        $entrySha = Get-EntryField -Entry $Entry -Field 'manifestSha'
-        $candVer  = if ($CandidateMeta.ContainsKey('version'))     { [string]$CandidateMeta['version'] }     else { '' }
-        $candSha  = if ($CandidateMeta.ContainsKey('manifestSha')) { [string]$CandidateMeta['manifestSha'] } else { '' }
-        if ($candVer -and $entryVer -and ($candVer -ne $entryVer)) { return $false }
-        if ($candSha -and $entrySha -and ($candSha -ne $entrySha)) { return $false }
-    }
-
-    $terminalGood = @('HasIcon', 'NoIcon', 'Unsupported')
-    $terminalBad  = @('InstallFailed', 'InstallTimeout', 'ExtractError')
-
-    if ($statusRaw -in $terminalGood) { return $age.TotalDays -lt $RefreshAfterDays }
-    if ($statusRaw -in $terminalBad)  { return $age.TotalDays -lt $RetryFailedAfterDays }
-    return $false
 }
 
 function Get-EntryField {
@@ -644,97 +466,31 @@ function Write-PackageState {
 # Main loop
 # -----------------------------------------------------------------------------
 
-# Load registry up front (mutated as we go; written at the end).
-$registry = Read-IconRegistry -Path $RegistryPath
 $wingetVersion = ''
 try {
     $wingetVersion = (& winget --version 2>$null) -replace '[\r\n]', ''
 } catch { }
 
-$skipped     = New-Object System.Collections.Generic.List[object]
-$unsupported = New-Object System.Collections.Generic.List[string]
 $todo        = New-Object System.Collections.Generic.List[string]
 
 foreach ($pkg in $Packages) {
-    $meta = if ($candidateMeta.ContainsKey($pkg)) { $candidateMeta[$pkg] } else { $null }
-
-    # Pre-filter: candidate-flagged ineligible (msix/msstore/portable/zip/...).
-    # Skip install entirely; record Unsupported in the registry so we never
-    # retry until the manifest changes (manifestSha-driven).
-    if ($meta -and ($meta.ContainsKey('eligible')) -and (-not $meta['eligible'])) {
-        $unsupported.Add($pkg) | Out-Null
-        continue
-    }
-
-    $entry = Get-RegistryEntry -Registry $registry -PackageId $pkg
-    if (-not $IgnoreRegistry -and (Test-EntryFresh -Entry $entry -CandidateMeta $meta -RefreshAfterDays $RefreshAfterDays -RetryFailedAfterDays $RetryFailedAfterDays)) {
-        $cachedIcons = Get-EntryField -Entry $entry -Field 'icons'
-        $iconCount   = if ($cachedIcons) { @($cachedIcons).Count } else { 0 }
-        $iconBytes   = if ($cachedIcons) { (@($cachedIcons) | Measure-Object -Property bytes -Sum).Sum } else { 0 }
-        $skipped.Add([pscustomobject]@{
-            PackageId       = $pkg
-            Status          = 'Skipped'
-            CachedStatus    = (Get-EntryField -Entry $entry -Field 'status')
-            LastCheckedUtc  = (Get-EntryField -Entry $entry -Field 'lastCheckedUtc')
-            IconCount       = $iconCount
-            IconBytes       = if ($iconBytes) { $iconBytes } else { 0 }
-            DurationSeconds = 0
-        }) | Out-Null
-        continue
-    }
     $todo.Add($pkg) | Out-Null
-}
-
-# Materialize Unsupported entries into the registry now (cheap, O(unsupported)).
-$nowIso = (Get-Date).ToUniversalTime().ToString('o')
-foreach ($pkg in $unsupported) {
-    $meta = $candidateMeta[$pkg]
-    $prev = Get-RegistryEntry -Registry $registry -PackageId $pkg
-    $prevFirstSeen = Get-EntryField -Entry $prev -Field 'firstSeenUtc'
-    $entry = [ordered]@{
-        status         = 'Unsupported'
-        firstSeenUtc   = if ($prevFirstSeen) { $prevFirstSeen } else { $nowIso }
-        lastCheckedUtc = $nowIso
-        lastUpdatedUtc = (Get-EntryField -Entry $prev -Field 'lastUpdatedUtc')
-        wingetVersion  = $wingetVersion
-        packageVersion = if ($meta.ContainsKey('version'))       { $meta['version'] }       else { $null }
-        manifestSha    = if ($meta.ContainsKey('manifestSha'))   { $meta['manifestSha'] }   else { $null }
-        installerType  = if ($meta.ContainsKey('installerType')) { $meta['installerType'] } else { $null }
-        notes          = "InstallerType pre-filter: $($meta['installerType'])"
-        iconCount      = 0
-        iconBytes      = 0
-        icons          = @()
-    }
-    Set-RegistryEntry -Registry $registry -PackageId $pkg -Entry $entry
-}
-
-if ($MaxNew -gt 0 -and $todo.Count -gt $MaxNew) {
-    Write-Host "Capping new packages this run to $MaxNew (of $($todo.Count) eligible)."
-    $todo = [System.Collections.Generic.List[string]]@($todo[0..($MaxNew - 1)])
 }
 
 Write-Host ''
 Write-Host "Output dir          : $OutDir"      -ForegroundColor Cyan
 Write-Host "Summary file        : $SummaryPath" -ForegroundColor Cyan
-if ($RegistryPath) {
-    Write-Host "Registry file       : $RegistryPath" -ForegroundColor Cyan
-}
 if ($ShardCount -gt 1) {
     Write-Host "Shard               : $ShardIndex / $ShardCount" -ForegroundColor Cyan
 }
-Write-Host "Candidates          : $($Packages.Count + $unsupported.Count)" -ForegroundColor Cyan
-Write-Host "Unsupported (filter): $($unsupported.Count)" -ForegroundColor Cyan
-Write-Host "Skipped (cached)    : $($skipped.Count)" -ForegroundColor Cyan
+Write-Host "Requested packages  : $($Packages.Count)" -ForegroundColor Cyan
 Write-Host "To process this run : $($todo.Count)" -ForegroundColor Cyan
 Write-Host "Uninstall after     : $UninstallAfter" -ForegroundColor Cyan
 Write-Host "Per-pkg TO          : ${PerPackageTimeoutSeconds}s" -ForegroundColor Cyan
 Write-Host "Uninstall TO        : ${UninstallTimeoutSeconds}s" -ForegroundColor Cyan
-Write-Host "Refresh after       : ${RefreshAfterDays}d (HasIcon/NoIcon/Unsupported)" -ForegroundColor Cyan
-Write-Host "Retry failed after  : ${RetryFailedAfterDays}d (Install*/Extract*)" -ForegroundColor Cyan
 Write-Host ''
 
 $results = New-Object System.Collections.Generic.List[object]
-foreach ($s in $skipped) { $results.Add($s) | Out-Null }
 
 $idx = 0
 $total = $todo.Count
@@ -823,7 +579,8 @@ foreach ($pkg in $todo) {
                 $record.AlreadyInstalled = $true
             }
             else {
-                Write-Warning ("  Install FAILED (exit 0x{0:X8})." -f ([uint32]$install.ExitCode))
+                $installHex = '{0:X8}' -f ([uint32]([int64]$install.ExitCode -band 0xffffffffL))
+                Write-Warning ("  Install FAILED (exit 0x{0})." -f $installHex)
                 $record.Status = 'InstallFailed'
             }
 
@@ -863,7 +620,8 @@ foreach ($pkg in $todo) {
                 if ($uninst.TimedOut) {
                     Write-Warning "  Uninstall timed out (continuing)."
                 } elseif ($uninst.ExitCode -ne 0) {
-                    Write-Warning ("  Uninstall non-zero exit (0x{0:X8}); continuing." -f ([uint32]$uninst.ExitCode))
+                    $uninstallHex = '{0:X8}' -f ([uint32]([int64]$uninst.ExitCode -band 0xffffffffL))
+                    Write-Warning ("  Uninstall non-zero exit (0x{0}); continuing." -f $uninstallHex)
                 } else {
                     Write-Host "  Uninstall OK." -ForegroundColor Gray
                 }
@@ -884,7 +642,7 @@ foreach ($pkg in $todo) {
 
         # Update registry. Keep an iteration-local copy of the previous entry's
         # 'firstSeenUtc' so we don't lose it on refresh.
-        $prev = Get-RegistryEntry -Registry $registry -PackageId $pkg
+        $prev = if ($PackageStateRoot) { Read-PackageStateMetadata -Root $PackageStateRoot -PackageId $pkg } else { $null }
         $prevFirstSeen     = Get-EntryField -Entry $prev -Field 'firstSeenUtc'
         $prevLastUpdated   = Get-EntryField -Entry $prev -Field 'lastUpdatedUtc'
         $firstSeen = if ($prevFirstSeen) { $prevFirstSeen } else { $record.StartedAt }
@@ -917,9 +675,9 @@ foreach ($pkg in $todo) {
             lastCheckedUtc      = $record.StartedAt
             lastUpdatedUtc      = if ($persistStatus -eq 'HasIcon') { $record.StartedAt } else { $null }
             wingetVersion       = $wingetVersion
-            packageVersion      = if ($candidateMeta.ContainsKey($pkg) -and $candidateMeta[$pkg].ContainsKey('version'))     { $candidateMeta[$pkg]['version'] }     else { (Get-EntryField -Entry $prev -Field 'packageVersion') }
-            manifestSha         = if ($candidateMeta.ContainsKey($pkg) -and $candidateMeta[$pkg].ContainsKey('manifestSha')) { $candidateMeta[$pkg]['manifestSha'] } else { (Get-EntryField -Entry $prev -Field 'manifestSha') }
-            installerType       = if ($candidateMeta.ContainsKey($pkg) -and $candidateMeta[$pkg].ContainsKey('installerType')) { $candidateMeta[$pkg]['installerType'] } else { (Get-EntryField -Entry $prev -Field 'installerType') }
+            packageVersion      = (Get-EntryField -Entry $prev -Field 'packageVersion')
+            manifestSha         = (Get-EntryField -Entry $prev -Field 'manifestSha')
+            installerType       = (Get-EntryField -Entry $prev -Field 'installerType')
             installSeconds      = $record.InstallSeconds
             extractSeconds      = $record.ExtractSeconds
             uninstallSeconds    = $record.UninstallSeconds
@@ -941,8 +699,6 @@ foreach ($pkg in $todo) {
         if ($persistStatus -ne 'HasIcon' -and $prevLastUpdated) {
             $newEntry['lastUpdatedUtc'] = $prevLastUpdated
         }
-
-        Set-RegistryEntry -Registry $registry -PackageId $pkg -Entry $newEntry
 
         if ($PackageStateRoot) {
             try {
@@ -973,13 +729,12 @@ Write-Host ''
 $payload = [ordered]@{
     GeneratedAt   = (Get-Date).ToUniversalTime().ToString('o')
     OutDir        = $OutDir
-    RegistryPath  = $RegistryPath
     WingetVersion = $wingetVersion
     ShardIndex    = $ShardIndex
     ShardCount    = $ShardCount
     Total         = $results.Count
-    Unsupported   = $unsupported.Count
-    Skipped       = $skipped.Count
+    Unsupported   = 0
+    Skipped       = 0
     Processed     = $todo.Count
     StatusCounts  = @{}
     Results       = $results
@@ -988,11 +743,6 @@ foreach ($g in $grouped) { $payload.StatusCounts[$g.Name] = $g.Count }
 
 $payload | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $SummaryPath -Encoding UTF8
 Write-Host "Summary written to: $SummaryPath" -ForegroundColor Cyan
-
-if ($RegistryPath) {
-    Write-IconRegistry -Registry $registry -Path $RegistryPath
-    Write-Host "Registry written to: $RegistryPath" -ForegroundColor Cyan
-}
 
 # Emit results on the pipeline so callers can pipe into Format-Table etc.
 $results
