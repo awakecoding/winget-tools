@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "packageId": "RARLab.WinRAR",
+  "status": "HasIcon",
+  "hasIcon": true,
+  "firstSeenUtc": "2026-04-20T17:30:30.2616082Z",
+  "lastCheckedUtc": "2026-04-20T17:30:30.2616082Z",
+  "lastUpdatedUtc": "2026-04-20T17:30:30.2616082Z",
+  "wingetVersion": "v1.11.510",
+  "packageVersion": null,
+  "manifestSha": null,
+  "installerType": null,
+  "alreadyInstalled": false,
+  "installedByThisRun": true,
+  "installSeconds": 5,
+  "extractSeconds": 0,
+  "uninstallSeconds": 180,
+  "durationSeconds": 186,
+  "installExitCode": 0,
+  "installTimedOut": false,
+  "uninstallExitCode": -1,
+  "uninstallTimedOut": true,
+  "iconCount": 1,
+  "iconBytes": 94549.0,
+  "appIconFile": "app-icon.ico",
+  "canonicalIconSourceName": "WinRAR 7.20 (64-bit).WinRAR archiver.ico",
+  "canonicalIconBytes": 94549,
+  "canonicalIconSha256": "59cee22d664cc41ddb4b7efcc5252a28ca6e0cef80bf25a5ce84f6db3b44aea7",
+  "extractError": null,
+  "installStdErr": null,
+  "icons": {
+    "name": "WinRAR 7.20 (64-bit).WinRAR archiver.ico",
+    "bytes": 94549,
+    "sha256": "59cee22d664cc41ddb4b7efcc5252a28ca6e0cef80bf25a5ce84f6db3b44aea7"
+  },
+  "run": {
+    "startedAtUtc": "2026-04-20T17:30:30.2616082Z",
+    "runId": "24680712810",
+    "runAttempt": "1",
+    "repository": "awakecoding/winget-tools"
+  }
+}
