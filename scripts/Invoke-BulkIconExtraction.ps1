@@ -745,6 +745,9 @@ $payload | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $SummaryPath -Enco
 Write-Host "Summary written to: $SummaryPath" -ForegroundColor Cyan
 
 # Emit results on the pipeline so callers can pipe into Format-Table etc.
+# Package-level failures are recorded in the results and metadata.json.
+# Do not leak the last winget native exit code out as a step failure.
+$global:LASTEXITCODE = 0
 $results
 
 
