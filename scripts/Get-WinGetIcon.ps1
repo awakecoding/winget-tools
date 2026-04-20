@@ -667,15 +667,35 @@ function Find-ArpEntries {
                         $subPath  = "Software\Microsoft\Windows\CurrentVersion\Uninstall\$name"
                         $ft = [WinGetIconTools.Native]::GetKeyLastWriteTime($hiveName, $subPath, $isWow32)
                         $lastWrite = if ($ft -gt 0) { [datetime]::FromFileTimeUtc($ft) } else { $null }
+                        $resolvedDisplayName = $name
+                        if ($displayName) {
+                            $resolvedDisplayName = [string]$displayName
+                        }
+                        $resolvedPublisher = ''
+                        if ($publisher) {
+                            $resolvedPublisher = [string]$publisher
+                        }
+                        $resolvedDisplayVersion = ''
+                        if ($displayVer) {
+                            $resolvedDisplayVersion = [string]$displayVer
+                        }
+                        $resolvedDisplayIcon = ''
+                        if ($displayIcon) {
+                            $resolvedDisplayIcon = [string]$displayIcon
+                        }
+                        $resolvedInstallDate = ''
+                        if ($installDate) {
+                            $resolvedInstallDate = [string]$installDate
+                        }
 
                         $results.Add([pscustomobject]@{
                             Hive          = $hive.Label
                             ProductCode   = $name
-                            DisplayName   = if ($displayName) { [string]$displayName } else { $name }
-                            Publisher     = if ($publisher)   { [string]$publisher }   else { '' }
-                            DisplayVersion= if ($displayVer)  { [string]$displayVer }  else { '' }
-                            DisplayIcon   = if ($displayIcon) { [string]$displayIcon } else { '' }
-                            InstallDate   = if ($installDate) { [string]$installDate } else { '' }
+                            DisplayName   = $resolvedDisplayName
+                            Publisher     = $resolvedPublisher
+                            DisplayVersion= $resolvedDisplayVersion
+                            DisplayIcon   = $resolvedDisplayIcon
+                            InstallDate   = $resolvedInstallDate
                             LastWriteTime = $lastWrite
                             IsMsi         = $isMsi
                             MatchKind     = $matchKind
