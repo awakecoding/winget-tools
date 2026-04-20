@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "packageId": "TeamSpeakSystems.TeamSpeakClient",
+  "status": "HasIcon",
+  "hasIcon": true,
+  "firstSeenUtc": "2026-04-20T16:59:42.1918517Z",
+  "lastCheckedUtc": "2026-04-20T16:59:42.1918517Z",
+  "lastUpdatedUtc": "2026-04-20T16:59:42.1918517Z",
+  "wingetVersion": "v1.11.510",
+  "packageVersion": null,
+  "manifestSha": null,
+  "installerType": null,
+  "alreadyInstalled": false,
+  "installedByThisRun": true,
+  "installSeconds": 24,
+  "extractSeconds": 0,
+  "uninstallSeconds": 2,
+  "durationSeconds": 29,
+  "installExitCode": 0,
+  "installTimedOut": false,
+  "uninstallExitCode": 0,
+  "uninstallTimedOut": false,
+  "iconCount": 1,
+  "iconBytes": 98943.0,
+  "appIconFile": "app-icon.ico",
+  "canonicalIconSourceName": "TeamSpeak 3 Client.TeamSpeak 3 Client.ico",
+  "canonicalIconBytes": 98943,
+  "canonicalIconSha256": "333336ba5fab426642b31a35abe65aa34d63c405c7afdbb6b3392c08bd501fed",
+  "extractError": null,
+  "installStdErr": null,
+  "icons": {
+    "name": "TeamSpeak 3 Client.TeamSpeak 3 Client.ico",
+    "bytes": 98943,
+    "sha256": "333336ba5fab426642b31a35abe65aa34d63c405c7afdbb6b3392c08bd501fed"
+  },
+  "run": {
+    "startedAtUtc": "2026-04-20T16:59:42.1918517Z",
+    "runId": "24679301764",
+    "runAttempt": "1",
+    "repository": "awakecoding/winget-tools"
+  }
+}
