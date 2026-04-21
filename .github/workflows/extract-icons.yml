@@ -162,7 +162,7 @@ jobs:
               foreach ($operation in @(
                   @{ Tag = 'source-list-before-repair'; Arguments = @('source', 'list') },
                   @{ Tag = 'source-reset'; Arguments = @('source', 'reset', '--force') },
-                  @{ Tag = 'source-update-after-reset'; Arguments = @('source', 'update', '--accept-source-agreements', '--disable-interactivity') },
+                  @{ Tag = 'source-update-after-reset'; Arguments = @('source', 'update', '--disable-interactivity') },
                   @{ Tag = 'source-list-after-repair'; Arguments = @('source', 'list') }
               )) {
                   $script:events.Add((Invoke-WingetCapture -Arguments $operation.Arguments -Tag $operation.Tag)) | Out-Null
@@ -172,7 +172,7 @@ jobs:
           $events = New-Object System.Collections.Generic.List[object]
           $repairCount = 0
           $maxAttempts = 3
-          $canaryPackage = if (@($requested.packages).Count -gt 0) { [string]$requested.packages[0] } else { '7zip.7zip' }
+              $canaryPackage = '7zip.7zip'
           $sourceReady = $false
           $lastSourceFailure = $null
 
@@ -190,7 +190,7 @@ jobs:
                   startedAtUtc = (Get-Date).ToUniversalTime().ToString('o')
               }) | Out-Null
 
-              $update = Invoke-WingetCapture -Arguments @('source', 'update', '--accept-source-agreements', '--disable-interactivity') -Tag 'source-update'
+              $update = Invoke-WingetCapture -Arguments @('source', 'update', '--disable-interactivity') -Tag 'source-update'
               $events.Add($update) | Out-Null
 
               $validate = Invoke-WingetCapture -Arguments @('show', '--id', $canaryPackage, '--exact', '--source', 'winget', '--accept-source-agreements', '--disable-interactivity') -Tag 'source-validate-canary'
