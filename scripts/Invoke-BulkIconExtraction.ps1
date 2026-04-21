@@ -240,6 +240,16 @@ function Invoke-IconExtraction {
     return [pscustomobject]@{ Files = $files; Error = $err; Scope = $Scope }
 }
 
+function Resolve-WinGetPackageId {
+    param([Parameter(Mandatory)] [string] $PackageId)
+
+    if ($script:wingetPackageIdAliases.Contains($PackageId)) {
+        return $script:wingetPackageIdAliases[$PackageId]
+    }
+
+    return $PackageId
+}
+
 function Format-ExceptionDetails {
     param([Parameter(Mandatory)] $ErrorRecord)
 
@@ -432,6 +442,15 @@ $script:wingetSourceErrorNames = [ordered]@{
 }
 
 $script:wingetCommunitySourceName = 'winget'
+
+$script:wingetPackageIdAliases = [ordered]@{
+    '1Password.1Password'                 = 'AgileBits.1Password'
+    'Signal.Signal'                      = 'OpenWhisperSystems.Signal'
+    'GoogleCloudSDK.GoogleCloudSDK'      = 'Google.CloudSDK'
+    'foobar2000.foobar2000'              = 'PeterPawlowski.foobar2000'
+    'ProtonTechnologies.ProtonVPN'       = 'Proton.ProtonVPN'
+    'Tracker-Software.PDF-XChangeEditor' = 'TrackerSoftware.PDF-XChangeEditor'
+}
 
 $script:wingetUnattendedArgs = @(
     '--accept-source-agreements',
@@ -700,6 +719,7 @@ function Write-PackageState {
     $metadata = [ordered]@{
         schema                  = 1
         packageId               = $PackageId
+        resolvedPackageId       = if ($Record.ResolvedPackageId -and ($Record.ResolvedPackageId -ne $PackageId)) { $Record.ResolvedPackageId } else { $null }
         status                  = (Get-EntryField -Entry $Entry -Field 'status')
         hasIcon                 = $hasIcon
         firstSeenUtc            = (Get-EntryField -Entry $Entry -Field 'firstSeenUtc')
@@ -786,6 +806,7 @@ foreach ($pkg in $todo) {
 
     $record = [ordered]@{
         PackageId          = $pkg
+        ResolvedPackageId  = ''
         Status             = 'Unknown'
         FailureCategory    = ''
         AlreadyInstalled   = $false
@@ -811,6 +832,12 @@ foreach ($pkg in $todo) {
         StartedAt          = $started.ToUniversalTime().ToString('o')
     }
 
+    $resolvedPackageId = Resolve-WinGetPackageId -PackageId $pkg
+    $record.ResolvedPackageId = $resolvedPackageId
+    if ($resolvedPackageId -ne $pkg) {
+        Write-Host ("  Resolved legacy ID '{0}' -> '{1}'" -f $pkg, $resolvedPackageId) -ForegroundColor DarkGray
+    }
+
     $pkgOutDir = Join-Path $OutDir $pkg
 
     try {
@@ -818,13 +845,13 @@ foreach ($pkg in $todo) {
         # ProductCode / DisplayName / Publisher hints even when the package was
         # preinstalled on the runner.
         Write-Host "  Warming manifest cache (winget show)..." -ForegroundColor Gray
-        $null = Show-WinGetPackage -PackageId $pkg -TimeoutSeconds 60
+        $null = Show-WinGetPackage -PackageId $resolvedPackageId -TimeoutSeconds 60
 
         # Probe for an existing icon. Short-circuits for packages already
         # installed locally (e.g. dev box, preinstalled on runner).
         Write-Host "  Probing for existing icon..." -ForegroundColor Gray
         $extStart = Get-Date
-        $probe = Invoke-IconExtractionWithRetry -PackageId $pkg -PkgOutDir $pkgOutDir -Force:$Force
+        $probe = Invoke-IconExtractionWithRetry -PackageId $resolvedPackageId -PkgOutDir $pkgOutDir -Force:$Force
         $record.ExtractSeconds = [int]((Get-Date) - $extStart).TotalSeconds
         $record.ExtractAttemptCount = @($probe.Attempts).Count
         $record.ExtractAttemptScopes = @($probe.Attempts | ForEach-Object { $_.scope })
@@ -841,7 +868,7 @@ foreach ($pkg in $todo) {
         else {
             Write-Host "  Not installed (or no ARP icon yet); installing..." -ForegroundColor Gray
             $instStart = Get-Date
-            $install = Install-WinGetPackage -PackageId $pkg -TimeoutSeconds $PerPackageTimeoutSeconds
+            $install = Install-WinGetPackage -PackageId $resolvedPackageId -TimeoutSeconds $PerPackageTimeoutSeconds
             $record.InstallSeconds = [int]((Get-Date) - $instStart).TotalSeconds
 
             $record.InstallExitCode = $install.ExitCode
@@ -906,7 +933,7 @@ foreach ($pkg in $todo) {
             if (($record.Status -in @('Installed', 'AlreadyInstalled')) -or $shouldVerifyInstallFailure) {
                 Write-Host "  Extracting icon..." -ForegroundColor Gray
                 $extStart = Get-Date
-                $ex = Invoke-IconExtractionWithRetry -PackageId $pkg -PkgOutDir $pkgOutDir -Force:$Force -AfterInstall
+                $ex = Invoke-IconExtractionWithRetry -PackageId $resolvedPackageId -PkgOutDir $pkgOutDir -Force:$Force -AfterInstall
                 $record.ExtractSeconds = [int]((Get-Date) - $extStart).TotalSeconds
                 $record.ExtractAttemptCount = @($ex.Attempts).Count
                 $record.ExtractAttemptScopes = @($ex.Attempts | ForEach-Object { $_.scope })
@@ -942,7 +969,7 @@ foreach ($pkg in $todo) {
             Write-Host "  Uninstalling..." -ForegroundColor Gray
             try {
                 $uninstallStart = Get-Date
-                $uninst = Uninstall-WinGetPackage -PackageId $pkg -TimeoutSeconds $UninstallTimeoutSeconds
+                $uninst = Uninstall-WinGetPackage -PackageId $resolvedPackageId -TimeoutSeconds $UninstallTimeoutSeconds
                 $record.UninstallSeconds = [int]((Get-Date) - $uninstallStart).TotalSeconds
                 $record.UninstallExitCode = $uninst.ExitCode
                 $record.UninstallTimedOut = $uninst.TimedOut
