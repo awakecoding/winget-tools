@@ -3,8 +3,8 @@
   "packageId": "Spotify.Spotify",
   "status": "InstallFailed",
   "hasIcon": false,
-  "firstSeenUtc": "2026-04-20T17:30:24.4148530Z",
-  "lastCheckedUtc": "2026-04-20T17:30:24.4148530Z",
+  "firstSeenUtc": "2026-04-20T17:30:24.414853Z",
+  "lastCheckedUtc": "2026-04-21T16:39:24.6188964Z",
   "lastUpdatedUtc": null,
   "wingetVersion": "v1.11.510",
   "packageVersion": null,
@@ -13,13 +13,23 @@
   "alreadyInstalled": false,
   "installedByThisRun": false,
   "installSeconds": 2,
-  "extractSeconds": 0,
+  "extractSeconds": 31,
   "uninstallSeconds": 0,
-  "durationSeconds": 3,
-  "installExitCode": -1978335146,
+  "durationSeconds": 34,
+  "installExitCode": -1978335216,
   "installTimedOut": false,
   "uninstallExitCode": null,
   "uninstallTimedOut": false,
+  "failureCategory": "Install",
+  "installAttemptTag": "install-machine",
+  "extractAttemptCount": 4,
+  "extractAttemptScopes": [
+    "Both",
+    "User",
+    "Machine",
+    "Both"
+  ],
+  "extractFailureCategory": "ArpNotFound",
   "iconCount": 0,
   "iconBytes": 0,
   "appIconFile": null,
@@ -28,10 +38,28 @@
   "canonicalIconSha256": null,
   "extractError": null,
   "installStdErr": null,
+  "installAttempts": [
+    {
+      "tag": "install-default",
+      "exitCode": -1978335146,
+      "exitHex": "0x8A150056",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    },
+    {
+      "tag": "install-machine",
+      "exitCode": -1978335216,
+      "exitHex": "0x8A150010",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    }
+  ],
   "icons": null,
   "run": {
-    "startedAtUtc": "2026-04-20T17:30:24.4148530Z",
-    "runId": "24680712810",
+    "startedAtUtc": "2026-04-21T16:39:24.6188964Z",
+    "runId": "24734510854",
     "runAttempt": "1",
     "repository": "awakecoding/winget-tools"
   }

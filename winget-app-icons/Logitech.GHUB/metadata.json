@@ -4,7 +4,7 @@
   "status": "InstallFailed",
   "hasIcon": false,
   "firstSeenUtc": "2026-04-20T17:53:59.9706836Z",
-  "lastCheckedUtc": "2026-04-20T17:53:59.9706836Z",
+  "lastCheckedUtc": "2026-04-21T16:22:12.5055063Z",
   "lastUpdatedUtc": null,
   "wingetVersion": "v1.11.510",
   "packageVersion": null,
@@ -12,14 +12,24 @@
   "installerType": null,
   "alreadyInstalled": false,
   "installedByThisRun": false,
-  "installSeconds": 5,
-  "extractSeconds": 0,
+  "installSeconds": 8,
+  "extractSeconds": 31,
   "uninstallSeconds": 0,
-  "durationSeconds": 7,
+  "durationSeconds": 41,
   "installExitCode": -1978335215,
   "installTimedOut": false,
   "uninstallExitCode": null,
   "uninstallTimedOut": false,
+  "failureCategory": "Install",
+  "installAttemptTag": "install-machine",
+  "extractAttemptCount": 4,
+  "extractAttemptScopes": [
+    "Both",
+    "User",
+    "Machine",
+    "Both"
+  ],
+  "extractFailureCategory": "ArpNotFound",
   "iconCount": 0,
   "iconBytes": 0,
   "appIconFile": null,
@@ -28,10 +38,28 @@
   "canonicalIconSha256": null,
   "extractError": null,
   "installStdErr": null,
+  "installAttempts": [
+    {
+      "tag": "install-default",
+      "exitCode": -1978335215,
+      "exitHex": "0x8A150011",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    },
+    {
+      "tag": "install-machine",
+      "exitCode": -1978335215,
+      "exitHex": "0x8A150011",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    }
+  ],
   "icons": null,
   "run": {
-    "startedAtUtc": "2026-04-20T17:53:59.9706836Z",
-    "runId": "24681728306",
+    "startedAtUtc": "2026-04-21T16:22:12.5055063Z",
+    "runId": "24733686307",
     "runAttempt": "1",
     "repository": "awakecoding/winget-tools"
   }
