@@ -125,6 +125,8 @@ if ($Mode -eq 'Online' -and $WarmCache) {
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
+$DefaultCommunitySourceName = 'winget'
+
 # --- Colour helpers -----------------------------------------------------------
 function Write-Step  ([string]$msg) { Write-Host "`n== $msg" -ForegroundColor Cyan }
 function Write-Found ([string]$msg) { Write-Host "  [FOUND] $msg" -ForegroundColor Green }
@@ -247,7 +249,12 @@ if ($WarmCache) {
     Write-Step 'Warming cache via winget show'
     $wingetArgs = @('show', '--id', $PackageId, '--exact', '--accept-source-agreements')
     if ($Version)    { $wingetArgs += @('--version', $Version) }
-    if ($SourceName) { $wingetArgs += @('--source',  $SourceName) }
+    if ($SourceName) {
+        $wingetArgs += @('--source', $SourceName)
+    }
+    else {
+        $wingetArgs += @('--source', $DefaultCommunitySourceName)
+    }
     Write-Log "  Running: winget $($wingetArgs -join ' ')" DarkCyan
     if ($isRestSource) {
         Write-Warn 'Source is Microsoft.Rest — winget show will not write a FileCache file.'

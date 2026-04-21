@@ -431,6 +431,8 @@ $script:wingetSourceErrorNames = [ordered]@{
     '-1978335157' = 'APPINSTALLER_CLI_ERROR_FAILED_TO_OPEN_ALL_SOURCES'
 }
 
+$script:wingetCommunitySourceName = 'winget'
+
 $script:wingetUnattendedArgs = @(
     '--accept-source-agreements',
     '--disable-interactivity'
@@ -533,6 +535,7 @@ function Install-WinGetPackage {
 
     $commonArgs = @(
         'install', '--id', $PackageId, '--exact',
+        '--source', $script:wingetCommunitySourceName,
         '--silent'
     )
     $commonArgs += $script:wingetInstallUnattendedArgs
@@ -603,7 +606,7 @@ function Show-WinGetPackage {
     # manifest-driven hint extraction succeed for packages we never install.
     $showArgs = @(
         'show', '--id', $PackageId, '--exact',
-        '--source', 'winget'
+        '--source', $script:wingetCommunitySourceName
     )
     $showArgs += $script:wingetUnattendedArgs
     return Invoke-WinGetCommand -Arguments $showArgs -TimeoutSeconds $TimeoutSeconds -Tag 'show'
