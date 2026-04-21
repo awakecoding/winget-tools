@@ -729,7 +729,7 @@ function Write-PackageState {
     $metadata = [ordered]@{
         schema                  = 1
         packageId               = $PackageId
-        resolvedPackageId       = if ($Record.ResolvedPackageId -and ($Record.ResolvedPackageId -ne $PackageId)) { $Record.ResolvedPackageId } else { $null }
+            resolvedPackageId       = if ($Record.ResolvedPackageId -and ($Record.ResolvedPackageId -cne $PackageId)) { $Record.ResolvedPackageId } else { $null }
         status                  = (Get-EntryField -Entry $Entry -Field 'status')
         hasIcon                 = $hasIcon
         firstSeenUtc            = (Get-EntryField -Entry $Entry -Field 'firstSeenUtc')
@@ -844,7 +844,7 @@ foreach ($pkg in $todo) {
 
     $resolvedPackageId = Resolve-WinGetPackageId -PackageId $pkg
     $record.ResolvedPackageId = $resolvedPackageId
-    if ($resolvedPackageId -ne $pkg) {
+        if ($resolvedPackageId -cne $pkg) {
         Write-Host ("  Resolved legacy ID '{0}' -> '{1}'" -f $pkg, $resolvedPackageId) -ForegroundColor DarkGray
     }
 
