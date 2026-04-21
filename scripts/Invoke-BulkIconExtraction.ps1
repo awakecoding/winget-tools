@@ -445,11 +445,21 @@ $script:wingetCommunitySourceName = 'winget'
 
 $script:wingetPackageIdAliases = [ordered]@{
     '1Password.1Password'                 = 'AgileBits.1Password'
+    'HashiCorp.Packer'                   = 'Hashicorp.Packer'
+    'HWiNFO.HWiNFO'                      = 'REALiX.HWiNFO'
+    'ImageGlass.ImageGlass'              = 'DuongDieuPhap.ImageGlass'
+    'Krita.Krita'                        = 'KDE.Krita'
+    'Mullvad.Mullvad'                    = 'MullvadVPN.MullvadVPN'
+    'Mumble.Mumble'                      = 'Mumble.Mumble.Client'
+    'PeaZip.PeaZip'                      = 'Giorgiotani.Peazip'
+    'Razer.Synapse3'                     = 'RazerInc.RazerInstaller.Synapse3'
     'Signal.Signal'                      = 'OpenWhisperSystems.Signal'
     'GoogleCloudSDK.GoogleCloudSDK'      = 'Google.CloudSDK'
     'foobar2000.foobar2000'              = 'PeterPawlowski.foobar2000'
     'ProtonTechnologies.ProtonVPN'       = 'Proton.ProtonVPN'
     'Tracker-Software.PDF-XChangeEditor' = 'TrackerSoftware.PDF-XChangeEditor'
+    'Vim.Vim'                            = 'vim.vim'
+    'WagnardSoft.DisplayDriverUninstaller' = 'Wagnardsoft.DisplayDriverUninstaller'
 }
 
 $script:wingetUnattendedArgs = @(
