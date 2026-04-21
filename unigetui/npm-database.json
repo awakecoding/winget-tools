@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "generatedAtUtc": "2026-04-21T18:58:25.7446513Z",
+  "source": "screenshot-database-v2.json",
+  "packageCount": 4,
+  "packages": {
+    "1password": {
+      "unigetui": "1password",
+      "choco": "1password",
+      "winget": "AgileBits.1Password",
+      "scoop": null,
+      "python": "1password",
+      "npm": "1password",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/5/5b/1Password_icon.png",
+      "images": [
+        "https://i.postimg.cc/nc6SCCj5/image.png",
+        "https://i.postimg.cc/yxDnNHVs/image.png",
+        "https://i.postimg.cc/hvNsz5jx/image.png",
+        "https://i.postimg.cc/yYSv4sQT/image.png",
+        "https://i.postimg.cc/vDR7Hxqt/image.png"
+      ]
+    },
+    "1password-cli": {
+      "unigetui": "1password-cli",
+      "choco": "1password-cli",
+      "winget": "AgileBits.1Password.CLI",
+      "scoop": "1password-cli",
+      "python": "1password-cli",
+      "npm": "1password-cli",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/5/5b/1Password_icon.png",
+      "images": []
+    },
+    "360se": {
+      "unigetui": "360se",
+      "choco": null,
+      "winget": "360.360SE",
+      "scoop": null,
+      "python": null,
+      "npm": "360se",
+      "icon": "https://i.imgur.com/OTgnwGn.png",
+      "images": [
+        "https://se1.360simg.com/t01556df2aa6ab462bc.jpg",
+        "https://se2.360simg.com/t01bc71221790eac009.jpg",
+        "https://se2.360simg.com/t01f6f305ac16a617ce.jpg",
+        "https://se2.360simg.com/t01000f2ee1d3caf0a0.jpg"
+      ]
+    },
+    "7zip": {
+      "unigetui": "7zip",
+      "choco": "7zip",
+      "winget": "7zip.7zip",
+      "scoop": "7zip",
+      "python": null,
+      "npm": "7zip",
+      "icon": "https://i.postimg.cc/CLMvJ2Fp/image.png",
+      "images": [
+        "https://i.postimg.cc/fyxLGHPS/7-Zip-1.png",
+        "https://cdn.mos.cms.futurecdn.net/0c3ce5fdf135bb76208e0558845eb98c.jpg"
+      ]
+    }
+  }
+}

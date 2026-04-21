@@ -43,6 +43,102 @@ When `auto_commit_results` is enabled, the workflow imports that same batch arti
 
 ## Scripts
 
+### `unigetui/scripts/Generate-UniGetUiPackageDatabases.ps1`
+
+Generates cleaned package-manager databases from
+`unigetui/screenshot-database-v2.json`:
+
+- `unigetui/choco-database.json`
+- `unigetui/winget-database.json`
+- `unigetui/scoop-database.json`
+- `unigetui/python-database.json`
+- `unigetui/npm-database.json`
+
+Each output record keeps the original UniGetUI key under `unigetui`, the
+manager-specific package ID for that database, the mapped package IDs in the
+other supported managers when confident matches exist, and the original `icon`
+/ `images` payload.
+
+The script follows UniGetUI's documented normalized IDs:
+
+- IDs are lowercased.
+- Spaces, underscores, and dots are replaced with dashes.
+- WinGet IDs drop the publisher segment before normalization.
+- Chocolatey IDs drop `.install` and `.portable` before normalization.
+- Scoop package IDs follow the general normalized-ID rules.
+- Python package IDs follow PEP 503 canonicalization.
+- npm package IDs drop the leading `@` on scoped packages for the UniGetUI key.
+
+Matching order is intentionally conservative:
+
+1. exact package ID match
+2. exact normalized-ID match
+3. separator-insensitive normalized fallback for cases like
+  `xmediarecode` vs `xmedia-recode`
+4. WinGet-only full-ID alias fallback for source keys that still include more
+  of the original package ID than UniGetUI's standard Winget normalization
+
+If multiple catalog packages still match after those steps, the cross-manager
+field is left `null` instead of guessing.
+
+#### Parameters
+
+| Parameter | Description |
+|---|---|
+| `-SourcePath` | Source UniGetUI JSON file. Default: `unigetui/screenshot-database-v2.json`. |
+| `-OutDir` | Output directory for the generated databases. Default: `unigetui/`. |
+| `-ChocoOutputPath` | Optional explicit output path for `choco-database.json`. |
+| `-WingetOutputPath` | Optional explicit output path for `winget-database.json`. |
+| `-ScoopOutputPath` | Optional explicit output path for `scoop-database.json`. |
+| `-PythonOutputPath` | Optional explicit output path for `python-database.json`. |
+| `-NpmOutputPath` | Optional explicit output path for `npm-database.json`. |
+| `-PassThru` | Emit a summary object with source and output counts. |
+
+#### Example
+
+```powershell
+.\unigetui\scripts\Generate-UniGetUiPackageDatabases.ps1 -PassThru
+```
+
+#### Notes
+
+- Chocolatey package IDs are pulled from the public OData feed.
+- WinGet package IDs are pulled from the official `source.msix` index database.
+- Scoop package IDs are pulled from the official Scoop buckets on GitHub.
+- Python package IDs are filtered from the PyPI Simple API index.
+- npm package IDs are filtered from the npm replicate catalog.
+- The generated files are deterministic for a fixed source JSON and fixed
+  upstream package catalogs.
+- Ambiguous cross-manager mappings are intentionally preserved as `null`.
+
+### `unigetui/scripts/Get-UniGetUiUnmatchedReport.ps1`
+
+Summarizes which UniGetUI source keys still are not represented by any generated
+database record after running the database generator.
+
+The report is intentionally lightweight and helps separate two broad cases:
+
+- likely alias or package-variant keys such as `7zip-alpha-exe` whose base form
+  may already be covered
+- likely unsupported-manager or genuinely unmapped keys that still need another
+  source or a manual alias rule
+
+#### Parameters
+
+| Parameter | Description |
+|---|---|
+| `-SourcePath` | Source UniGetUI JSON file. Default: `unigetui/screenshot-database-v2.json`. |
+| `-DatabasePaths` | Generated databases to compare against. Defaults to the five package-manager outputs under `unigetui/`. |
+| `-ReportPath` | Optional JSON output path for the generated report. |
+| `-SampleCount` | Number of sample items to emit for unmatched keys and alias examples. Default: `20`. |
+| `-PassThru` | Emit the report object instead of printing JSON text. |
+
+#### Example
+
+```powershell
+.\unigetui\scripts\Get-UniGetUiUnmatchedReport.ps1 -PassThru
+```
+
 ### `scripts/Get-WinGetManifest.ps1`
 
 Fetches the raw, unlocalized WinGet manifest for a package — without going
