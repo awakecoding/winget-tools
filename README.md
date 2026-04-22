@@ -43,6 +43,48 @@ When `auto_commit_results` is enabled, the workflow imports that same batch arti
 
 ## Scripts
 
+### `scripts/Invoke-IconExtractionCampaign.ps1`
+
+Builds and optionally executes a repeatable GitHub Actions extraction campaign
+for a large package set (for example, 100 packages split into 10-package
+batches).
+
+What it does:
+
+- Parses candidate IDs from a text file (defaults to `tests/popular-packages.txt`).
+- Excludes IDs already present under `winget-app-icons/` unless
+  `-IncludeExisting` is set.
+- Validates each selected package ID with `winget show --id <PackageId> --exact`.
+- Writes a campaign plan JSON file containing selected IDs and batch CSV payloads.
+- In `run` mode, dispatches `.github/workflows/extract-icons.yml` per batch.
+- Optional: downloads each workflow artifact, expands
+  `winget-app-icons-batch-<run_id>.zip` at repo root, then commits only the
+  requested package folders.
+
+#### Key parameters
+
+| Parameter | Description |
+|---|---|
+| `-Mode plan|run` | `plan` validates and writes campaign JSON only; `run` also dispatches workflow runs. |
+| `-TargetCount` | Number of validated IDs to include (default `100`). |
+| `-BatchSize` | Packages per workflow run (default `10`, max `25`). |
+| `-CampaignPath` | Output JSON plan path (default `out/icon-campaign-100.json`). |
+| `-DownloadAndImportArtifacts` | After each run, downloads artifact and imports extracted package folders locally. |
+| `-PushAfterCommit` | With import mode, pushes each local commit to `origin/master`. |
+
+#### Examples
+
+```powershell
+# Create a validated 100-package, 10-batch plan only
+.\scripts\Invoke-IconExtractionCampaign.ps1 -Mode plan
+
+# Execute the campaign with manual artifact import + local commit/push
+.\scripts\Invoke-IconExtractionCampaign.ps1 -Mode run -DownloadAndImportArtifacts -PushAfterCommit
+
+# Execute with workflow auto-commit enabled (no local artifact import)
+.\scripts\Invoke-IconExtractionCampaign.ps1 -Mode run -AutoCommitResults $true
+```
+
 ### `unigetui/scripts/Generate-UniGetUiPackageDatabases.ps1`
 
 Generates cleaned package-manager databases from
