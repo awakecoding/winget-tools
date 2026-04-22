@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "packageId": "Microsoft.webpicmd",
+  "resolvedPackageId": null,
+  "status": "NoIcon",
+  "hasIcon": false,
+  "firstSeenUtc": "2026-04-22T06:27:25.4110129Z",
+  "lastCheckedUtc": "2026-04-22T06:27:25.4110129Z",
+  "lastUpdatedUtc": null,
+  "wingetVersion": "v1.11.510",
+  "packageVersion": null,
+  "manifestSha": null,
+  "installerType": null,
+  "alreadyInstalled": true,
+  "installedByThisRun": false,
+  "installSeconds": 2,
+  "extractSeconds": 31,
+  "uninstallSeconds": 0,
+  "durationSeconds": 35,
+  "installExitCode": -1978335189,
+  "installTimedOut": false,
+  "uninstallExitCode": null,
+  "uninstallTimedOut": false,
+  "failureCategory": null,
+  "installAttemptTag": "install-machine",
+  "extractAttemptCount": 4,
+  "extractAttemptScopes": [
+    "Both",
+    "User",
+    "Machine",
+    "Both"
+  ],
+  "extractFailureCategory": null,
+  "iconCount": 0,
+  "iconBytes": 0,
+  "appIconFile": null,
+  "canonicalIconSourceName": null,
+  "canonicalIconBytes": null,
+  "canonicalIconSha256": null,
+  "extractError": null,
+  "installStdErr": null,
+  "installAttempts": [
+    {
+      "tag": "install-default",
+      "exitCode": -1978335189,
+      "exitHex": "0x8A15002B",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    },
+    {
+      "tag": "install-machine",
+      "exitCode": -1978335189,
+      "exitHex": "0x8A15002B",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    }
+  ],
+  "icons": null,
+  "run": {
+    "startedAtUtc": "2026-04-22T06:27:25.4110129Z",
+    "runId": "24763707317",
+    "runAttempt": "1",
+    "repository": "awakecoding/winget-tools"
+  }
+}
