@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "packageId": "industrial-dave.PCAP-Sentry",
+  "resolvedPackageId": null,
+  "status": "InstallFailed",
+  "hasIcon": false,
+  "firstSeenUtc": "2026-04-22T06:49:15.7359564Z",
+  "lastCheckedUtc": "2026-04-22T06:49:15.7359564Z",
+  "lastUpdatedUtc": null,
+  "wingetVersion": "v1.11.510",
+  "packageVersion": null,
+  "manifestSha": null,
+  "installerType": null,
+  "alreadyInstalled": false,
+  "installedByThisRun": false,
+  "installSeconds": 13,
+  "extractSeconds": 32,
+  "uninstallSeconds": 0,
+  "durationSeconds": 45,
+  "installExitCode": -2145844844,
+  "installTimedOut": false,
+  "uninstallExitCode": null,
+  "uninstallTimedOut": false,
+  "failureCategory": "Install",
+  "installAttemptTag": "install-machine",
+  "extractAttemptCount": 4,
+  "extractAttemptScopes": [
+    "Both",
+    "User",
+    "Machine",
+    "Both"
+  ],
+  "extractFailureCategory": "ArpNotFound",
+  "iconCount": 0,
+  "iconBytes": 0,
+  "appIconFile": null,
+  "canonicalIconSourceName": null,
+  "canonicalIconBytes": null,
+  "canonicalIconSha256": null,
+  "extractError": null,
+  "installStdErr": null,
+  "installAttempts": [
+    {
+      "tag": "install-default",
+      "exitCode": -2145844844,
+      "exitHex": "0x80190194",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    },
+    {
+      "tag": "install-machine",
+      "exitCode": -2145844844,
+      "exitHex": "0x80190194",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    }
+  ],
+  "icons": null,
+  "run": {
+    "startedAtUtc": "2026-04-22T06:49:15.7359564Z",
+    "runId": "24764445096",
+    "runAttempt": "1",
+    "repository": "awakecoding/winget-tools"
+  }
+}
