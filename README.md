@@ -13,18 +13,18 @@ The workflow is best-effort by design: package-level install or extraction failu
 
 The repository now also includes project skills under `.agents/skills/` for prompt-driven extraction campaigns and fast package-index lookups.
 
-The extraction skill at `.agents/skills/extract-winget-icons/` is intended to let an agent handle the whole loop from a simple request such as “extract 10 more winget app icons”:
+The extraction skill at `.agents/skills/winget-extract-icons/` is intended to let an agent handle the whole loop from a simple request such as “extract 10 more winget app icons”:
 
-- select the next unprocessed package IDs from `tests/popular-packages.txt`
+- select the next unprocessed package IDs from the cached `svrooij/winget-pkgs-index` catalog
 - wait for existing `extract-icons.yml` workflow-dispatch runs to finish instead of piling onto the queue
 - dispatch new batches with traceable request labels and dispatch tokens
 - wait for each workflow run to finish
 - rely on workflow auto-commit to update `winget-app-icons/`
 - fast-forward local `master` after each batch so the next batch selection sees the latest repo state
 
-The skill wrapper script is `.agents/skills/extract-winget-icons/scripts/run-default-campaign.ps1`, which calls `scripts/Invoke-IconExtractionCampaign.ps1` with repository-friendly defaults.
+The skill wrapper script is `.agents/skills/winget-extract-icons/scripts/run-default-campaign.ps1`, which calls `scripts/Invoke-IconExtractionCampaign.ps1` with repository-friendly defaults.
 
-The index skill at `.agents/skills/winget-package-index/` uses `svrooij/winget-pkgs-index` as a fast availability source instead of local `winget show` probes. Its wrapper script is `.agents/skills/winget-package-index/scripts/run-index-backed-campaign.ps1`, which calls the same campaign runner with `-ValidationSource svrooij-index-v2`.
+The index skill at `.agents/skills/winget-package-index/` uses `svrooij/winget-pkgs-index` as a fast availability source through a cached `out/cache/winget-pkgs-index/index.v2.json` file parsed in PowerShell instead of local `winget` package-index probes. Its wrapper script is `.agents/skills/winget-package-index/scripts/run-index-backed-campaign.ps1`, which calls the same campaign runner with repository-friendly index-cache defaults.
 
 ### Workflow inputs
 
@@ -72,10 +72,10 @@ batches).
 
 What it does:
 
-- Parses candidate IDs from a text file (defaults to `tests/popular-packages.txt`).
+- Parses candidate IDs from `-CandidatePath` when provided, otherwise selects candidates from the cached `svrooij/winget-pkgs-index` catalog.
 - Excludes IDs already present under `winget-app-icons/` unless
   `-IncludeExisting` is set.
-- Validates each selected package ID either with `winget show --id <PackageId> --exact` or with `svrooij/winget-pkgs-index` via `-ValidationSource svrooij-index-v2`.
+- Validates each selected package ID against the cached `svrooij/winget-pkgs-index` JSON file.
 - Writes a campaign plan JSON file containing selected IDs and batch CSV payloads.
 - Writes a status TSV alongside the plan so automation can summarize batch
   outcomes without scraping multiple terminals.
@@ -94,7 +94,6 @@ What it does:
 | `-Mode plan|run` | `plan` validates and writes campaign JSON only; `run` also dispatches workflow runs. |
 | `-TargetCount` | Number of validated IDs to include (default `100`). |
 | `-BatchSize` | Packages per workflow run (default `10`, max `25`). |
-| `-ValidationSource` | `winget-show` (default) or `svrooij-index-v2` for faster index-backed validation. |
 | `-CampaignPath` | Output JSON plan path (default `out/icon-campaign-100.json`). |
 | `-StatusPath` | Optional explicit path for the status TSV written during plan/run flows. |
 | `-CampaignId` | Optional explicit campaign identifier used in local status files and workflow inputs. |
@@ -107,14 +106,17 @@ What it does:
 # Create a validated 100-package, 10-batch plan only
 .\scripts\Invoke-IconExtractionCampaign.ps1 -Mode plan
 
+# Create a plan from a custom candidate file
+.\scripts\Invoke-IconExtractionCampaign.ps1 -Mode plan -CandidatePath .\out\package-ids.txt
+
 # Execute the campaign with manual artifact import + local commit/push
 .\scripts\Invoke-IconExtractionCampaign.ps1 -Mode run -DownloadAndImportArtifacts -PushAfterCommit
 
 # Execute with workflow auto-commit enabled (no local artifact import)
 .\scripts\Invoke-IconExtractionCampaign.ps1 -Mode run -AutoCommitResults $true
 
-# Plan with the external svrooij package index instead of winget show
-.\scripts\Invoke-IconExtractionCampaign.ps1 -Mode plan -ValidationSource svrooij-index-v2 -RefreshWingetIndexCache
+# Plan with the external svrooij package index JSON cache
+.\scripts\Invoke-IconExtractionCampaign.ps1 -Mode plan -RefreshWingetIndexCache
 ```
 
 ### `unigetui/scripts/Generate-UniGetUiPackageDatabases.ps1`

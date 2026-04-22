@@ -73,7 +73,7 @@
 
 .EXAMPLE
     .\scripts\Invoke-BulkIconExtraction.ps1 `
-        -PackageListFile .\tests\popular-packages.txt `
+        -PackageListFile .\out\package-ids.txt `
         -OutDir .\out\bulk-icons `
         -PackageStateRoot .\winget-app-icons `
         -UninstallAfter

@@ -75,7 +75,7 @@ When iterating quickly, prefer batches of 10 packages.
   uninstall, metadata emission, and summary generation
 - `scripts/Get-WinGetIcon.ps1`: installed-package icon extraction logic
 - `scripts/Get-WinGetManifest.ps1`: manifest lookup helper
-- `.agents/skills/extract-winget-icons/`: prompt-driven extraction skill for
+- `.agents/skills/winget-extract-icons/`: prompt-driven extraction skill for
    GitHub Actions-based icon population
 - `.agents/skills/winget-package-index/`: prompt-driven skill for fast
    svrooij/winget-pkgs-index-backed package discovery and campaign validation
@@ -84,7 +84,6 @@ When iterating quickly, prefer batches of 10 packages.
    UniGetUI package databases
 - `unigetui/scripts/Get-UniGetUiUnmatchedReport.ps1`: classifies remaining
    UniGetUI source keys that do not map to any generated database
-- `tests/popular-packages.txt`: curated batch candidates for workflow runs
 
 ## Editing Guidance
 
@@ -93,11 +92,15 @@ When changing `scripts/Invoke-IconExtractionCampaign.ps1`:
 - Preserve sequential, queue-aware dispatch behavior for `extract-icons.yml`
 - Preserve dispatch-token and request-label correlation between local automation
    and GitHub Actions runs
-- Keep `winget-show` as the default validation path unless the task explicitly
-   changes the default behavior
 - Keep `svrooij-index-v2` support focused on candidate validation only; do not
    let it change the durable extraction contract under `winget-app-icons/`
+- For `svrooij-index-v2`, prefer the cached `index.v2.json` file under `out/`, parsed in PowerShell, and refresh it only when explicitly requested, missing, malformed, or older than 4 hours
 - Preserve the status TSV output because it is the agent-facing summary surface
+
+When changing PowerShell scripts or examples:
+
+- Prefer cross-platform PowerShell 7 (`pwsh`) compatible syntax, cmdlets, and examples unless the task is intentionally Windows-only
+- Avoid Windows PowerShell-only APIs or syntax in new code when a PowerShell 7-compatible alternative is available
 
 When changing `.agents/skills/*`:
 
@@ -135,7 +138,7 @@ When changing `.github/workflows/extract-icons.yml`:
 
 For code-only changes, run at minimum:
 
-- PowerShell parse validation for edited `.ps1` files
+- PowerShell 7 parse validation for edited `.ps1` files
 - `git diff --check`
 - workflow/schema error checks if the workflow file changed
 
@@ -160,7 +163,7 @@ For workflow behavior changes, prefer this sequence:
 
 When the user asks to populate more entries:
 
-- Build batches from `tests/popular-packages.txt`
+- Build batches from the cached `svrooij/winget-pkgs-index` catalog unless the user provides explicit package IDs or a custom candidate file
 - Exclude package IDs that already exist under `winget-app-icons/`
 - Prefer 10-package batches for faster iteration and easier diagnosis
 - After each successful auto-commit run, fast-forward local `master` before

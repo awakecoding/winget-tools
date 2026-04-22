@@ -1,7 +1,7 @@
 [CmdletBinding(DefaultParameterSetName = 'Campaign')]
 param(
     [Parameter(ParameterSetName = 'Campaign')]
-    [string]$CandidatePath = 'tests/popular-packages.txt',
+    [string]$CandidatePath,
 
     [Parameter(ParameterSetName = 'Campaign')]
     [int]$TargetCount = 10,
@@ -61,7 +61,9 @@ if ($PSCmdlet.ParameterSetName -eq 'Inline') {
     $params['IncludeExisting'] = $true
 }
 else {
-    $params['CandidatePath'] = $CandidatePath
+    if (-not [string]::IsNullOrWhiteSpace($CandidatePath)) {
+        $params['CandidatePath'] = $CandidatePath
+    }
     $params['TargetCount'] = $TargetCount
     $params['IncludeExisting'] = $IncludeExisting.IsPresent
 }

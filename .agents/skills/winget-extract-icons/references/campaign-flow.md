@@ -9,9 +9,9 @@ This skill is built around the repository's durable extraction path:
 ## What the runner does
 
 1. Fast-forwards local `master` before selecting a batch.
-2. Builds a candidate set from `tests/popular-packages.txt` unless explicit package IDs are provided.
+2. Builds a candidate set from the cached `svrooij/winget-pkgs-index` catalog unless explicit package IDs or a custom candidate file are provided.
 3. Excludes existing package folders by default.
-4. Validates candidate package IDs with `winget show` by default, or with `svrooij/winget-pkgs-index index.v2.csv` when `-ValidationSource svrooij-index-v2` is selected.
+4. Validates candidate package IDs against the cached `svrooij/winget-pkgs-index index.v2.json` file.
 5. Waits for existing `extract-icons.yml` workflow-dispatch runs to become idle instead of piling onto the queue.
 6. Dispatches the workflow with a unique `dispatch_token` and a human-readable `request_label`.
 7. Watches the workflow run to completion.
@@ -29,7 +29,7 @@ This skill is built around the repository's durable extraction path:
 - `Extract 10 more winget app icons.`
 - `Run one 10-package extract-icons batch and wait for it.`
 - `Extract icons for Git.Git, Docker.DockerDesktop, and SlackTechnologies.Slack.`
-- `Run a 50-package campaign from popular packages with auto-commit.`
+- `Run a 50-package campaign with auto-commit.`
 
 ## Result files to inspect
 

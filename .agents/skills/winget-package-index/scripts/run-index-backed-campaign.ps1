@@ -1,7 +1,7 @@
 [CmdletBinding(DefaultParameterSetName = 'Campaign')]
 param(
     [Parameter(ParameterSetName = 'Campaign')]
-    [string]$CandidatePath = 'tests/popular-packages.txt',
+    [string]$CandidatePath,
 
     [Parameter(ParameterSetName = 'Campaign')]
     [int]$TargetCount = 10,
@@ -34,7 +34,6 @@ $params = @{
     BatchSize              = $BatchSize
     Ref                    = 'master'
     AutoCommitResults      = $true
-    ValidationSource       = 'svrooij-index-v2'
     RefreshWingetIndexCache = $RefreshIndex.IsPresent
     ContinueOnBatchFailure = $ContinueOnBatchFailure.IsPresent
 }
@@ -64,7 +63,9 @@ if ($PSCmdlet.ParameterSetName -eq 'Inline') {
     $params['IncludeExisting'] = $true
 }
 else {
-    $params['CandidatePath'] = $CandidatePath
+    if (-not [string]::IsNullOrWhiteSpace($CandidatePath)) {
+        $params['CandidatePath'] = $CandidatePath
+    }
     $params['TargetCount'] = $TargetCount
     $params['IncludeExisting'] = $IncludeExisting.IsPresent
 }

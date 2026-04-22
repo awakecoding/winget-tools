@@ -3,7 +3,7 @@ param(
     [ValidateSet('plan', 'run')]
     [string]$Mode = 'plan',
 
-    [string]$CandidatePath = 'tests/popular-packages.txt',
+    [string]$CandidatePath,
     [string]$CampaignPath = 'out/icon-campaign-100.json',
     [string]$StatusPath,
     [string]$LockPath,
@@ -11,11 +11,8 @@ param(
     [int]$TargetCount = 100,
     [int]$BatchSize = 10,
     [switch]$IncludeExisting,
-    [ValidateSet('winget-show', 'svrooij-index-v2')]
-    [string]$ValidationSource = 'winget-show',
-    [int]$WingetShowTimeoutSeconds = 30,
-    [string]$WingetIndexUrl = 'https://github.com/svrooij/winget-pkgs-index/raw/main/index.v2.csv',
-    [string]$WingetIndexCachePath = 'out/cache/winget-pkgs-index/index.v2.csv',
+    [string]$WingetIndexUrl = 'https://github.com/svrooij/winget-pkgs-index/raw/main/index.v2.json',
+    [string]$WingetIndexCachePath = 'out/cache/winget-pkgs-index/index.v2.json',
     [switch]$RefreshWingetIndexCache,
 
     [string]$WorkflowName = 'extract-icons.yml',
@@ -90,24 +87,10 @@ function Get-CandidateIds {
     return @($ids | Select-Object -Unique)
 }
 
-function Test-WingetPackageId {
-    param(
-        [Parameter(Mandatory)] [string]$PackageId,
-        [Parameter(Mandatory)] [int]$TimeoutSeconds
-    )
+function Get-CandidateIdsFromPackageIndex {
+    param([Parameter(Mandatory)] [object]$PackageIndex)
 
-    $null = $TimeoutSeconds
-
-    $raw = @(& winget show --id $PackageId --exact --source winget --disable-interactivity --accept-source-agreements 2>&1)
-    $exitCode = $LASTEXITCODE
-    $text = (@($raw | ForEach-Object { $_.ToString() }) | Where-Object { $_.Trim() }) -join "`n"
-
-    return [pscustomobject]@{
-        packageId = $PackageId
-        success   = ($exitCode -eq 0)
-        exitCode  = $exitCode
-        output    = $text
-    }
+    return @($PackageIndex.Keys | Sort-Object)
 }
 
 function Get-WingetIndexPackageMap {
@@ -122,20 +105,35 @@ function Get-WingetIndexPackageMap {
         [void](New-Item -ItemType Directory -Path $cacheDir -Force)
     }
 
-    if ($ForceRefresh -or -not (Test-Path -LiteralPath $CachePath)) {
+    $refreshCache = $ForceRefresh -or -not (Test-Path -LiteralPath $CachePath)
+    if (-not $refreshCache) {
+        $cacheAge = (Get-Date).ToUniversalTime() - (Get-Item -LiteralPath $CachePath).LastWriteTimeUtc
+        $refreshCache = $cacheAge -ge [TimeSpan]::FromHours(4)
+    }
+
+    if ($refreshCache) {
         Invoke-WebRequest -Uri $IndexUrl -OutFile $CachePath
     }
 
-    $rows = @(Import-Csv -LiteralPath $CachePath)
+    $rawJson = Get-Content -LiteralPath $CachePath -Raw -Encoding UTF8
+    if ([string]::IsNullOrWhiteSpace($rawJson)) {
+        throw ("WinGet package index cache is empty: {0}" -f $CachePath)
+    }
+
+    $rows = @($rawJson | ConvertFrom-Json)
     if ($rows.Count -eq 0) {
         throw ("WinGet package index cache is empty: {0}" -f $CachePath)
     }
 
-    $requiredHeaders = @('PackageId', 'Version', 'Name', 'LastUpdate')
-    $headers = @($rows[0].PSObject.Properties.Name)
-    foreach ($header in $requiredHeaders) {
-        if ($header -notin $headers) {
-            throw ("WinGet package index cache is missing required column '{0}': {1}" -f $header, $CachePath)
+    if ($rows[0] -isnot [psobject]) {
+        throw ("WinGet package index cache must contain JSON objects: {0}" -f $CachePath)
+    }
+
+    $requiredProperties = @('PackageId', 'Version', 'Name', 'LastUpdate')
+    $properties = @($rows[0].PSObject.Properties.Name)
+    foreach ($property in $requiredProperties) {
+        if ($property -notin $properties) {
+            throw ("WinGet package index cache is missing required property '{0}': {1}" -f $property, $CachePath)
         }
     }
 
@@ -160,34 +158,52 @@ function Get-WingetIndexPackageMap {
 function New-CampaignPlan {
     param(
         [Parameter(Mandatory)] [string]$RepoRoot,
-        [Parameter(Mandatory)] [string]$CandidateFile,
+        [string]$CandidateFile,
         [Parameter(Mandatory)] [string]$OutputPath,
         [Parameter(Mandatory)] [string]$CampaignIdentifier,
         [Parameter(Mandatory)] [int]$DesiredCount,
         [Parameter(Mandatory)] [int]$ChunkSize,
         [Parameter(Mandatory)] [bool]$AllowExisting,
-        [Parameter(Mandatory)] [string]$ValidationMode,
-        [Parameter(Mandatory)] [int]$TimeoutSeconds,
         [object]$PackageIndex,
         [string]$PackageIndexUrl,
         [string]$PackageIndexCachePath
     )
 
-    if (-not (Test-Path -LiteralPath $CandidateFile)) {
-        throw ("Candidate file not found: {0}" -f $CandidateFile)
-    }
-
     if ($DesiredCount -lt 1) { throw 'TargetCount must be >= 1.' }
     if ($ChunkSize -lt 1) { throw 'BatchSize must be >= 1.' }
     if ($ChunkSize -gt 25) { throw 'BatchSize cannot exceed workflow maximum of 25.' }
 
-    $candidates = @(Get-CandidateIds -Path $CandidateFile)
+    $resolvedCandidatePath = $null
+    $candidateSource = $null
+    if (-not [string]::IsNullOrWhiteSpace($CandidateFile)) {
+        if (-not (Test-Path -LiteralPath $CandidateFile)) {
+            throw ("Candidate file not found: {0}" -f $CandidateFile)
+        }
+
+        $candidates = @(Get-CandidateIds -Path $CandidateFile)
+        $resolvedCandidatePath = (Resolve-Path -LiteralPath $CandidateFile).Path
+        $candidateSource = 'file'
+    }
+    elseif ($null -ne $PackageIndex) {
+        $candidates = @(Get-CandidateIdsFromPackageIndex -PackageIndex $PackageIndex)
+        $candidateSource = 'svrooij-index-v2'
+    }
+    else {
+        throw 'CandidatePath is required unless the svrooij index is available for automatic candidate selection.'
+    }
+
+    $candidates = @($candidates)
+    if ($candidates.Count -eq 0) {
+        throw 'Candidate selection produced zero package IDs.'
+    }
+
     $existingDirs = @(
         Get-ChildItem -LiteralPath (Join-Path $RepoRoot 'winget-app-icons') -Directory |
             Select-Object -ExpandProperty Name
     )
 
     $pool = if ($AllowExisting) { $candidates } else { @($candidates | Where-Object { $_ -notin $existingDirs }) }
+    $pool = @($pool)
     $validated = New-Object System.Collections.Generic.List[string]
     $failedValidation = New-Object System.Collections.Generic.List[object]
 
@@ -196,39 +212,22 @@ function New-CampaignPlan {
     foreach ($id in $pool) {
         if ($validated.Count -ge $DesiredCount) { break }
 
-        if ($ValidationMode -eq 'svrooij-index-v2') {
-            $indexRecord = $null
-            if ($PackageIndex -and $PackageIndex.ContainsKey($id)) {
-                $indexRecord = $PackageIndex[$id]
-            }
+        $indexRecord = $null
+        if ($PackageIndex -and $PackageIndex.ContainsKey($id)) {
+            $indexRecord = $PackageIndex[$id]
+        }
 
-            if ($null -ne $indexRecord) {
-                $validated.Add($id)
-                Write-Host ("[ok] {0} ({1}/{2})" -f $id, $validated.Count, $DesiredCount)
-            }
-            else {
-                $failedValidation.Add([pscustomobject]@{
-                    packageId = $id
-                    exitCode  = $null
-                    output    = 'Package ID not present in svrooij/winget-pkgs-index index.v2.csv.'
-                })
-                Write-Host ("[skip] {0} (missing from svrooij index)" -f $id)
-            }
+        if ($null -ne $indexRecord) {
+            $validated.Add($id)
+            Write-Host ("[ok] {0} ({1}/{2})" -f $id, $validated.Count, $DesiredCount)
         }
         else {
-            $probe = Test-WingetPackageId -PackageId $id -TimeoutSeconds $TimeoutSeconds
-            if ($probe.success) {
-                $validated.Add($id)
-                Write-Host ("[ok] {0} ({1}/{2})" -f $id, $validated.Count, $DesiredCount)
-            }
-            else {
-                $failedValidation.Add([pscustomobject]@{
-                    packageId = $id
-                    exitCode  = $probe.exitCode
-                    output    = $probe.output
-                })
-                Write-Host ("[skip] {0} (exit={1})" -f $id, $probe.exitCode)
-            }
+            $failedValidation.Add([pscustomobject]@{
+                packageId = $id
+                exitCode  = $null
+                output    = 'Package ID not present in svrooij/winget-pkgs-index index.v2.json.'
+            })
+            Write-Host ("[skip] {0} (missing from svrooij index)" -f $id)
         }
     }
 
@@ -256,11 +255,12 @@ function New-CampaignPlan {
     $plan = [pscustomobject]@{
         campaignId           = $CampaignIdentifier
         generatedAtUtc       = (Get-Date).ToUniversalTime().ToString('o')
-        candidatePath        = (Resolve-Path -LiteralPath $CandidateFile).Path
+        candidatePath        = $resolvedCandidatePath
+        candidateSource      = $candidateSource
         targetCount          = $DesiredCount
         batchSize            = $ChunkSize
         includeExisting      = $AllowExisting
-        validationSource     = $ValidationMode
+        validationSource     = 'svrooij-index-v2'
         packageIndexUrl      = $PackageIndexUrl
         packageIndexCachePath = $PackageIndexCachePath
         sourceCandidateCount = $candidates.Count
@@ -641,11 +641,12 @@ function Import-RunArtifactAndCommit {
 $repoRoot = Get-RepoRoot
 Set-Location -LiteralPath $repoRoot
 
-$CandidatePath = Resolve-RepoPath -RepoRoot $repoRoot -Path $CandidatePath
-$CampaignPath = Resolve-RepoPath -RepoRoot $repoRoot -Path $CampaignPath
-if ($ValidationSource -eq 'svrooij-index-v2') {
-    $WingetIndexCachePath = Resolve-RepoPath -RepoRoot $repoRoot -Path $WingetIndexCachePath
+$usePackageIndexCandidates = [string]::IsNullOrWhiteSpace($CandidatePath)
+if (-not $usePackageIndexCandidates) {
+    $CandidatePath = Resolve-RepoPath -RepoRoot $repoRoot -Path $CandidatePath
 }
+$CampaignPath = Resolve-RepoPath -RepoRoot $repoRoot -Path $CampaignPath
+$WingetIndexCachePath = Resolve-RepoPath -RepoRoot $repoRoot -Path $WingetIndexCachePath
 if (-not $StatusPath) {
     $StatusPath = [System.IO.Path]::ChangeExtension($CampaignPath, '.status.tsv')
 }
@@ -675,14 +676,12 @@ try {
     $packageIndex = $null
     $packageIndexUrl = $null
     $packageIndexCachePath = $null
-    if ($ValidationSource -eq 'svrooij-index-v2') {
-        $packageIndex = Get-WingetIndexPackageMap -IndexUrl $WingetIndexUrl -CachePath $WingetIndexCachePath -ForceRefresh:$RefreshWingetIndexCache
-        $packageIndexUrl = $WingetIndexUrl
-        $packageIndexCachePath = $WingetIndexCachePath
-        Write-Host ("Using svrooij WinGet package index cache: {0}" -f $WingetIndexCachePath)
-    }
+    $packageIndex = Get-WingetIndexPackageMap -IndexUrl $WingetIndexUrl -CachePath $WingetIndexCachePath -ForceRefresh:$RefreshWingetIndexCache
+    $packageIndexUrl = $WingetIndexUrl
+    $packageIndexCachePath = $WingetIndexCachePath
+    Write-Host ("Using svrooij WinGet package index cache: {0}" -f $WingetIndexCachePath)
 
-    $campaign = New-CampaignPlan -RepoRoot $repoRoot -CandidateFile $CandidatePath -OutputPath $CampaignPath -CampaignIdentifier $CampaignId -DesiredCount $TargetCount -ChunkSize $BatchSize -AllowExisting $allowExisting -ValidationMode $ValidationSource -TimeoutSeconds $WingetShowTimeoutSeconds -PackageIndex $packageIndex -PackageIndexUrl $packageIndexUrl -PackageIndexCachePath $packageIndexCachePath
+    $campaign = New-CampaignPlan -RepoRoot $repoRoot -CandidateFile $CandidatePath -OutputPath $CampaignPath -CampaignIdentifier $CampaignId -DesiredCount $TargetCount -ChunkSize $BatchSize -AllowExisting $allowExisting -PackageIndex $packageIndex -PackageIndexUrl $packageIndexUrl -PackageIndexCachePath $packageIndexCachePath
     Write-Host ("Campaign plan written to: {0}" -f $CampaignPath)
     Write-Host ("Validated IDs: {0}; Batches: {1}" -f $campaign.validatedCount, $campaign.batches.Count)
 
