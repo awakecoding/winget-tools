@@ -22,6 +22,8 @@
   "uninstallTimedOut": false,
   "iconCount": 1,
   "iconBytes": 43648.0,
+  "failureCategory": null,
+  "extractFailureCategory": null,
   "appIconFile": "app-icon.ico",
   "canonicalIconSourceName": "TechPowerUp GPU-Z.{8B0F211E-5846-4FB2-B0B9-4EB31546FDF9}}_is1.ico",
   "canonicalIconBytes": 43648,

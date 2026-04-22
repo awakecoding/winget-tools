@@ -22,6 +22,8 @@
   "uninstallTimedOut": false,
   "iconCount": 1,
   "iconBytes": 93455.0,
+  "failureCategory": null,
+  "extractFailureCategory": null,
   "appIconFile": "app-icon.ico",
   "canonicalIconSourceName": "OBS Studio.OBS Studio.ico",
   "canonicalIconBytes": 93455,

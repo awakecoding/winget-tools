@@ -22,6 +22,8 @@
   "uninstallTimedOut": false,
   "iconCount": 1,
   "iconBytes": 107281.0,
+  "failureCategory": null,
+  "extractFailureCategory": null,
   "appIconFile": "app-icon.ico",
   "canonicalIconSourceName": "draw.io 29.7.8.27a75bf3-be48-5c35-934f-8491cf108abe.ico",
   "canonicalIconBytes": 107281,

@@ -22,6 +22,8 @@
   "uninstallTimedOut": false,
   "iconCount": 1,
   "iconBytes": 72517.0,
+  "failureCategory": null,
+  "extractFailureCategory": null,
   "appIconFile": "app-icon.ico",
   "canonicalIconSourceName": "Geany 2.1.Geany.ico",
   "canonicalIconBytes": 72517,

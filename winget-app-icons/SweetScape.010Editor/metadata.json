@@ -22,6 +22,8 @@
   "uninstallTimedOut": false,
   "iconCount": 1,
   "iconBytes": 373702.0,
+  "failureCategory": null,
+  "extractFailureCategory": null,
   "appIconFile": "app-icon.ico",
   "canonicalIconSourceName": "010 Editor 16.0.4 (64-bit).010 Editor_is1.ico",
   "canonicalIconBytes": 373702,

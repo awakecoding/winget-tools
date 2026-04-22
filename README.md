@@ -26,6 +26,8 @@ The skill wrapper script is `.agents/skills/winget-extract-icons/scripts/run-def
 
 The index skill at `.agents/skills/winget-package-index/` uses `svrooij/winget-pkgs-index` as a fast availability source through a cached `out/cache/winget-pkgs-index/index.v2.json` file parsed in PowerShell instead of local `winget` package-index probes. Its wrapper script is `.agents/skills/winget-package-index/scripts/run-index-backed-campaign.ps1`, which calls the same campaign runner with repository-friendly index-cache defaults.
 
+The catalog skill at `.agents/skills/winget-icon-catalog/` queries the local `winget-app-icons/` registry so an agent can count packages with icons, list failures, filter by failure category, and summarize extraction reasons from `metadata.json`.
+
 ### Workflow inputs
 
 | Input | Description |

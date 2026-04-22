@@ -22,6 +22,8 @@
   "uninstallTimedOut": false,
   "iconCount": 1,
   "iconBytes": 112843.0,
+  "failureCategory": null,
+  "extractFailureCategory": null,
   "appIconFile": "app-icon.ico",
   "canonicalIconSourceName": "Notion 7.11.0.661f0cc6-343a-59cb-a5e8-8f6324cc6998.ico",
   "canonicalIconBytes": 112843,

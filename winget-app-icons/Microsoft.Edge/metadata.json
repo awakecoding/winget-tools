@@ -20,6 +20,8 @@
   "installTimedOut": false,
   "uninstallExitCode": null,
   "uninstallTimedOut": false,
+  "failureCategory": null,
+  "extractFailureCategory": null,
   "iconCount": 1,
   "iconBytes": 53242.0,
   "appIconFile": "app-icon.ico",

@@ -22,6 +22,8 @@
   "uninstallTimedOut": false,
   "iconCount": 1,
   "iconBytes": 139692.0,
+  "failureCategory": null,
+  "extractFailureCategory": null,
   "appIconFile": "app-icon.ico",
   "canonicalIconSourceName": "Tailscale.{7D52B73E-0AED-4A77-A467-FFF1ECBBD41C}.ico",
   "canonicalIconBytes": 139692,
