@@ -5,10 +5,18 @@ param(
 
     [string]$CandidatePath = 'tests/popular-packages.txt',
     [string]$CampaignPath = 'out/icon-campaign-100.json',
+    [string]$StatusPath,
+    [string]$LockPath,
+    [string]$CampaignId,
     [int]$TargetCount = 100,
     [int]$BatchSize = 10,
     [switch]$IncludeExisting,
+    [ValidateSet('winget-show', 'svrooij-index-v2')]
+    [string]$ValidationSource = 'winget-show',
     [int]$WingetShowTimeoutSeconds = 30,
+    [string]$WingetIndexUrl = 'https://github.com/svrooij/winget-pkgs-index/raw/main/index.v2.csv',
+    [string]$WingetIndexCachePath = 'out/cache/winget-pkgs-index/index.v2.csv',
+    [switch]$RefreshWingetIndexCache,
 
     [string]$WorkflowName = 'extract-icons.yml',
     [string]$Ref = 'master',
@@ -22,6 +30,11 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+$PSNativeCommandUseErrorActionPreference = $false
+$env:GH_FORCE_TTY = '0'
+$env:GH_PAGER = ''
+$env:PAGER = ''
+$env:GH_PROMPT_DISABLED = '1'
 
 function Get-RepoRoot {
     $root = (& git rev-parse --show-toplevel 2>$null)
@@ -30,6 +43,31 @@ function Get-RepoRoot {
     }
 
     return $root.Trim()
+}
+
+function Resolve-RepoPath {
+    param(
+        [Parameter(Mandatory)] [string]$RepoRoot,
+        [Parameter(Mandatory)] [string]$Path
+    )
+
+    if ([System.IO.Path]::IsPathRooted($Path)) {
+        return [System.IO.Path]::GetFullPath($Path)
+    }
+
+    return [System.IO.Path]::GetFullPath((Join-Path $RepoRoot $Path))
+}
+
+function Invoke-GitFastForward {
+    param(
+        [Parameter(Mandatory)] [string]$BranchName,
+        [Parameter(Mandatory)] [string]$ContextLabel
+    )
+
+    & git pull --ff-only origin $BranchName
+    if ($LASTEXITCODE -ne 0) {
+        throw ("git pull --ff-only failed during {0}." -f $ContextLabel)
+    }
 }
 
 function Get-CandidateIds {
@@ -58,7 +96,6 @@ function Test-WingetPackageId {
         [Parameter(Mandatory)] [int]$TimeoutSeconds
     )
 
-    # TimeoutSeconds is kept for backward compatibility of the interface.
     $null = $TimeoutSeconds
 
     $raw = @(& winget show --id $PackageId --exact --source winget --disable-interactivity --accept-source-agreements 2>&1)
@@ -73,15 +110,67 @@ function Test-WingetPackageId {
     }
 }
 
+function Get-WingetIndexPackageMap {
+    param(
+        [Parameter(Mandatory)] [string]$IndexUrl,
+        [Parameter(Mandatory)] [string]$CachePath,
+        [Parameter(Mandatory)] [bool]$ForceRefresh
+    )
+
+    $cacheDir = Split-Path -Path $CachePath -Parent
+    if ($cacheDir) {
+        [void](New-Item -ItemType Directory -Path $cacheDir -Force)
+    }
+
+    if ($ForceRefresh -or -not (Test-Path -LiteralPath $CachePath)) {
+        Invoke-WebRequest -Uri $IndexUrl -OutFile $CachePath
+    }
+
+    $rows = @(Import-Csv -LiteralPath $CachePath)
+    if ($rows.Count -eq 0) {
+        throw ("WinGet package index cache is empty: {0}" -f $CachePath)
+    }
+
+    $requiredHeaders = @('PackageId', 'Version', 'Name', 'LastUpdate')
+    $headers = @($rows[0].PSObject.Properties.Name)
+    foreach ($header in $requiredHeaders) {
+        if ($header -notin $headers) {
+            throw ("WinGet package index cache is missing required column '{0}': {1}" -f $header, $CachePath)
+        }
+    }
+
+    $index = New-Object 'System.Collections.Generic.Dictionary[string, object]' ([System.StringComparer]::OrdinalIgnoreCase)
+    foreach ($row in $rows) {
+        $packageId = [string]$row.PackageId
+        if ([string]::IsNullOrWhiteSpace($packageId)) {
+            continue
+        }
+
+        $index[$packageId] = [pscustomobject]@{
+            PackageId  = $packageId
+            Version    = [string]$row.Version
+            Name       = [string]$row.Name
+            LastUpdate = [string]$row.LastUpdate
+        }
+    }
+
+    return $index
+}
+
 function New-CampaignPlan {
     param(
         [Parameter(Mandatory)] [string]$RepoRoot,
         [Parameter(Mandatory)] [string]$CandidateFile,
         [Parameter(Mandatory)] [string]$OutputPath,
+        [Parameter(Mandatory)] [string]$CampaignIdentifier,
         [Parameter(Mandatory)] [int]$DesiredCount,
         [Parameter(Mandatory)] [int]$ChunkSize,
         [Parameter(Mandatory)] [bool]$AllowExisting,
-        [Parameter(Mandatory)] [int]$TimeoutSeconds
+        [Parameter(Mandatory)] [string]$ValidationMode,
+        [Parameter(Mandatory)] [int]$TimeoutSeconds,
+        [object]$PackageIndex,
+        [string]$PackageIndexUrl,
+        [string]$PackageIndexCachePath
     )
 
     if (-not (Test-Path -LiteralPath $CandidateFile)) {
@@ -107,18 +196,39 @@ function New-CampaignPlan {
     foreach ($id in $pool) {
         if ($validated.Count -ge $DesiredCount) { break }
 
-        $probe = Test-WingetPackageId -PackageId $id -TimeoutSeconds $TimeoutSeconds
-        if ($probe.success) {
-            $validated.Add($id)
-            Write-Host ("[ok] {0} ({1}/{2})" -f $id, $validated.Count, $DesiredCount)
+        if ($ValidationMode -eq 'svrooij-index-v2') {
+            $indexRecord = $null
+            if ($PackageIndex -and $PackageIndex.ContainsKey($id)) {
+                $indexRecord = $PackageIndex[$id]
+            }
+
+            if ($null -ne $indexRecord) {
+                $validated.Add($id)
+                Write-Host ("[ok] {0} ({1}/{2})" -f $id, $validated.Count, $DesiredCount)
+            }
+            else {
+                $failedValidation.Add([pscustomobject]@{
+                    packageId = $id
+                    exitCode  = $null
+                    output    = 'Package ID not present in svrooij/winget-pkgs-index index.v2.csv.'
+                })
+                Write-Host ("[skip] {0} (missing from svrooij index)" -f $id)
+            }
         }
         else {
-            $failedValidation.Add([pscustomobject]@{
-                packageId = $id
-                exitCode  = $probe.exitCode
-                output    = $probe.output
-            })
-            Write-Host ("[skip] {0} (exit={1})" -f $id, $probe.exitCode)
+            $probe = Test-WingetPackageId -PackageId $id -TimeoutSeconds $TimeoutSeconds
+            if ($probe.success) {
+                $validated.Add($id)
+                Write-Host ("[ok] {0} ({1}/{2})" -f $id, $validated.Count, $DesiredCount)
+            }
+            else {
+                $failedValidation.Add([pscustomobject]@{
+                    packageId = $id
+                    exitCode  = $probe.exitCode
+                    output    = $probe.output
+                })
+                Write-Host ("[skip] {0} (exit={1})" -f $id, $probe.exitCode)
+            }
         }
     }
 
@@ -144,11 +254,15 @@ function New-CampaignPlan {
     $failedArray = @($failedValidation.ToArray())
 
     $plan = [pscustomobject]@{
+        campaignId           = $CampaignIdentifier
         generatedAtUtc       = (Get-Date).ToUniversalTime().ToString('o')
         candidatePath        = (Resolve-Path -LiteralPath $CandidateFile).Path
         targetCount          = $DesiredCount
         batchSize            = $ChunkSize
         includeExisting      = $AllowExisting
+        validationSource     = $ValidationMode
+        packageIndexUrl      = $PackageIndexUrl
+        packageIndexCachePath = $PackageIndexCachePath
         sourceCandidateCount = $candidates.Count
         existingExcluded     = ($candidates.Count - $pool.Count)
         validatedCount       = $selectedArray.Count
@@ -167,35 +281,282 @@ function New-CampaignPlan {
     return $plan
 }
 
-function Resolve-LatestRunId {
+function Test-ProcessAlive {
+    param([Parameter(Mandatory)] [int]$ProcessId)
+
+    try {
+        Get-Process -Id $ProcessId -ErrorAction Stop | Out-Null
+        return $true
+    }
+    catch {
+        return $false
+    }
+}
+
+function Acquire-CampaignLock {
+    param(
+        [Parameter(Mandatory)] [string]$Path,
+        [Parameter(Mandatory)] [string]$CampaignIdentifier
+    )
+
+    $dir = Split-Path -Path $Path -Parent
+    if ($dir) {
+        [void](New-Item -ItemType Directory -Path $dir -Force)
+    }
+
+    if (Test-Path -LiteralPath $Path) {
+        $existing = @{}
+        foreach ($line in (Get-Content -LiteralPath $Path -Encoding UTF8 -ErrorAction SilentlyContinue)) {
+            if ($line -match '^(?<key>[^=]+)=(?<value>.*)$') {
+                $existing[$Matches['key']] = $Matches['value']
+            }
+        }
+
+        $existingPid = 0
+        if ($existing.ContainsKey('pid')) {
+            [void][int]::TryParse([string]$existing['pid'], [ref]$existingPid)
+        }
+
+        if ($existingPid -gt 0 -and (Test-ProcessAlive -ProcessId $existingPid)) {
+            throw ("Another icon extraction campaign appears to be active (pid {0}, campaign {1})." -f $existingPid, $existing['campaignId'])
+        }
+
+        Remove-Item -LiteralPath $Path -Force -ErrorAction SilentlyContinue
+    }
+
+    @(
+        ("campaignId={0}" -f $CampaignIdentifier)
+        ("pid={0}" -f $PID)
+        ("startedAtUtc={0}" -f (Get-Date).ToUniversalTime().ToString('o'))
+        ("machine={0}" -f $env:COMPUTERNAME)
+    ) | Set-Content -LiteralPath $Path -Encoding UTF8
+}
+
+function Release-CampaignLock {
+    param([Parameter(Mandatory)] [string]$Path)
+
+    if (Test-Path -LiteralPath $Path) {
+        Remove-Item -LiteralPath $Path -Force -ErrorAction SilentlyContinue
+    }
+}
+
+function ConvertTo-UtcDateTime {
+    param([Parameter(Mandatory)] [string]$Value)
+
+    return [DateTimeOffset]::Parse(
+        $Value,
+        [System.Globalization.CultureInfo]::InvariantCulture,
+        [System.Globalization.DateTimeStyles]::AssumeUniversal
+    ).UtcDateTime
+}
+
+function Get-WorkflowRuns {
+    param(
+        [Parameter(Mandatory)] [string]$Workflow,
+        [Parameter(Mandatory)] [string]$Branch
+    )
+
+    $lines = @(& gh run list --workflow $Workflow --branch $Branch --event workflow_dispatch --limit 50 --json databaseId,status,conclusion,createdAt,displayTitle --jq '.[] | "\(.databaseId)\t\(.status)\t\(.conclusion)\t\(.createdAt)\t\(.displayTitle)"' 2>$null)
+    if ($LASTEXITCODE -ne 0) {
+        return @()
+    }
+
+    $runs = New-Object System.Collections.Generic.List[object]
+    foreach ($line in $lines) {
+        $text = $line.ToString().Trim()
+        if (-not $text) { continue }
+
+        $parts = $text -split "`t", 5
+        if ($parts.Count -lt 5) { continue }
+        if ($parts[0] -notmatch '^\d+$') { continue }
+
+        $createdAtUtc = [datetime]::MinValue
+        try {
+            $createdAtUtc = ConvertTo-UtcDateTime -Value $parts[3]
+        }
+        catch {
+            $createdAtUtc = [datetime]::MinValue
+        }
+
+        $runs.Add([pscustomobject]@{
+            runId        = [string]$parts[0]
+            status       = [string]$parts[1]
+            conclusion   = [string]$parts[2]
+            createdAt    = [string]$parts[3]
+            createdAtUtc = $createdAtUtc
+            displayTitle = [string]$parts[4]
+        }) | Out-Null
+    }
+
+    return @($runs.ToArray())
+}
+
+function Get-ActiveWorkflowRuns {
+    param(
+        [Parameter(Mandatory)] [string]$Workflow,
+        [Parameter(Mandatory)] [string]$Branch
+    )
+
+    return @(
+        Get-WorkflowRuns -Workflow $Workflow -Branch $Branch |
+            Where-Object { $_.status -in @('queued', 'pending', 'in_progress') } |
+            Sort-Object createdAtUtc, runId
+    )
+}
+
+function Wait-ForWorkflowIdle {
     param(
         [Parameter(Mandatory)] [string]$Workflow,
         [Parameter(Mandatory)] [string]$Branch,
+        [Parameter(Mandatory)] [bool]$PullAfterCompletion,
+        [Parameter(Mandatory)] [string]$PullBranch,
+        [Parameter(Mandatory)] [string]$ContextLabel
+    )
+
+    while ($true) {
+        $active = @(Get-ActiveWorkflowRuns -Workflow $Workflow -Branch $Branch)
+        if ($active.Count -eq 0) {
+            return
+        }
+
+        $next = $active | Select-Object -First 1
+        Write-Host ("Waiting for existing workflow run {0} [{1}] ({2}) before dispatching another batch." -f $next.runId, $next.status, $next.displayTitle)
+        & gh run watch $next.runId --exit-status --compact
+
+        if ($PullAfterCompletion) {
+            Invoke-GitFastForward -BranchName $PullBranch -ContextLabel $ContextLabel
+        }
+    }
+}
+
+function New-DispatchToken {
+    param(
+        [Parameter(Mandatory)] [string]$CampaignIdentifier,
+        [Parameter(Mandatory)] [int]$BatchIndex
+    )
+
+    return ("{0}-b{1}-{2}" -f $CampaignIdentifier, $BatchIndex, ([guid]::NewGuid().ToString('N').Substring(0, 8)))
+}
+
+function New-RequestLabel {
+    param(
+        [Parameter(Mandatory)] [string]$CampaignIdentifier,
+        [Parameter(Mandatory)] [int]$BatchIndex,
+        [Parameter(Mandatory)] [int]$BatchTotal,
+        [Parameter(Mandatory)] [int]$PackageCount,
+        [Parameter(Mandatory)] [string]$DispatchToken
+    )
+
+    return ("Extract WinGet icons {0} batch {1}/{2} ({3} packages) {4}" -f $CampaignIdentifier, $BatchIndex, $BatchTotal, $PackageCount, $DispatchToken)
+}
+
+function Resolve-RunIdFromDispatchOutput {
+    param([Parameter(Mandatory)] [string]$Text)
+
+    if ($Text -match '/runs/(?<runId>\d+)') {
+        return [string]$Matches['runId']
+    }
+
+    return $null
+}
+
+function Resolve-RunIdByToken {
+    param(
+        [Parameter(Mandatory)] [string]$Workflow,
+        [Parameter(Mandatory)] [string]$Branch,
+        [Parameter(Mandatory)] [string]$DispatchToken,
         [Parameter(Mandatory)] [datetime]$StartedAtUtc
     )
 
     $deadline = (Get-Date).ToUniversalTime().AddMinutes(3)
     do {
-        $json = & gh run list --workflow $Workflow --branch $Branch --event workflow_dispatch --limit 20 --json databaseId,createdAt
-        if ($LASTEXITCODE -eq 0 -and $json) {
-            $rows = @($json | ConvertFrom-Json)
-            $newest = $rows |
-                Where-Object {
-                    ([datetime]::Parse($_.createdAt).ToUniversalTime()) -ge $StartedAtUtc.AddSeconds(-15)
-                } |
-                Sort-Object { [datetime]::Parse($_.createdAt).ToUniversalTime() } -Descending |
-                Select-Object -First 1
+        $runs = @(Get-WorkflowRuns -Workflow $Workflow -Branch $Branch)
 
-            if ($newest) {
-                return [string]$newest.databaseId
-            }
+        $tokenMatch = @(
+            $runs |
+                Where-Object {
+                    $_.displayTitle -like ("*{0}*" -f $DispatchToken) -and
+                    $_.createdAtUtc -ge $StartedAtUtc.AddSeconds(-30)
+                } |
+                Sort-Object createdAtUtc -Descending
+        )
+        if ($tokenMatch.Count -gt 0) {
+            return [string]$tokenMatch[0].runId
+        }
+
+        $recent = @(
+            $runs |
+                Where-Object { $_.createdAtUtc -ge $StartedAtUtc.AddSeconds(-15) } |
+                Sort-Object createdAtUtc -Descending
+        )
+        if ($recent.Count -eq 1) {
+            return [string]$recent[0].runId
         }
 
         Start-Sleep -Seconds 3
     }
     while ((Get-Date).ToUniversalTime() -lt $deadline)
 
-    throw 'Could not resolve a workflow run ID after dispatch.'
+    throw ("Could not resolve a workflow run ID for dispatch token {0}." -f $DispatchToken)
+}
+
+function Get-RunState {
+    param([Parameter(Mandatory)] [string]$RunId)
+
+    $line = (& gh run view $RunId --json status,conclusion --jq '"\(.status)\t\(.conclusion)"' 2>$null)
+    if ($LASTEXITCODE -ne 0 -or -not $line) {
+        return [pscustomobject]@{ status = 'unknown'; conclusion = '' }
+    }
+
+    $parts = $line.ToString().Split("`t", 2)
+    return [pscustomobject]@{
+        status     = if ($parts.Count -ge 1) { [string]$parts[0] } else { 'unknown' }
+        conclusion = if ($parts.Count -ge 2) { [string]$parts[1] } else { '' }
+    }
+}
+
+function Initialize-StatusFile {
+    param([Parameter(Mandatory)] [string]$Path)
+
+    $dir = Split-Path -Path $Path -Parent
+    if ($dir) {
+        [void](New-Item -ItemType Directory -Path $dir -Force)
+    }
+
+    'timestampUtc`tcampaignId`tbatchIndex`tbatchTotal`tpackageCount`tdispatchToken	runId	requestLabel	status	conclusion	note' | Set-Content -LiteralPath $Path -Encoding UTF8
+}
+
+function Add-StatusRow {
+    param(
+        [Parameter(Mandatory)] [string]$Path,
+        [Parameter(Mandatory)] [string]$CampaignIdentifier,
+        [Parameter(Mandatory)] [int]$BatchIndex,
+        [Parameter(Mandatory)] [int]$BatchTotal,
+        [Parameter(Mandatory)] [int]$PackageCount,
+        [Parameter(Mandatory)] [string]$DispatchToken,
+        [string]$RunId,
+        [Parameter(Mandatory)] [string]$RequestLabel,
+        [Parameter(Mandatory)] [string]$Status,
+        [string]$Conclusion = '',
+        [string]$Note = ''
+    )
+
+    $safeNote = ($Note -replace "`r?`n", ' | ')
+    $row = @(
+        (Get-Date).ToUniversalTime().ToString('o')
+        $CampaignIdentifier
+        [string]$BatchIndex
+        [string]$BatchTotal
+        [string]$PackageCount
+        $DispatchToken
+        $RunId
+        $RequestLabel
+        $Status
+        $Conclusion
+        $safeNote
+    ) -join "`t"
+
+    Add-Content -LiteralPath $Path -Value $row -Encoding UTF8
 }
 
 function Assert-StagedFilesWithinTargets {
@@ -280,45 +641,121 @@ function Import-RunArtifactAndCommit {
 $repoRoot = Get-RepoRoot
 Set-Location -LiteralPath $repoRoot
 
-$allowExisting = [bool]$IncludeExisting
-$campaign = New-CampaignPlan -RepoRoot $repoRoot -CandidateFile $CandidatePath -OutputPath $CampaignPath -DesiredCount $TargetCount -ChunkSize $BatchSize -AllowExisting $allowExisting -TimeoutSeconds $WingetShowTimeoutSeconds
-Write-Host ("Campaign plan written to: {0}" -f $CampaignPath)
-Write-Host ("Validated IDs: {0}; Batches: {1}" -f $campaign.validatedCount, $campaign.batches.Count)
-
-if ($Mode -eq 'plan') {
-    return
+$CandidatePath = Resolve-RepoPath -RepoRoot $repoRoot -Path $CandidatePath
+$CampaignPath = Resolve-RepoPath -RepoRoot $repoRoot -Path $CampaignPath
+if ($ValidationSource -eq 'svrooij-index-v2') {
+    $WingetIndexCachePath = Resolve-RepoPath -RepoRoot $repoRoot -Path $WingetIndexCachePath
+}
+if (-not $StatusPath) {
+    $StatusPath = [System.IO.Path]::ChangeExtension($CampaignPath, '.status.tsv')
+}
+else {
+    $StatusPath = Resolve-RepoPath -RepoRoot $repoRoot -Path $StatusPath
+}
+if (-not $LockPath) {
+    $LockPath = Resolve-RepoPath -RepoRoot $repoRoot -Path 'out/icon-extraction-campaign.lock'
+}
+else {
+    $LockPath = Resolve-RepoPath -RepoRoot $repoRoot -Path $LockPath
+}
+if (-not $CampaignId) {
+    $CampaignId = ("icon-campaign-{0}" -f (Get-Date).ToUniversalTime().ToString('yyyyMMddHHmmss'))
 }
 
-foreach ($batch in $campaign.batches) {
-    Write-Host ''
-    Write-Host ("=== Batch {0}/{1} ({2} packages) ===" -f $batch.index, $campaign.batches.Count, $batch.packageCnt)
+if ($AutoCommitResults -and $DownloadAndImportArtifacts) {
+    Write-Warning 'DownloadAndImportArtifacts is ignored when AutoCommitResults=true because the workflow already commits refreshed package folders.'
+    $DownloadAndImportArtifacts = $false
+}
 
-    $dispatchStarted = (Get-Date).ToUniversalTime()
-    & gh workflow run $WorkflowName --ref $Ref `
-        -f ("package_ids_csv={0}" -f $batch.csv) `
-        -f ("uninstall_after={0}" -f ([string]$UninstallAfter).ToLowerInvariant()) `
-        -f ("per_package_timeout={0}" -f $PerPackageTimeout) `
-        -f ("auto_commit_results={0}" -f ([string]$AutoCommitResults).ToLowerInvariant())
+Acquire-CampaignLock -Path $LockPath -CampaignIdentifier $CampaignId
+try {
+    Invoke-GitFastForward -BranchName $Ref -ContextLabel 'campaign initialization'
 
-    if ($LASTEXITCODE -ne 0) {
-        if ($ContinueOnBatchFailure) {
-            Write-Warning ("Dispatch failed for batch {0}; continuing." -f $batch.index)
-            continue
+    $allowExisting = [bool]$IncludeExisting
+    $packageIndex = $null
+    $packageIndexUrl = $null
+    $packageIndexCachePath = $null
+    if ($ValidationSource -eq 'svrooij-index-v2') {
+        $packageIndex = Get-WingetIndexPackageMap -IndexUrl $WingetIndexUrl -CachePath $WingetIndexCachePath -ForceRefresh:$RefreshWingetIndexCache
+        $packageIndexUrl = $WingetIndexUrl
+        $packageIndexCachePath = $WingetIndexCachePath
+        Write-Host ("Using svrooij WinGet package index cache: {0}" -f $WingetIndexCachePath)
+    }
+
+    $campaign = New-CampaignPlan -RepoRoot $repoRoot -CandidateFile $CandidatePath -OutputPath $CampaignPath -CampaignIdentifier $CampaignId -DesiredCount $TargetCount -ChunkSize $BatchSize -AllowExisting $allowExisting -ValidationMode $ValidationSource -TimeoutSeconds $WingetShowTimeoutSeconds -PackageIndex $packageIndex -PackageIndexUrl $packageIndexUrl -PackageIndexCachePath $packageIndexCachePath
+    Write-Host ("Campaign plan written to: {0}" -f $CampaignPath)
+    Write-Host ("Validated IDs: {0}; Batches: {1}" -f $campaign.validatedCount, $campaign.batches.Count)
+
+    if ($Mode -eq 'plan') {
+        return
+    }
+
+    Initialize-StatusFile -Path $StatusPath
+    Wait-ForWorkflowIdle -Workflow $WorkflowName -Branch $Ref -PullAfterCompletion:$AutoCommitResults -PullBranch $Ref -ContextLabel 'pre-dispatch idle wait'
+
+    foreach ($batch in $campaign.batches) {
+        Write-Host ''
+        Write-Host ("=== Batch {0}/{1} ({2} packages) ===" -f $batch.index, $campaign.batches.Count, $batch.packageCnt)
+
+        Wait-ForWorkflowIdle -Workflow $WorkflowName -Branch $Ref -PullAfterCompletion:$AutoCommitResults -PullBranch $Ref -ContextLabel ("batch {0} idle wait" -f $batch.index)
+
+        $dispatchToken = New-DispatchToken -CampaignIdentifier $CampaignId -BatchIndex $batch.index
+        $requestLabel = New-RequestLabel -CampaignIdentifier $CampaignId -BatchIndex $batch.index -BatchTotal $campaign.batches.Count -PackageCount $batch.packageCnt -DispatchToken $dispatchToken
+        $dispatchStarted = (Get-Date).ToUniversalTime()
+
+        $dispatchOutput = @(
+            & gh workflow run $WorkflowName --ref $Ref `
+                -f ("package_ids_csv={0}" -f $batch.csv) `
+                -f ("uninstall_after={0}" -f ([string]$UninstallAfter).ToLowerInvariant()) `
+                -f ("per_package_timeout={0}" -f $PerPackageTimeout) `
+                -f ("auto_commit_results={0}" -f ([string]$AutoCommitResults).ToLowerInvariant()) `
+                -f ("campaign_id={0}" -f $CampaignId) `
+                -f ("batch_index={0}" -f $batch.index) `
+                -f ("batch_total={0}" -f $campaign.batches.Count) `
+                -f ("dispatch_token={0}" -f $dispatchToken) `
+                -f ("request_label={0}" -f $requestLabel) 2>&1
+        )
+        $dispatchText = ($dispatchOutput | ForEach-Object { $_.ToString() }) -join "`n"
+        if ($dispatchText) {
+            Write-Host $dispatchText.TrimEnd()
         }
 
-        throw ("Dispatch failed for batch {0}." -f $batch.index)
-    }
+        if ($LASTEXITCODE -ne 0) {
+            Add-StatusRow -Path $StatusPath -CampaignIdentifier $CampaignId -BatchIndex $batch.index -BatchTotal $campaign.batches.Count -PackageCount $batch.packageCnt -DispatchToken $dispatchToken -RequestLabel $requestLabel -Status 'dispatch_failed' -Note $dispatchText
+            if ($ContinueOnBatchFailure) {
+                Write-Warning ("Dispatch failed for batch {0}; continuing." -f $batch.index)
+                continue
+            }
 
-    $runId = Resolve-LatestRunId -Workflow $WorkflowName -Branch $Ref -StartedAtUtc $dispatchStarted
-    Write-Host ("Run ID: {0}" -f $runId)
+            throw ("Dispatch failed for batch {0}." -f $batch.index)
+        }
 
-    & gh run watch $runId --exit-status --compact
-    $watchExit = $LASTEXITCODE
-    if ($watchExit -ne 0 -and -not $ContinueOnBatchFailure) {
-        throw ("Workflow run {0} failed for batch {1}." -f $runId, $batch.index)
-    }
+        $runId = Resolve-RunIdFromDispatchOutput -Text $dispatchText
+        if (-not $runId) {
+            $runId = Resolve-RunIdByToken -Workflow $WorkflowName -Branch $Ref -DispatchToken $dispatchToken -StartedAtUtc $dispatchStarted
+        }
+        Write-Host ("Run ID: {0}" -f $runId)
 
-    if ($DownloadAndImportArtifacts) {
-        Import-RunArtifactAndCommit -RepoRoot $repoRoot -RunId $runId -Batch $batch -BatchTotal $campaign.batches.Count -PushCommit:$PushAfterCommit.IsPresent
+        & gh run watch $runId --exit-status --compact
+        $watchExit = $LASTEXITCODE
+        $runState = Get-RunState -RunId $runId
+        $status = if ($watchExit -eq 0) { 'success' } else { 'failed' }
+
+        Add-StatusRow -Path $StatusPath -CampaignIdentifier $CampaignId -BatchIndex $batch.index -BatchTotal $campaign.batches.Count -PackageCount $batch.packageCnt -DispatchToken $dispatchToken -RunId $runId -RequestLabel $requestLabel -Status $status -Conclusion $runState.conclusion
+
+        if ($AutoCommitResults) {
+            Invoke-GitFastForward -BranchName $Ref -ContextLabel ("post-batch pull for batch {0}" -f $batch.index)
+        }
+
+        if ($DownloadAndImportArtifacts) {
+            Import-RunArtifactAndCommit -RepoRoot $repoRoot -RunId $runId -Batch $batch -BatchTotal $campaign.batches.Count -PushCommit:$PushAfterCommit.IsPresent
+        }
+
+        if ($watchExit -ne 0 -and -not $ContinueOnBatchFailure) {
+            throw ("Workflow run {0} failed for batch {1}." -f $runId, $batch.index)
+        }
     }
+}
+finally {
+    Release-CampaignLock -Path $LockPath
 }

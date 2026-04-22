@@ -1,4 +1,6 @@
 name: Extract WinGet icons
+run-name: >-
+  ${{ inputs.request_label != '' && inputs.request_label || format('Extract WinGet icons #{0}', github.run_number) }}
 
 on:
   workflow_dispatch:
@@ -22,6 +24,31 @@ on:
         required: false
         default: false
         type: boolean
+      campaign_id:
+        description: 'Optional campaign identifier used by automation'
+        required: false
+        default: ''
+        type: string
+      batch_index:
+        description: 'Optional 1-based batch index used by automation'
+        required: false
+        default: ''
+        type: string
+      batch_total:
+        description: 'Optional total batch count used by automation'
+        required: false
+        default: ''
+        type: string
+      dispatch_token:
+        description: 'Optional unique dispatch token used to correlate this run'
+        required: false
+        default: ''
+        type: string
+      request_label:
+        description: 'Optional run label shown in Actions UI'
+        required: false
+        default: ''
+        type: string
 
 permissions:
   contents: write
@@ -38,6 +65,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Verify winget
         shell: pwsh
@@ -85,6 +114,11 @@ jobs:
           $payload = [ordered]@{
               generatedAtUtc = (Get-Date).ToUniversalTime().ToString('o')
               count          = $packages.Count
+              campaignId     = '${{ inputs.campaign_id }}'
+              batchIndex     = '${{ inputs.batch_index }}'
+              batchTotal     = '${{ inputs.batch_total }}'
+              dispatchToken  = '${{ inputs.dispatch_token }}'
+              requestLabel   = '${{ inputs.request_label }}'
               packages       = $packages
           }
 
@@ -99,6 +133,19 @@ jobs:
           "- Count: **$($packages.Count)**" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
           "- Auto-commit: **${{ inputs.auto_commit_results }}**" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
           "- Uninstall after extraction: **${{ inputs.uninstall_after }}**" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+            if ('${{ inputs.campaign_id }}') {
+              "- Campaign ID: **${{ inputs.campaign_id }}**" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+            }
+            if ('${{ inputs.batch_index }}') {
+              $batchLine = if ('${{ inputs.batch_total }}') { "${{ inputs.batch_index }}/${{ inputs.batch_total }}" } else { '${{ inputs.batch_index }}' }
+              "- Batch: **$batchLine**" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+            }
+            if ('${{ inputs.dispatch_token }}') {
+              "- Dispatch token: **${{ inputs.dispatch_token }}**" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+            }
+            if ('${{ inputs.request_label }}') {
+              "- Request label: **${{ inputs.request_label }}**" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+            }
           "" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
           foreach ($pkg in $packages) {
               "- ``$pkg``" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
@@ -430,6 +477,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Download batch artifact
         uses: actions/download-artifact@v8
@@ -455,7 +504,7 @@ jobs:
           $requestPath = $requestMatch.FullName
           git config user.name  'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git pull --rebase
+          git pull --ff-only origin master
 
           Expand-Archive -LiteralPath $zipPath -DestinationPath (Resolve-Path '.').Path -Force
 
@@ -474,7 +523,22 @@ jobs:
               return
           }
 
-          git commit -m "chore: refresh winget icon batch ($($requested.packages.Count) packages, run $env:GITHUB_RUN_ID) [skip ci]"
+            $details = New-Object System.Collections.Generic.List[string]
+            if ($requested.campaignId) {
+              $details.Add("campaign $($requested.campaignId)") | Out-Null
+            }
+            if ($requested.batchIndex) {
+              if ($requested.batchTotal) {
+                $details.Add("batch $($requested.batchIndex)/$($requested.batchTotal)") | Out-Null
+              }
+              else {
+                $details.Add("batch $($requested.batchIndex)") | Out-Null
+              }
+            }
+            $details.Add("$($requested.packages.Count) packages") | Out-Null
+            $details.Add("run $env:GITHUB_RUN_ID") | Out-Null
+
+            git commit -m "chore: refresh winget icon batch ($($details -join ', ')) [skip ci]"
           git push
 
       - name: Render commit summary
@@ -484,3 +548,6 @@ jobs:
           "## Auto-commit" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
           "" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
           "- Enabled for this run." | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+            if ('${{ inputs.request_label }}') {
+              "- Request label: **${{ inputs.request_label }}**" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+            }

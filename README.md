@@ -9,6 +9,23 @@ The repository now includes a manual sandbox workflow at `.github/workflows/extr
 
 The workflow is best-effort by design: package-level install or extraction failures are recorded in `metadata.json` for the affected package, but they do not block the rest of the batch from being published or auto-committed.
 
+### Agent skills
+
+The repository now also includes project skills under `.agents/skills/` for prompt-driven extraction campaigns and fast package-index lookups.
+
+The extraction skill at `.agents/skills/extract-winget-icons/` is intended to let an agent handle the whole loop from a simple request such as “extract 10 more winget app icons”:
+
+- select the next unprocessed package IDs from `tests/popular-packages.txt`
+- wait for existing `extract-icons.yml` workflow-dispatch runs to finish instead of piling onto the queue
+- dispatch new batches with traceable request labels and dispatch tokens
+- wait for each workflow run to finish
+- rely on workflow auto-commit to update `winget-app-icons/`
+- fast-forward local `master` after each batch so the next batch selection sees the latest repo state
+
+The skill wrapper script is `.agents/skills/extract-winget-icons/scripts/run-default-campaign.ps1`, which calls `scripts/Invoke-IconExtractionCampaign.ps1` with repository-friendly defaults.
+
+The index skill at `.agents/skills/winget-package-index/` uses `svrooij/winget-pkgs-index` as a fast availability source instead of local `winget show` probes. Its wrapper script is `.agents/skills/winget-package-index/scripts/run-index-backed-campaign.ps1`, which calls the same campaign runner with `-ValidationSource svrooij-index-v2`.
+
 ### Workflow inputs
 
 | Input | Description |
@@ -17,6 +34,10 @@ The workflow is best-effort by design: package-level install or extraction failu
 | `uninstall_after` | When `true`, the workflow uninstalls each package after extraction. |
 | `per_package_timeout` | Install timeout in seconds for each package. |
 | `auto_commit_results` | When `true`, the workflow also commits the refreshed package folders back to the repository. |
+| `campaign_id` | Optional automation-supplied campaign identifier used to label and correlate runs. |
+| `batch_index` / `batch_total` | Optional automation metadata for multi-batch campaigns. |
+| `dispatch_token` | Optional unique token used by the campaign runner to match a workflow-dispatch call to the resulting Actions run. |
+| `request_label` | Optional run label shown in the Actions UI and workflow summaries. |
 
 ### Output layout
 
@@ -54,9 +75,14 @@ What it does:
 - Parses candidate IDs from a text file (defaults to `tests/popular-packages.txt`).
 - Excludes IDs already present under `winget-app-icons/` unless
   `-IncludeExisting` is set.
-- Validates each selected package ID with `winget show --id <PackageId> --exact`.
+- Validates each selected package ID either with `winget show --id <PackageId> --exact` or with `svrooij/winget-pkgs-index` via `-ValidationSource svrooij-index-v2`.
 - Writes a campaign plan JSON file containing selected IDs and batch CSV payloads.
+- Writes a status TSV alongside the plan so automation can summarize batch
+  outcomes without scraping multiple terminals.
 - In `run` mode, dispatches `.github/workflows/extract-icons.yml` per batch.
+- Waits for existing workflow-dispatch runs to finish before dispatching the
+  next batch, then correlates each batch via `dispatch_token` and
+  `request_label`.
 - Optional: downloads each workflow artifact, expands
   `winget-app-icons-batch-<run_id>.zip` at repo root, then commits only the
   requested package folders.
@@ -68,7 +94,10 @@ What it does:
 | `-Mode plan|run` | `plan` validates and writes campaign JSON only; `run` also dispatches workflow runs. |
 | `-TargetCount` | Number of validated IDs to include (default `100`). |
 | `-BatchSize` | Packages per workflow run (default `10`, max `25`). |
+| `-ValidationSource` | `winget-show` (default) or `svrooij-index-v2` for faster index-backed validation. |
 | `-CampaignPath` | Output JSON plan path (default `out/icon-campaign-100.json`). |
+| `-StatusPath` | Optional explicit path for the status TSV written during plan/run flows. |
+| `-CampaignId` | Optional explicit campaign identifier used in local status files and workflow inputs. |
 | `-DownloadAndImportArtifacts` | After each run, downloads artifact and imports extracted package folders locally. |
 | `-PushAfterCommit` | With import mode, pushes each local commit to `origin/master`. |
 
@@ -83,6 +112,9 @@ What it does:
 
 # Execute with workflow auto-commit enabled (no local artifact import)
 .\scripts\Invoke-IconExtractionCampaign.ps1 -Mode run -AutoCommitResults $true
+
+# Plan with the external svrooij package index instead of winget show
+.\scripts\Invoke-IconExtractionCampaign.ps1 -Mode plan -ValidationSource svrooij-index-v2 -RefreshWingetIndexCache
 ```
 
 ### `unigetui/scripts/Generate-UniGetUiPackageDatabases.ps1`
