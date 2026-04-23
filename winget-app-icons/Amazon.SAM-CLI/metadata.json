@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "packageId": "Amazon.SAM-CLI",
+  "resolvedPackageId": null,
+  "status": "NoIcon",
+  "hasIcon": false,
+  "firstSeenUtc": "2026-04-23T13:34:25.1603432Z",
+  "lastCheckedUtc": "2026-04-23T13:34:25.1603432Z",
+  "lastUpdatedUtc": null,
+  "wingetVersion": "v1.11.510",
+  "packageVersion": null,
+  "manifestSha": null,
+  "installerType": null,
+  "alreadyInstalled": true,
+  "installedByThisRun": false,
+  "installSeconds": 5,
+  "extractSeconds": 35,
+  "uninstallSeconds": 0,
+  "durationSeconds": 41,
+  "installExitCode": -1978335189,
+  "installTimedOut": false,
+  "uninstallExitCode": null,
+  "uninstallTimedOut": false,
+  "failureCategory": null,
+  "installAttemptTag": "install-machine",
+  "extractAttemptCount": 4,
+  "extractAttemptScopes": [
+    "Both",
+    "User",
+    "Machine",
+    "Both"
+  ],
+  "extractFailureCategory": null,
+  "iconCount": 0,
+  "iconBytes": 0,
+  "appIconFile": null,
+  "canonicalIconSourceName": null,
+  "canonicalIconBytes": null,
+  "canonicalIconSha256": null,
+  "extractError": null,
+  "installStdErr": null,
+  "installAttempts": [
+    {
+      "tag": "install-default",
+      "exitCode": -1978335189,
+      "exitHex": "0x8A15002B",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    },
+    {
+      "tag": "install-machine",
+      "exitCode": -1978335189,
+      "exitHex": "0x8A15002B",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    }
+  ],
+  "icons": null,
+  "run": {
+    "startedAtUtc": "2026-04-23T13:34:25.1603432Z",
+    "runId": "24837321993",
+    "runAttempt": "1",
+    "repository": "awakecoding/winget-tools"
+  }
+}
