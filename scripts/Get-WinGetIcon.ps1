@@ -475,7 +475,7 @@ function Get-PackageHints {
         }
     }
     if (-not $json) {
-        throw "Could not retrieve manifest for '$PackageId' (FileCache empty and 'winget show' did not populate it)."
+        throw "Could not retrieve manifest for '$PackageId' (cache lookup, package-index version resolution, and 'winget show' retry did not produce a manifest)."
     }
 
     try {

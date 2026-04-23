@@ -126,6 +126,9 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $DefaultCommunitySourceName = 'winget'
+$DefaultWingetIndexUrl = 'https://github.com/svrooij/winget-pkgs-index/raw/main/index.v2.json'
+$DefaultWingetIndexCachePath = Join-Path (Split-Path -Path $PSScriptRoot -Parent) 'out/cache/winget-pkgs-index/index.v2.json'
+$DefaultWingetPkgsRawBase = 'https://raw.githubusercontent.com/microsoft/winget-pkgs/master'
 
 # --- Colour helpers -----------------------------------------------------------
 function Write-Step  ([string]$msg) { Write-Host "`n== $msg" -ForegroundColor Cyan }
@@ -152,15 +155,20 @@ $isRestSource     = $false   # Microsoft.Rest sources never write FileCache entr
 #   PackageId = "Publisher.PackageName"  e.g.  Git.Git  ->  Git / Git
 #   CDN path  = manifests/{id[0]}/{Publisher}/{PackageName}/{Version}/{PackageId}.yaml
 $firstChar = $PackageId[0].ToString().ToLower()
-$dotIdx    = $PackageId.IndexOf('.')
-if ($dotIdx -ge 0) {
-    $publisher   = $PackageId.Substring(0, $dotIdx)
-    $packageName = $PackageId.Substring($dotIdx + 1)
+$packageIdParts = @($PackageId.Split('.', [System.StringSplitOptions]::RemoveEmptyEntries))
+if ($packageIdParts.Count -ge 2) {
+    $publisher = $packageIdParts[0]
+    $packageIdPathParts = @($packageIdParts | Select-Object -Skip 1)
+    $packageName = ($packageIdPathParts -join '.')
 } else {
     Write-Warn "Package ID '$PackageId' contains no dot — treating entire ID as both publisher and package name."
     $publisher   = $PackageId
     $packageName = $PackageId
+    $packageIdPathParts = @($PackageId)
 }
+
+$packagePath = ($packageIdPathParts -join '/')
+$packageCachePath = [System.IO.Path]::Combine($packageIdPathParts)
 
 # =============================================================================
 # SOURCE DISCOVERY (when -SourceName is specified)
@@ -231,7 +239,149 @@ if (-not $PathOnly) {
 }
 
 function Get-RelativePath ([string]$ver) {
-    "manifests/$firstChar/$publisher/$packageName/$ver/$PackageId.yaml"
+    "manifests/$firstChar/$publisher/$packagePath/$ver/$PackageId.yaml"
+}
+
+function Get-LatestVersionFromWingetIndex {
+    param(
+        [Parameter(Mandatory)] [string]$PackageId,
+        [Parameter(Mandatory)] [string]$IndexUrl,
+        [Parameter(Mandatory)] [string]$CachePath
+    )
+
+    $cacheDir = Split-Path -Path $CachePath -Parent
+    if ($cacheDir) {
+        [void](New-Item -ItemType Directory -Path $cacheDir -Force)
+    }
+
+    $refreshCache = -not (Test-Path -LiteralPath $CachePath)
+    if (-not $refreshCache) {
+        $cacheAge = (Get-Date).ToUniversalTime() - (Get-Item -LiteralPath $CachePath).LastWriteTimeUtc
+        $refreshCache = $cacheAge -ge [TimeSpan]::FromHours(4)
+    }
+
+    if ($refreshCache) {
+        Write-Verbose "Refreshing WinGet package index cache: $CachePath"
+        Invoke-WebRequest -Uri $IndexUrl -OutFile $CachePath
+    }
+
+    $rawJson = Get-Content -LiteralPath $CachePath -Raw -Encoding UTF8
+    if ([string]::IsNullOrWhiteSpace($rawJson)) {
+        return $null
+    }
+
+    $rows = @($rawJson | ConvertFrom-Json)
+    if ($rows.Count -eq 0) {
+        return $null
+    }
+
+    $match = @($rows | Where-Object { [string]$_.PackageId -ieq $PackageId } | Select-Object -First 1)
+    if ($match.Count -eq 0) {
+        return $null
+    }
+
+    return [string]$match[0].Version
+}
+
+function Import-YayamlIfAvailable {
+    if (Get-Module -Name Yayaml) {
+        return $true
+    }
+
+    if (-not (Get-Module -ListAvailable -Name Yayaml)) {
+        return $false
+    }
+
+    Import-Module Yayaml -ErrorAction Stop
+    return $true
+}
+
+function Get-MergedWingetPkgsManifestJson {
+    param(
+        [Parameter(Mandatory)] [string]$BaseManifestYaml,
+        [Parameter(Mandatory)] [string]$RawBaseUrl,
+        [Parameter(Mandatory)] [string]$PackageId
+    )
+
+    if (-not (Import-YayamlIfAvailable)) {
+        return $null
+    }
+
+    $manifest = $BaseManifestYaml | ConvertFrom-Yaml
+    if (-not $manifest) {
+        return $null
+    }
+
+    function Set-ManifestValue {
+        param(
+            [Parameter(Mandatory)] [object]$Target,
+            [Parameter(Mandatory)] [string]$Name,
+            [Parameter(Mandatory)] $Value
+        )
+
+        if ($Target -is [System.Collections.IDictionary]) {
+            $Target[$Name] = $Value
+            return
+        }
+
+        $Target | Add-Member -NotePropertyName $Name -NotePropertyValue $Value -Force
+    }
+
+    function Get-ManifestValue {
+        param(
+            [Parameter(Mandatory)] [object]$Target,
+            [Parameter(Mandatory)] [string]$Name
+        )
+
+        if ($Target -is [System.Collections.IDictionary]) {
+            if ($Target.Contains($Name)) {
+                return $Target[$Name]
+            }
+
+            return $null
+        }
+
+        if ($Target.PSObject.Properties.Name -contains $Name) {
+            return $Target.$Name
+        }
+
+        return $null
+    }
+
+    $installerUrl = "$RawBaseUrl/$PackageId.installer.yaml"
+    try {
+        $installerResponse = Invoke-WebRequest -Uri $installerUrl -UseBasicParsing -ErrorAction Stop
+        $installerManifest = $installerResponse.Content | ConvertFrom-Yaml
+        $installers = Get-ManifestValue -Target $installerManifest -Name 'Installers'
+        if ($installerManifest -and $installers) {
+            Set-ManifestValue -Target $manifest -Name 'Installers' -Value $installers
+        }
+    } catch {
+        Write-Verbose "Installer manifest merge miss: $installerUrl :: $($_.Exception.Message)"
+    }
+
+    $defaultLocaleValue = Get-ManifestValue -Target $manifest -Name 'DefaultLocale'
+    $defaultLocale = if ($defaultLocaleValue) { [string]$defaultLocaleValue } else { $null }
+
+    if ($defaultLocale) {
+        $localeUrl = "$RawBaseUrl/$PackageId.locale.$defaultLocale.yaml"
+        try {
+            $localeResponse = Invoke-WebRequest -Uri $localeUrl -UseBasicParsing -ErrorAction Stop
+            $localeManifest = $localeResponse.Content | ConvertFrom-Yaml
+            if ($localeManifest) {
+                foreach ($propertyName in @('PackageName', 'Publisher')) {
+                    $propertyValue = Get-ManifestValue -Target $localeManifest -Name $propertyName
+                    if ($propertyValue) {
+                        Set-ManifestValue -Target $manifest -Name $propertyName -Value $propertyValue
+                    }
+                }
+            }
+        } catch {
+            Write-Verbose "Locale manifest merge miss: $localeUrl :: $($_.Exception.Message)"
+        }
+    }
+
+    return ($manifest | ConvertTo-Json -Depth 20)
 }
 
 $manifestYaml    = $null
@@ -312,7 +462,7 @@ foreach ($variant in $cacheVariants) {
         # Exact version known — check the version subdirectory.
         # V1: file is named {PackageId}.yaml
         # V2: file is named with the SHA256 hash (no extension) — scan for any single file
-        $versionDir = [IO.Path]::Combine($root, "manifests\$firstChar\$publisher\$packageName\$Version")
+        $versionDir = [IO.Path]::Combine($root, 'manifests', $firstChar, $publisher, $packageCachePath, $Version)
         Write-Verbose "    Checking: $versionDir"
 
         if ($isV2) {
@@ -344,7 +494,7 @@ foreach ($variant in $cacheVariants) {
     } else {
         # No version specified — scan for any cached version of this package.
         # Each version subdirectory contains exactly one manifest file.
-        $scanBase = [IO.Path]::Combine($root, "manifests\$firstChar\$publisher\$packageName")
+        $scanBase = [IO.Path]::Combine($root, 'manifests', $firstChar, $publisher, $packageCachePath)
         Write-Verbose "    Scanning: $scanBase"
         if (-not (Test-Path $scanBase)) {
             Write-Miss "[$($variant.Label)] no cached data for this package"
@@ -387,6 +537,21 @@ foreach ($variant in $cacheVariants) {
 
 }  # end if ($Mode -ne 'Online')
 
+if (-not $manifestYaml -and -not $Version -and -not $isRestSource -and $Mode -ne 'FileCache' -and (($SourceName -eq $null) -or ($SourceName -eq '') -or ($SourceName -eq $DefaultCommunitySourceName))) {
+    Write-Step 'Supplemental version lookup — svrooij package index'
+    try {
+        $resolvedVersion = Get-LatestVersionFromWingetIndex -PackageId $PackageId -IndexUrl $DefaultWingetIndexUrl -CachePath $DefaultWingetIndexCachePath
+        if ($resolvedVersion) {
+            $Version = $resolvedVersion
+            Write-Found "Resolved version from package index: $Version"
+        } else {
+            Write-Miss 'Package not found in package index or version unavailable'
+        }
+    } catch {
+        Write-Warn "Package index lookup failed: $($_.Exception.Message)"
+    }
+}
+
 # =============================================================================
 # STRATEGY 2 — CDN Direct Download
 # =============================================================================
@@ -425,6 +590,31 @@ if ($Mode -eq 'FileCache') {
         } catch {
             Write-Miss "CDN miss ($(($_.Exception.Message -split ':')[0].Trim()))"
             Write-Warn 'Possible causes: misspelled ID, wrong version, V2/hash-named source (use -WarmCache), or non-default source.'
+
+            if ((($SourceName -eq $null) -or ($SourceName -eq '') -or ($SourceName -eq $DefaultCommunitySourceName)) -and -not $manifestYaml) {
+                $rawUrl = "$DefaultWingetPkgsRawBase/$relPath"
+                Write-Log "  Trying raw winget-pkgs: $rawUrl" DarkCyan
+
+                try {
+                    $rawResponse    = Invoke-WebRequest -Uri $rawUrl -UseBasicParsing -ErrorAction Stop
+                    $manifestYaml   = $rawResponse.Content
+                    $manifestSource = "winget-pkgs raw: $rawUrl"
+                    $manifestFormat = 'yaml'
+
+                    if ($AsJson) {
+                        $mergedJson = Get-MergedWingetPkgsManifestJson -BaseManifestYaml $manifestYaml -RawBaseUrl ($rawUrl.Substring(0, $rawUrl.LastIndexOf('/'))) -PackageId $PackageId
+                        if ($mergedJson) {
+                            $manifestYaml = $mergedJson
+                            $manifestFormat = 'json'
+                            $manifestSource = "winget-pkgs merged raw: $rawUrl"
+                        }
+                    }
+
+                    Write-Found "Downloaded $([Math]::Round($manifestYaml.Length / 1KB, 1)) KB from winget-pkgs"
+                } catch {
+                    Write-Miss "winget-pkgs raw miss ($(($_.Exception.Message -split ':')[0].Trim()))"
+                }
+            }
         }
     }
 }
