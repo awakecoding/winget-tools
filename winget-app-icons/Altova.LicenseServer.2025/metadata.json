@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "packageId": "Altova.LicenseServer.2025",
+  "resolvedPackageId": null,
+  "status": "InstallFailed",
+  "hasIcon": false,
+  "firstSeenUtc": "2026-04-23T08:55:32.9488023Z",
+  "lastCheckedUtc": "2026-04-23T08:55:32.9488023Z",
+  "lastUpdatedUtc": null,
+  "wingetVersion": "v1.11.510",
+  "packageVersion": null,
+  "manifestSha": null,
+  "installerType": null,
+  "alreadyInstalled": false,
+  "installedByThisRun": false,
+  "installSeconds": 96,
+  "extractSeconds": 1,
+  "uninstallSeconds": 0,
+  "durationSeconds": 98,
+  "installExitCode": -1978334964,
+  "installTimedOut": false,
+  "uninstallExitCode": null,
+  "uninstallTimedOut": false,
+  "failureCategory": "Install",
+  "installAttemptTag": "install-machine",
+  "extractAttemptCount": 1,
+  "extractAttemptScopes": "Both",
+  "extractFailureCategory": null,
+  "iconCount": 0,
+  "iconBytes": 0,
+  "appIconFile": null,
+  "canonicalIconSourceName": null,
+  "canonicalIconBytes": null,
+  "canonicalIconSha256": null,
+  "extractError": null,
+  "installStdErr": null,
+  "installAttempts": [
+    {
+      "tag": "install-default",
+      "exitCode": -1978334964,
+      "exitHex": "0x8A15010C",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    },
+    {
+      "tag": "install-machine",
+      "exitCode": -1978334964,
+      "exitHex": "0x8A15010C",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    }
+  ],
+  "icons": null,
+  "run": {
+    "startedAtUtc": "2026-04-23T08:55:32.9488023Z",
+    "runId": "24824042329",
+    "runAttempt": "1",
+    "repository": "awakecoding/winget-tools"
+  }
+}
