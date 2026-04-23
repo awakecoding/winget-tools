@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "packageId": "Admobilize.AdMobilize.VisionService",
+  "resolvedPackageId": null,
+  "status": "InstallFailed",
+  "hasIcon": false,
+  "firstSeenUtc": "2026-04-23T01:17:02.2252824Z",
+  "lastCheckedUtc": "2026-04-23T01:17:02.2252824Z",
+  "lastUpdatedUtc": null,
+  "wingetVersion": "v1.11.510",
+  "packageVersion": null,
+  "manifestSha": null,
+  "installerType": null,
+  "alreadyInstalled": false,
+  "installedByThisRun": false,
+  "installSeconds": 14,
+  "extractSeconds": 1,
+  "uninstallSeconds": 0,
+  "durationSeconds": 16,
+  "installExitCode": -1978334960,
+  "installTimedOut": false,
+  "uninstallExitCode": null,
+  "uninstallTimedOut": false,
+  "failureCategory": "Install",
+  "installAttemptTag": "install-machine",
+  "extractAttemptCount": 1,
+  "extractAttemptScopes": "Both",
+  "extractFailureCategory": "ManifestUnavailable",
+  "iconCount": 0,
+  "iconBytes": 0,
+  "appIconFile": null,
+  "canonicalIconSourceName": null,
+  "canonicalIconBytes": null,
+  "canonicalIconSha256": null,
+  "extractError": null,
+  "installStdErr": null,
+  "installAttempts": [
+    {
+      "tag": "install-default",
+      "exitCode": -1978334960,
+      "exitHex": "0x8A150110",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    },
+    {
+      "tag": "install-machine",
+      "exitCode": -1978334960,
+      "exitHex": "0x8A150110",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    }
+  ],
+  "icons": null,
+  "run": {
+    "startedAtUtc": "2026-04-23T01:17:02.2252824Z",
+    "runId": "24811160194",
+    "runAttempt": "1",
+    "repository": "awakecoding/winget-tools"
+  }
+}
