@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "packageId": "AdGuard.AdGuardVPN.Beta",
+  "resolvedPackageId": null,
+  "status": "InstallFailed",
+  "hasIcon": false,
+  "firstSeenUtc": "2026-04-23T00:44:56.6217190Z",
+  "lastCheckedUtc": "2026-04-23T00:44:56.6217190Z",
+  "lastUpdatedUtc": null,
+  "wingetVersion": "v1.11.510",
+  "packageVersion": null,
+  "manifestSha": null,
+  "installerType": null,
+  "alreadyInstalled": false,
+  "installedByThisRun": false,
+  "installSeconds": 10,
+  "extractSeconds": 1,
+  "uninstallSeconds": 0,
+  "durationSeconds": 13,
+  "installExitCode": -1978335215,
+  "installTimedOut": false,
+  "uninstallExitCode": null,
+  "uninstallTimedOut": false,
+  "failureCategory": "Install",
+  "installAttemptTag": "install-machine",
+  "extractAttemptCount": 1,
+  "extractAttemptScopes": "Both",
+  "extractFailureCategory": "ManifestUnavailable",
+  "iconCount": 0,
+  "iconBytes": 0,
+  "appIconFile": null,
+  "canonicalIconSourceName": null,
+  "canonicalIconBytes": null,
+  "canonicalIconSha256": null,
+  "extractError": null,
+  "installStdErr": null,
+  "installAttempts": [
+    {
+      "tag": "install-default",
+      "exitCode": -1978335215,
+      "exitHex": "0x8A150011",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    },
+    {
+      "tag": "install-machine",
+      "exitCode": -1978335215,
+      "exitHex": "0x8A150011",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    }
+  ],
+  "icons": null,
+  "run": {
+    "startedAtUtc": "2026-04-23T00:44:56.6217190Z",
+    "runId": "24809815963",
+    "runAttempt": "1",
+    "repository": "awakecoding/winget-tools"
+  }
+}
