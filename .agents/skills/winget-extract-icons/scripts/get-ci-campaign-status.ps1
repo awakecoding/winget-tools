@@ -16,11 +16,18 @@ $env:GH_FORCE_TTY = '0'
 $env:GH_PAGER = ''
 $env:PAGER = ''
 $env:GH_PROMPT_DISABLED = '1'
+$env:NO_COLOR = '1'
+
+function Normalize-GhJson {
+    param([Parameter(Mandatory)] [string]$Text)
+
+    return ([regex]::Replace($Text, '\x1B\[[0-9;]*[A-Za-z]', '')).Trim()
+}
 
 function Get-WorkflowRun {
     param([Parameter(Mandatory)] [string]$Id)
 
-    $json = & gh run view $Id --json databaseId,status,conclusion,displayTitle,createdAt,updatedAt,url,jobs 2>$null
+    $json = Normalize-GhJson -Text (@(& gh run view $Id --json databaseId,status,conclusion,displayTitle,createdAt,updatedAt,url,jobs 2>$null) -join "`n")
     if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($json)) {
         return $null
     }
@@ -34,7 +41,7 @@ function Find-CampaignRun {
         [Parameter(Mandatory)] [string]$CampaignIdentifier
     )
 
-    $json = & gh run list --workflow $Workflow --limit 30 --json databaseId,status,conclusion,displayTitle,createdAt,updatedAt,url 2>$null
+    $json = Normalize-GhJson -Text (@(& gh run list --workflow $Workflow --limit 30 --json databaseId,status,conclusion,displayTitle,createdAt,updatedAt,url 2>$null) -join "`n")
     if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($json)) {
         return $null
     }
