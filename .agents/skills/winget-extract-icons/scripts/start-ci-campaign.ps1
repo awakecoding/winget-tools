@@ -137,12 +137,18 @@ try {
         $planParams['IncludeExisting'] = $IncludeExisting.IsPresent
     }
 
-    $plan = & $campaignScript @planParams
-    if (-not $plan) {
-        throw 'Campaign plan creation returned no data.'
-    }
+    & $campaignScript @planParams
 
     $planJson = Get-Content -LiteralPath $CampaignPath -Raw -Encoding UTF8
+    if ([string]::IsNullOrWhiteSpace($planJson)) {
+        throw ("Campaign plan file is empty: {0}" -f $CampaignPath)
+    }
+
+    $plan = $planJson | ConvertFrom-Json -Depth 10
+    if (-not $plan) {
+        throw ("Unable to load campaign plan from {0}." -f $CampaignPath)
+    }
+
     $planPayload = ConvertTo-GzipBase64 -Text $planJson
     $campaignIdentifier = [string]$plan.campaignId
     $campaignRunLabel = 'Extract WinGet icon campaign {0} ({1} batches)' -f $campaignIdentifier, @($plan.batches).Count

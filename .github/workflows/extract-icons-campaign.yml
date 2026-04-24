@@ -121,7 +121,9 @@ jobs:
               }) | Out-Null
           }
 
-          $matrixJson = @($matrix.ToArray()) | ConvertTo-Json -Depth 5 -Compress
+            $matrixJson = [pscustomobject]@{
+              batch = @($matrix.ToArray())
+            } | ConvertTo-Json -Depth 6 -Compress
 
           "campaign_id=$($plan.campaignId)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
           "batch_total=$batchTotal" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
