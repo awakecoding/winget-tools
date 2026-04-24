@@ -512,7 +512,7 @@ jobs:
         with:
           name: ${{ steps.packages.outputs.artifact_name }}
           path: |
-            out/artifacts/winget-app-icons-batch-${{ github.run_id }}.zip
+            out/artifacts/winget-app-icons-batch-${{ steps.packages.outputs.artifact_key }}.zip
             out/summary.json
             out/requested-packages.json
             out/source-bootstrap.json
