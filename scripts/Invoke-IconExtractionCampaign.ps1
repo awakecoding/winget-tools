@@ -67,6 +67,32 @@ function Invoke-GitFastForward {
     }
 }
 
+function Invoke-GhCaptured {
+    param([Parameter(Mandatory)] [string[]]$Arguments)
+
+    $stdoutPath = Join-Path $env:TEMP ('gh-stdout-{0}.log' -f ([guid]::NewGuid().ToString('N')))
+    $stderrPath = Join-Path $env:TEMP ('gh-stderr-{0}.log' -f ([guid]::NewGuid().ToString('N')))
+    try {
+        $process = Start-Process -FilePath 'gh' -ArgumentList $Arguments -NoNewWindow -Wait -PassThru -RedirectStandardOutput $stdoutPath -RedirectStandardError $stderrPath
+
+        $stdoutLines = if (Test-Path -LiteralPath $stdoutPath) { @(Get-Content -LiteralPath $stdoutPath -Encoding UTF8) } else { @() }
+        $stderrLines = if (Test-Path -LiteralPath $stderrPath) { @(Get-Content -LiteralPath $stderrPath -Encoding UTF8) } else { @() }
+        $combinedLines = @($stdoutLines + $stderrLines | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+
+        return [pscustomobject]@{
+            ExitCode = $process.ExitCode
+            Output   = ($combinedLines -join "`n")
+        }
+    }
+    finally {
+        foreach ($path in @($stdoutPath, $stderrPath)) {
+            if (Test-Path -LiteralPath $path) {
+                Remove-Item -LiteralPath $path -Force -ErrorAction SilentlyContinue
+            }
+        }
+    }
+}
+
 function Get-CandidateIds {
     param([Parameter(Mandatory)] [string]$Path)
 
@@ -702,24 +728,37 @@ try {
         $requestLabel = New-RequestLabel -CampaignIdentifier $CampaignId -BatchIndex $batch.index -BatchTotal $campaign.batches.Count -PackageCount $batch.packageCnt -DispatchToken $dispatchToken
         $dispatchStarted = (Get-Date).ToUniversalTime()
 
-        $dispatchOutput = @(
-            & gh workflow run $WorkflowName --ref $Ref `
-                -f ("package_ids_csv={0}" -f $batch.csv) `
-                -f ("uninstall_after={0}" -f ([string]$UninstallAfter).ToLowerInvariant()) `
-                -f ("per_package_timeout={0}" -f $PerPackageTimeout) `
-                -f ("auto_commit_results={0}" -f ([string]$AutoCommitResults).ToLowerInvariant()) `
-                -f ("campaign_id={0}" -f $CampaignId) `
-                -f ("batch_index={0}" -f $batch.index) `
-                -f ("batch_total={0}" -f $campaign.batches.Count) `
-                -f ("dispatch_token={0}" -f $dispatchToken) `
-                -f ("request_label={0}" -f $requestLabel) 2>&1
+        $dispatchResult = Invoke-GhCaptured -Arguments @(
+            'workflow'
+            'run'
+            $WorkflowName
+            '--ref'
+            $Ref
+            '-f'
+            ("package_ids_csv={0}" -f $batch.csv)
+            '-f'
+            ("uninstall_after={0}" -f ([string]$UninstallAfter).ToLowerInvariant())
+            '-f'
+            ("per_package_timeout={0}" -f $PerPackageTimeout)
+            '-f'
+            ("auto_commit_results={0}" -f ([string]$AutoCommitResults).ToLowerInvariant())
+            '-f'
+            ("campaign_id={0}" -f $CampaignId)
+            '-f'
+            ("batch_index={0}" -f $batch.index)
+            '-f'
+            ("batch_total={0}" -f $campaign.batches.Count)
+            '-f'
+            ("dispatch_token={0}" -f $dispatchToken)
+            '-f'
+            ("request_label={0}" -f $requestLabel)
         )
-        $dispatchText = ($dispatchOutput | ForEach-Object { $_.ToString() }) -join "`n"
+        $dispatchText = $dispatchResult.Output
         if ($dispatchText) {
             Write-Host $dispatchText.TrimEnd()
         }
 
-        if ($LASTEXITCODE -ne 0) {
+        if ($dispatchResult.ExitCode -ne 0) {
             Add-StatusRow -Path $StatusPath -CampaignIdentifier $CampaignId -BatchIndex $batch.index -BatchTotal $campaign.batches.Count -PackageCount $batch.packageCnt -DispatchToken $dispatchToken -RequestLabel $requestLabel -Status 'dispatch_failed' -Note $dispatchText
             if ($ContinueOnBatchFailure) {
                 Write-Warning ("Dispatch failed for batch {0}; continuing." -f $batch.index)

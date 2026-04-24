@@ -67,6 +67,49 @@ function Get-RepoRoot {
     return $root.Trim()
 }
 
+function Get-GitHubRepositorySlug {
+    $originUrl = (& git config --get remote.origin.url 2>$null)
+    if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($originUrl)) {
+        throw 'Unable to resolve remote.origin.url for workflow dispatch.'
+    }
+
+    $trimmed = $originUrl.Trim()
+    $match = [regex]::Match($trimmed, 'github\.com[:/](?<owner>[^/]+)/(?<repo>[^/.]+?)(?:\.git)?$')
+    if (-not $match.Success) {
+        throw ("remote.origin.url is not a GitHub repository URL: {0}" -f $trimmed)
+    }
+
+    return ('{0}/{1}' -f $match.Groups['owner'].Value, $match.Groups['repo'].Value)
+}
+
+function Invoke-GhCaptured {
+    param([Parameter(Mandatory)] [string[]]$Arguments)
+
+    $stdoutPath = Join-Path $env:TEMP ('gh-stdout-{0}.log' -f ([guid]::NewGuid().ToString('N')))
+    $stderrPath = Join-Path $env:TEMP ('gh-stderr-{0}.log' -f ([guid]::NewGuid().ToString('N')))
+    try {
+        $process = Start-Process -FilePath 'gh' -ArgumentList $Arguments -NoNewWindow -Wait -PassThru -RedirectStandardOutput $stdoutPath -RedirectStandardError $stderrPath
+
+        $stdoutLines = if (Test-Path -LiteralPath $stdoutPath) { @(Get-Content -LiteralPath $stdoutPath -Encoding UTF8) } else { @() }
+        $stderrLines = if (Test-Path -LiteralPath $stderrPath) { @(Get-Content -LiteralPath $stderrPath -Encoding UTF8) } else { @() }
+        $combinedLines = @($stdoutLines + $stderrLines | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+
+        return [pscustomobject]@{
+            ExitCode = $process.ExitCode
+            StdOut   = $stdoutLines
+            StdErr   = $stderrLines
+            Output   = ($combinedLines -join "`n")
+        }
+    }
+    finally {
+        foreach ($path in @($stdoutPath, $stderrPath)) {
+            if (Test-Path -LiteralPath $path) {
+                Remove-Item -LiteralPath $path -Force -ErrorAction SilentlyContinue
+            }
+        }
+    }
+}
+
 function Resolve-CampaignRun {
     param(
         [Parameter(Mandatory)] [string]$Workflow,
@@ -84,6 +127,7 @@ function Resolve-CampaignRun {
 }
 
 $repoRoot = Get-RepoRoot
+$repoSlug = Get-GitHubRepositorySlug
 $campaignScript = Join-Path $repoRoot 'scripts\Invoke-IconExtractionCampaign.ps1'
 if (-not (Test-Path -LiteralPath $campaignScript)) {
     throw "Campaign script not found: $campaignScript"
@@ -153,18 +197,39 @@ try {
     $campaignIdentifier = [string]$plan.campaignId
     $campaignRunLabel = 'Extract WinGet icon campaign {0} ({1} batches)' -f $campaignIdentifier, @($plan.batches).Count
 
-    $dispatchOutput = @(
-        & gh workflow run $WorkflowName --ref $Ref `
-            -f ("campaign_id={0}" -f $campaignIdentifier) `
-            -f ("campaign_run_label={0}" -f $campaignRunLabel) `
-            -f ("campaign_gzip_base64={0}" -f $planPayload) `
-            -f ("uninstall_after={0}" -f ([string]$UninstallAfter).ToLowerInvariant()) `
-            -f ("per_package_timeout={0}" -f $PerPackageTimeout) `
-            -f ("auto_commit_results={0}" -f ([string]$AutoCommitResults).ToLowerInvariant()) `
-            -f ("continue_on_batch_failure={0}" -f ([string]$ContinueOnBatchFailure.IsPresent).ToLowerInvariant()) 2>&1
-    )
-    $dispatchText = ($dispatchOutput | ForEach-Object { $_.ToString() }) -join "`n"
-    if ($LASTEXITCODE -ne 0) {
+    $dispatchRequestPath = Join-Path $env:TEMP ('gh-workflow-dispatch-{0}.json' -f ([guid]::NewGuid().ToString('N')))
+    try {
+        $dispatchRequest = [ordered]@{
+            ref    = $Ref
+            inputs = [ordered]@{
+                campaign_id               = $campaignIdentifier
+                campaign_run_label        = $campaignRunLabel
+                campaign_gzip_base64      = $planPayload
+                uninstall_after           = ([string]$UninstallAfter).ToLowerInvariant()
+                per_package_timeout       = [string]$PerPackageTimeout
+                auto_commit_results       = ([string]$AutoCommitResults).ToLowerInvariant()
+                continue_on_batch_failure = ([string]$ContinueOnBatchFailure.IsPresent).ToLowerInvariant()
+            }
+        } | ConvertTo-Json -Depth 5 -Compress
+        Set-Content -LiteralPath $dispatchRequestPath -Value $dispatchRequest -Encoding UTF8
+
+        $dispatchResult = Invoke-GhCaptured -Arguments @(
+            'api'
+            ('repos/{0}/actions/workflows/{1}/dispatches' -f $repoSlug, $WorkflowName)
+            '--method'
+            'POST'
+            '--input'
+            $dispatchRequestPath
+        )
+
+        $dispatchText = $dispatchResult.Output
+    }
+    finally {
+        if (Test-Path -LiteralPath $dispatchRequestPath) {
+            Remove-Item -LiteralPath $dispatchRequestPath -Force -ErrorAction SilentlyContinue
+        }
+    }
+    if ($dispatchResult.ExitCode -ne 0) {
         throw ("Failed to dispatch workflow {0}. {1}" -f $WorkflowName, $dispatchText.Trim())
     }
 
