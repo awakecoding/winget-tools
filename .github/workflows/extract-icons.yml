@@ -3,6 +3,52 @@ run-name: >-
   ${{ inputs.request_label != '' && inputs.request_label || format('Extract WinGet icons #{0}', github.run_number) }}
 
 on:
+  workflow_call:
+    inputs:
+      package_ids_csv:
+        description: 'Comma-separated winget package IDs to process (maximum 25).'
+        required: true
+        type: string
+      uninstall_after:
+        description: 'Uninstall each package after icon extraction'
+        required: false
+        default: true
+        type: boolean
+      per_package_timeout:
+        description: 'Per-package install timeout (seconds)'
+        required: false
+        default: '600'
+        type: string
+      auto_commit_results:
+        description: 'Commit the refreshed winget-app-icons package folders back to the repo'
+        required: false
+        default: false
+        type: boolean
+      campaign_id:
+        description: 'Optional campaign identifier used by automation'
+        required: false
+        default: ''
+        type: string
+      batch_index:
+        description: 'Optional 1-based batch index used by automation'
+        required: false
+        default: ''
+        type: string
+      batch_total:
+        description: 'Optional total batch count used by automation'
+        required: false
+        default: ''
+        type: string
+      dispatch_token:
+        description: 'Optional unique dispatch token used to correlate this run'
+        required: false
+        default: ''
+        type: string
+      request_label:
+        description: 'Optional run label shown in Actions UI'
+        required: false
+        default: ''
+        type: string
   workflow_dispatch:
     inputs:
       package_ids_csv:
@@ -62,6 +108,9 @@ jobs:
     name: Extract requested package batch
     runs-on: windows-latest
     timeout-minutes: 360
+    outputs:
+      artifact_name: ${{ steps.packages.outputs.artifact_name }}
+      artifact_key: ${{ steps.packages.outputs.artifact_key }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -81,6 +130,7 @@ jobs:
         shell: pwsh
         env:
           PACKAGE_IDS_CSV: ${{ inputs.package_ids_csv }}
+          ARTIFACT_KEY: ${{ inputs.dispatch_token != '' && inputs.dispatch_token || github.run_id }}
         run: |
           $ErrorActionPreference = 'Stop'
           [void](New-Item -ItemType Directory -Path out -Force)
@@ -126,7 +176,8 @@ jobs:
           $packages | Set-Content -LiteralPath out/requested-packages.txt -Encoding UTF8
 
           "count=$($packages.Count)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
-          "artifact_name=winget-icon-batch-${{ github.run_id }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "artifact_key=$env:ARTIFACT_KEY" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "artifact_name=winget-icon-batch-$env:ARTIFACT_KEY" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
 
           "## Requested packages" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
           "" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
@@ -418,7 +469,7 @@ jobs:
         if: always()
         shell: pwsh
         env:
-          BATCH_ZIP_NAME: winget-app-icons-batch-${{ github.run_id }}.zip
+          BATCH_ZIP_NAME: winget-app-icons-batch-${{ steps.packages.outputs.artifact_key }}.zip
         run: |
           $ErrorActionPreference = 'Stop'
           $requested = Get-Content -LiteralPath out/requested-packages.json -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -483,15 +534,17 @@ jobs:
       - name: Download batch artifact
         uses: actions/download-artifact@v8
         with:
-          name: winget-icon-batch-${{ github.run_id }}
+          name: ${{ needs.extract.outputs.artifact_name }}
           path: import
 
       - name: Import batch and commit
         shell: pwsh
+        env:
+          ARTIFACT_KEY: ${{ needs.extract.outputs.artifact_key }}
         run: |
           $ErrorActionPreference = 'Stop'
           $importRoot = (Resolve-Path 'import').Path
-          $zipMatch = Get-ChildItem -LiteralPath $importRoot -Recurse -File -Filter "winget-app-icons-batch-${env:GITHUB_RUN_ID}.zip" -ErrorAction Stop | Select-Object -First 1
+          $zipMatch = Get-ChildItem -LiteralPath $importRoot -Recurse -File -Filter "winget-app-icons-batch-$env:ARTIFACT_KEY.zip" -ErrorAction Stop | Select-Object -First 1
           $requestMatch = Get-ChildItem -LiteralPath $importRoot -Recurse -File -Filter 'requested-packages.json' -ErrorAction Stop | Select-Object -First 1
           if (-not $zipMatch) {
             throw "Batch archive not found under $importRoot"

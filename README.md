@@ -5,7 +5,7 @@ Manager (winget) beyond what the official CLI exposes.
 
 ## GitHub Actions batch extraction
 
-The repository now includes a manual sandbox workflow at `.github/workflows/extract-icons.yml` for installing packages inside GitHub Actions, extracting icons there, and bringing the results back into git without installing those packages on your local machine.
+The repository includes a manual sandbox workflow at `.github/workflows/extract-icons.yml` for one batch at a time, plus `.github/workflows/extract-icons-campaign.yml` for scheduling a full multi-batch campaign inside GitHub Actions and checking back later.
 
 The workflow is best-effort by design: package-level install or extraction failures are recorded in `metadata.json` for the affected package, but they do not block the rest of the batch from being published or auto-committed.
 
@@ -16,19 +16,21 @@ The repository now also includes project skills under `.agents/skills/` for prom
 The extraction skill at `.agents/skills/winget-extract-icons/` is intended to let an agent handle the whole loop from a simple request such as “extract 10 more winget app icons”:
 
 - select the next unprocessed package IDs from the cached `svrooij/winget-pkgs-index` catalog
-- wait for existing `extract-icons.yml` workflow-dispatch runs to finish instead of piling onto the queue
-- dispatch new batches with traceable request labels and dispatch tokens
-- wait for each workflow run to finish
+- build a validated campaign plan locally
+- dispatch one CI-native campaign workflow run with traceable campaign and batch labels
+- let Actions sequence the later batch jobs without a live local watcher
 - rely on workflow auto-commit to update `winget-app-icons/`
-- fast-forward local `master` after each batch so the next batch selection sees the latest repo state
+- query CI state later instead of depending on a local lock file
 
-The skill wrapper script is `.agents/skills/winget-extract-icons/scripts/run-default-campaign.ps1`, which calls `scripts/Invoke-IconExtractionCampaign.ps1` with repository-friendly defaults.
+The skill wrapper script is `.agents/skills/winget-extract-icons/scripts/run-default-campaign.ps1`, which now defaults to CI-native campaign dispatch. The helper `.agents/skills/winget-extract-icons/scripts/get-ci-campaign-status.ps1` summarizes campaign progress later from GitHub Actions.
 
 The index skill at `.agents/skills/winget-package-index/` uses `svrooij/winget-pkgs-index` as a fast availability source through a cached `out/cache/winget-pkgs-index/index.v2.json` file parsed in PowerShell instead of local `winget` package-index probes. Its wrapper script is `.agents/skills/winget-package-index/scripts/run-index-backed-campaign.ps1`, which calls the same campaign runner with repository-friendly index-cache defaults.
 
 The catalog skill at `.agents/skills/winget-icon-catalog/` queries the local `winget-app-icons/` registry so an agent can count packages with icons, list failures, filter by failure category, and summarize extraction reasons from `metadata.json`.
 
 ### Workflow inputs
+
+`extract-icons.yml` inputs:
 
 | Input | Description |
 |---|---|
@@ -40,6 +42,18 @@ The catalog skill at `.agents/skills/winget-icon-catalog/` queries the local `wi
 | `batch_index` / `batch_total` | Optional automation metadata for multi-batch campaigns. |
 | `dispatch_token` | Optional unique token used by the campaign runner to match a workflow-dispatch call to the resulting Actions run. |
 | `request_label` | Optional run label shown in the Actions UI and workflow summaries. |
+
+`extract-icons-campaign.yml` inputs:
+
+| Input | Description |
+|---|---|
+| `campaign_id` | Required campaign identifier shown in the Actions UI. |
+| `campaign_run_label` | Optional campaign run label shown in the Actions UI. |
+| `campaign_gzip_base64` | Required compressed campaign plan payload created from `Invoke-IconExtractionCampaign.ps1 -Mode plan`. |
+| `uninstall_after` | When `true`, each batch uninstalls packages after extraction. |
+| `per_package_timeout` | Install timeout in seconds for each package in each batch. |
+| `auto_commit_results` | When `true`, each batch auto-commits refreshed package folders. |
+| `continue_on_batch_failure` | When `true`, later batches still run if an earlier batch fails. |
 
 ### Output layout
 
@@ -82,6 +96,7 @@ What it does:
 - Writes a status TSV alongside the plan so automation can summarize batch
   outcomes without scraping multiple terminals.
 - In `run` mode, dispatches `.github/workflows/extract-icons.yml` per batch.
+- That `run` mode is now the legacy local-watcher path; CI-native campaign dispatch uses the same plan output but runs later batches entirely in Actions.
 - Waits for existing workflow-dispatch runs to finish before dispatching the
   next batch, then correlates each batch via `dispatch_token` and
   `request_label`.
@@ -119,6 +134,12 @@ What it does:
 
 # Plan with the external svrooij package index JSON cache
 .\scripts\Invoke-IconExtractionCampaign.ps1 -Mode plan -RefreshWingetIndexCache
+
+# Schedule the plan as a CI-native campaign that can continue without a local watcher
+.\.agents\skills\winget-extract-icons\scripts\start-ci-campaign.ps1 -TargetCount 100 -BatchSize 10
+
+# Query a scheduled CI campaign later
+.\.agents\skills\winget-extract-icons\scripts\get-ci-campaign-status.ps1 -CampaignId my-campaign-id
 ```
 
 ### `unigetui/scripts/Generate-UniGetUiPackageDatabases.ps1`

@@ -9,6 +9,9 @@ param(
     [Parameter(ParameterSetName = 'Inline', Mandatory)]
     [string[]]$PackageIds,
 
+    [ValidateSet('Ci', 'Local')]
+    [string]$ExecutionModel = 'Ci',
+
     [int]$BatchSize = 10,
     [string]$CampaignPath = 'out/icon-campaign-skill.json',
     [string]$StatusPath,
@@ -22,9 +25,40 @@ $ErrorActionPreference = 'Stop'
 
 $repoRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..\..\..'))
 $campaignScript = Join-Path $repoRoot 'scripts\Invoke-IconExtractionCampaign.ps1'
+$ciCampaignScript = Join-Path $PSScriptRoot 'start-ci-campaign.ps1'
 
 if (-not (Test-Path -LiteralPath $campaignScript)) {
     throw "Campaign script not found: $campaignScript"
+}
+if (-not (Test-Path -LiteralPath $ciCampaignScript)) {
+    throw "CI campaign script not found: $ciCampaignScript"
+}
+
+if ($ExecutionModel -eq 'Ci') {
+    $params = @{
+        BatchSize              = $BatchSize
+        CampaignPath           = $CampaignPath
+        AutoCommitResults      = $true
+        ContinueOnBatchFailure = $ContinueOnBatchFailure.IsPresent
+    }
+
+    if ($CampaignId) {
+        $params['CampaignId'] = $CampaignId
+    }
+
+    if ($PSCmdlet.ParameterSetName -eq 'Inline') {
+        $params['PackageIds'] = $PackageIds
+    }
+    else {
+        if (-not [string]::IsNullOrWhiteSpace($CandidatePath)) {
+            $params['CandidatePath'] = $CandidatePath
+        }
+        $params['TargetCount'] = $TargetCount
+        $params['IncludeExisting'] = $IncludeExisting.IsPresent
+    }
+
+    & $ciCampaignScript @params
+    return
 }
 
 $params = @{

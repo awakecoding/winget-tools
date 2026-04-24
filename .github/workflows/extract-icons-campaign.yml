@@ -1,0 +1,174 @@
+name: Extract WinGet icons campaign
+run-name: >-
+  ${{ inputs.campaign_run_label != '' && inputs.campaign_run_label || format('Extract WinGet icon campaign {0}', inputs.campaign_id) }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      campaign_id:
+        description: 'Campaign identifier shown in the Actions UI.'
+        required: true
+        type: string
+      campaign_run_label:
+        description: 'Optional run label shown in the Actions UI.'
+        required: false
+        default: ''
+        type: string
+      campaign_gzip_base64:
+        description: 'GZip+Base64 encoded campaign plan JSON produced by Invoke-IconExtractionCampaign.ps1 -Mode plan.'
+        required: true
+        type: string
+      uninstall_after:
+        description: 'Uninstall each package after icon extraction.'
+        required: false
+        default: true
+        type: boolean
+      per_package_timeout:
+        description: 'Per-package install timeout (seconds).'
+        required: false
+        default: '900'
+        type: string
+      auto_commit_results:
+        description: 'Commit refreshed package folders back to the repo.'
+        required: false
+        default: true
+        type: boolean
+      continue_on_batch_failure:
+        description: 'Keep later batches running even if one batch fails.'
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: extract-icons-campaign-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    name: Decode campaign plan
+    runs-on: ubuntu-latest
+    outputs:
+      campaign_id: ${{ steps.decode.outputs.campaign_id }}
+      batch_total: ${{ steps.decode.outputs.batch_total }}
+      matrix: ${{ steps.decode.outputs.matrix }}
+    steps:
+      - name: Decode campaign payload
+        id: decode
+        shell: pwsh
+        env:
+          CAMPAIGN_ID: ${{ inputs.campaign_id }}
+          CAMPAIGN_GZIP_BASE64: ${{ inputs.campaign_gzip_base64 }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          function Expand-GzipBase64 {
+              param([Parameter(Mandatory)] [string]$Value)
+
+              $compressedBytes = [Convert]::FromBase64String($Value)
+              $inputStream = [System.IO.MemoryStream]::new($compressedBytes, $false)
+              try {
+                  $gzipStream = [System.IO.Compression.GZipStream]::new($inputStream, [System.IO.Compression.CompressionMode]::Decompress)
+                  try {
+                      $reader = [System.IO.StreamReader]::new($gzipStream, [System.Text.Encoding]::UTF8)
+                      try {
+                          return $reader.ReadToEnd()
+                      }
+                      finally {
+                          $reader.Dispose()
+                      }
+                  }
+                  finally {
+                      $gzipStream.Dispose()
+                  }
+              }
+              finally {
+                  $inputStream.Dispose()
+              }
+          }
+
+          $planJson = Expand-GzipBase64 -Value $env:CAMPAIGN_GZIP_BASE64
+          if ([string]::IsNullOrWhiteSpace($planJson)) {
+              throw 'Decoded campaign payload is empty.'
+          }
+
+          $plan = $planJson | ConvertFrom-Json -Depth 10
+          if (-not $plan.campaignId) {
+              throw 'Campaign plan is missing campaignId.'
+          }
+          if ($plan.campaignId -ne $env:CAMPAIGN_ID) {
+              throw ("Campaign ID mismatch. Input='{0}', payload='{1}'." -f $env:CAMPAIGN_ID, $plan.campaignId)
+          }
+
+          $batches = @($plan.batches)
+          if ($batches.Count -eq 0) {
+              throw 'Campaign plan does not contain any batches.'
+          }
+
+          $matrix = New-Object System.Collections.Generic.List[object]
+          $batchTotal = $batches.Count
+          foreach ($batch in $batches) {
+              $dispatchToken = '{0}-b{1}-{2}' -f $plan.campaignId, $batch.index, ([guid]::NewGuid().ToString('N').Substring(0, 8))
+              $requestLabel = 'Extract WinGet icons {0} batch {1}/{2} ({3} packages) {4}' -f $plan.campaignId, $batch.index, $batchTotal, $batch.packageCnt, $dispatchToken
+              $matrix.Add([ordered]@{
+                  index         = [int]$batch.index
+                  package_count = [int]$batch.packageCnt
+                  csv           = [string]$batch.csv
+                  dispatch_token = $dispatchToken
+                  request_label = $requestLabel
+              }) | Out-Null
+          }
+
+          $matrixJson = @($matrix.ToArray()) | ConvertTo-Json -Depth 5 -Compress
+
+          "campaign_id=$($plan.campaignId)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "batch_total=$batchTotal" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "matrix=$matrixJson" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+          "## Campaign plan" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "- Campaign ID: **$($plan.campaignId)**" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "- Validated packages: **$($plan.validatedCount)**" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "- Batches: **$batchTotal**" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "- Batch size: **$($plan.batchSize)**" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "- Candidate source: **$($plan.candidateSource)**" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+
+  run-batches:
+    name: Batch ${{ matrix.batch.index }}/${{ needs.plan.outputs.batch_total }} (${{ matrix.batch.package_count }} packages)
+    needs: plan
+    strategy:
+      fail-fast: ${{ !inputs.continue_on_batch_failure }}
+      max-parallel: 1
+      matrix:
+        batch: ${{ fromJson(needs.plan.outputs.matrix) }}
+    uses: ./.github/workflows/extract-icons.yml
+    secrets: inherit
+    with:
+      package_ids_csv: ${{ matrix.batch.csv }}
+      uninstall_after: ${{ inputs.uninstall_after }}
+      per_package_timeout: ${{ inputs.per_package_timeout }}
+      auto_commit_results: ${{ inputs.auto_commit_results }}
+      campaign_id: ${{ needs.plan.outputs.campaign_id }}
+      batch_index: ${{ matrix.batch.index }}
+      batch_total: ${{ needs.plan.outputs.batch_total }}
+      dispatch_token: ${{ matrix.batch.dispatch_token }}
+      request_label: ${{ matrix.batch.request_label }}
+
+  summarize:
+    name: Campaign summary
+    if: always()
+    needs:
+      - plan
+      - run-batches
+    runs-on: ubuntu-latest
+    steps:
+      - name: Write campaign summary
+        shell: pwsh
+        run: |
+          "## Campaign result" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "- Campaign ID: **${{ needs.plan.outputs.campaign_id }}**" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "- Batch count: **${{ needs.plan.outputs.batch_total }}**" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          "- Overall result: **${{ needs.run-batches.result }}**" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8

@@ -32,13 +32,14 @@ Do not reintroduce the old shard/index pipeline under `data/`.
 
 ## Current Workflow Model
 
-The main workflow is `.github/workflows/extract-icons.yml`.
+The main extraction workflows are `.github/workflows/extract-icons.yml` and `.github/workflows/extract-icons-campaign.yml`.
 
 Key expectations:
 
 - Manual `workflow_dispatch` only
-- Input is a comma-separated list of package IDs
-- Maximum batch size is 25 package IDs per run
+- `extract-icons.yml` input is a comma-separated list of package IDs
+- `extract-icons-campaign.yml` accepts a precomputed campaign plan payload and runs its batches sequentially inside GitHub Actions
+- Maximum batch size is 25 package IDs per batch run
 - Best-effort batch behavior: individual package failures must be recorded in
   `metadata.json`, but must not fail the entire workflow run
 - Artifact-first output always exists
@@ -67,7 +68,8 @@ When iterating quickly, prefer batches of 10 packages.
 
 - `AGENTS.md`: repository guidance for coding agents
 - `README.md`: user-facing workflow and repository overview
-- `.github/workflows/extract-icons.yml`: batch extraction and optional auto-commit
+- `.github/workflows/extract-icons.yml`: single-batch extraction and optional auto-commit
+- `.github/workflows/extract-icons-campaign.yml`: CI-native multi-batch orchestration that sequences batch jobs without a live local watcher
 - `scripts/Invoke-IconExtractionCampaign.ps1`: queue-aware campaign runner for
    plan/run flows, workflow correlation, status TSV output, and optional
    index-backed candidate validation
@@ -135,6 +137,13 @@ When changing `.github/workflows/extract-icons.yml`:
 - Keep auto-commit optional
 - Prefer simple, explicit PowerShell over clever YAML expressions
 - Validate changes with a small manual batch before running a larger batch
+
+When changing `.github/workflows/extract-icons-campaign.yml`:
+
+- Keep campaign sequencing in GitHub Actions instead of relying on a local watcher process
+- Preserve one-batch-at-a-time execution for package installs and commits
+- Keep the batch workflow as the durable extraction implementation surface
+- Validate that batch artifacts and auto-commit still work when the batch workflow is called from the campaign workflow
 
 ## Validation Expectations
 
