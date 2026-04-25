@@ -4,8 +4,8 @@
   "resolvedPackageId": null,
   "status": "InstallFailed",
   "hasIcon": false,
-  "firstSeenUtc": "2026-04-25T10:17:07.0344810Z",
-  "lastCheckedUtc": "2026-04-25T10:17:07.0344810Z",
+  "firstSeenUtc": "2026-04-25T20:38:17.4727397Z",
+  "lastCheckedUtc": "2026-04-25T20:38:17.4727397Z",
   "lastUpdatedUtc": null,
   "wingetVersion": "v1.11.510",
   "packageVersion": null,
@@ -13,11 +13,11 @@
   "installerType": null,
   "alreadyInstalled": false,
   "installedByThisRun": false,
-  "installSeconds": 3,
-  "extractSeconds": 33,
+  "installSeconds": 5,
+  "extractSeconds": 32,
   "uninstallSeconds": 0,
   "durationSeconds": 38,
-  "installExitCode": -2145844845,
+  "installExitCode": -1978335215,
   "installTimedOut": false,
   "uninstallExitCode": null,
   "uninstallTimedOut": false,
@@ -42,16 +42,16 @@
   "installAttempts": [
     {
       "tag": "install-default",
-      "exitCode": -2145844845,
-      "exitHex": "0x80190193",
+      "exitCode": -1978335215,
+      "exitHex": "0x8A150011",
       "timedOut": false,
       "errorName": null,
       "failureCategory": "Install"
     },
     {
       "tag": "install-machine",
-      "exitCode": -2145844845,
-      "exitHex": "0x80190193",
+      "exitCode": -1978335215,
+      "exitHex": "0x8A150011",
       "timedOut": false,
       "errorName": null,
       "failureCategory": "Install"
@@ -59,8 +59,8 @@
   ],
   "icons": null,
   "run": {
-    "startedAtUtc": "2026-04-25T10:17:07.0344810Z",
-    "runId": "24908564742",
+    "startedAtUtc": "2026-04-25T20:38:17.4727397Z",
+    "runId": "24919615418",
     "runAttempt": "1",
     "repository": "awakecoding/winget-tools"
   }
