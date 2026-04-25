@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "packageId": "AutoDWG.DWGSeePro",
+  "resolvedPackageId": null,
+  "status": "InstallFailed",
+  "hasIcon": false,
+  "firstSeenUtc": "2026-04-25T04:28:33.2073690Z",
+  "lastCheckedUtc": "2026-04-25T04:28:33.2073690Z",
+  "lastUpdatedUtc": null,
+  "wingetVersion": "v1.11.510",
+  "packageVersion": null,
+  "manifestSha": null,
+  "installerType": null,
+  "alreadyInstalled": false,
+  "installedByThisRun": false,
+  "installSeconds": 5,
+  "extractSeconds": 32,
+  "uninstallSeconds": 0,
+  "durationSeconds": 37,
+  "installExitCode": -1978334974,
+  "installTimedOut": false,
+  "uninstallExitCode": null,
+  "uninstallTimedOut": false,
+  "failureCategory": "Install",
+  "installAttemptTag": "install-machine",
+  "extractAttemptCount": 4,
+  "extractAttemptScopes": [
+    "Both",
+    "User",
+    "Machine",
+    "Both"
+  ],
+  "extractFailureCategory": "ArpNotFound",
+  "iconCount": 0,
+  "iconBytes": 0,
+  "appIconFile": null,
+  "canonicalIconSourceName": null,
+  "canonicalIconBytes": null,
+  "canonicalIconSha256": null,
+  "extractError": null,
+  "installStdErr": null,
+  "installAttempts": [
+    {
+      "tag": "install-default",
+      "exitCode": -1978334974,
+      "exitHex": "0x8A150102",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    },
+    {
+      "tag": "install-machine",
+      "exitCode": -1978334974,
+      "exitHex": "0x8A150102",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    }
+  ],
+  "icons": null,
+  "run": {
+    "startedAtUtc": "2026-04-25T04:28:33.2073690Z",
+    "runId": "24908564742",
+    "runAttempt": "1",
+    "repository": "awakecoding/winget-tools"
+  }
+}
