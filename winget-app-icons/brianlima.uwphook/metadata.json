@@ -4,25 +4,25 @@
   "resolvedPackageId": null,
   "status": "HasIcon",
   "hasIcon": true,
-  "firstSeenUtc": "2026-04-25T10:04:46.6831224Z",
-  "lastCheckedUtc": "2026-04-25T10:04:46.6831224Z",
-  "lastUpdatedUtc": "2026-04-25T10:04:46.6831224Z",
+  "firstSeenUtc": "2026-04-25T20:21:48.4467249Z",
+  "lastCheckedUtc": "2026-04-25T20:21:48.4467249Z",
+  "lastUpdatedUtc": "2026-04-25T20:21:48.4467249Z",
   "wingetVersion": "v1.11.510",
   "packageVersion": null,
   "manifestSha": null,
   "installerType": null,
   "alreadyInstalled": false,
   "installedByThisRun": true,
-  "installSeconds": 4,
+  "installSeconds": 10,
   "extractSeconds": 0,
-  "uninstallSeconds": 1,
-  "durationSeconds": 6,
+  "uninstallSeconds": 2,
+  "durationSeconds": 13,
   "installExitCode": 0,
   "installTimedOut": false,
   "uninstallExitCode": 0,
   "uninstallTimedOut": false,
   "failureCategory": null,
-  "installAttemptTag": "install-default",
+  "installAttemptTag": "install-machine",
   "extractAttemptCount": 1,
   "extractAttemptScopes": "Both",
   "extractFailureCategory": null,
@@ -34,22 +34,32 @@
   "canonicalIconSha256": "fb15a8311191d5ac1ab47c263feed4f1a2350519aecb62a70cb1727d3e833d64",
   "extractError": null,
   "installStdErr": null,
-  "installAttempts": {
-    "tag": "install-default",
-    "exitCode": 0,
-    "exitHex": "0x00000000",
-    "timedOut": false,
-    "errorName": null,
-    "failureCategory": null
-  },
+  "installAttempts": [
+    {
+      "tag": "install-default",
+      "exitCode": -2145844746,
+      "exitHex": "0x801901F6",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    },
+    {
+      "tag": "install-machine",
+      "exitCode": 0,
+      "exitHex": "0x00000000",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": null
+    }
+  ],
   "icons": {
     "name": "UWPHook.UWPHook.ico",
     "bytes": 67646,
     "sha256": "fb15a8311191d5ac1ab47c263feed4f1a2350519aecb62a70cb1727d3e833d64"
   },
   "run": {
-    "startedAtUtc": "2026-04-25T10:04:46.6831224Z",
-    "runId": "24908564742",
+    "startedAtUtc": "2026-04-25T20:21:48.4467249Z",
+    "runId": "24919615418",
     "runAttempt": "1",
     "repository": "awakecoding/winget-tools"
   }
