@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "packageId": "Cisco.Proximity",
+  "resolvedPackageId": null,
+  "status": "InstallFailed",
+  "hasIcon": false,
+  "firstSeenUtc": "2026-04-25T12:34:12.1531167Z",
+  "lastCheckedUtc": "2026-04-25T12:34:12.1531167Z",
+  "lastUpdatedUtc": null,
+  "wingetVersion": "v1.11.510",
+  "packageVersion": null,
+  "manifestSha": null,
+  "installerType": null,
+  "alreadyInstalled": false,
+  "installedByThisRun": false,
+  "installSeconds": 8,
+  "extractSeconds": 34,
+  "uninstallSeconds": 0,
+  "durationSeconds": 43,
+  "installExitCode": -1978335216,
+  "installTimedOut": false,
+  "uninstallExitCode": null,
+  "uninstallTimedOut": false,
+  "failureCategory": "Install",
+  "installAttemptTag": "install-machine",
+  "extractAttemptCount": 4,
+  "extractAttemptScopes": [
+    "Both",
+    "User",
+    "Machine",
+    "Both"
+  ],
+  "extractFailureCategory": "ArpNotFound",
+  "iconCount": 0,
+  "iconBytes": 0,
+  "appIconFile": null,
+  "canonicalIconSourceName": null,
+  "canonicalIconBytes": null,
+  "canonicalIconSha256": null,
+  "extractError": null,
+  "installStdErr": null,
+  "installAttempts": [
+    {
+      "tag": "install-default",
+      "exitCode": -2147012859,
+      "exitHex": "0x80072F05",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    },
+    {
+      "tag": "install-machine",
+      "exitCode": -1978335216,
+      "exitHex": "0x8A150010",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    }
+  ],
+  "icons": null,
+  "run": {
+    "startedAtUtc": "2026-04-25T12:34:12.1531167Z",
+    "runId": "24908564742",
+    "runAttempt": "1",
+    "repository": "awakecoding/winget-tools"
+  }
+}
