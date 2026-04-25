@@ -4,8 +4,8 @@
   "resolvedPackageId": null,
   "status": "ExtractError",
   "hasIcon": false,
-  "firstSeenUtc": "2026-04-25T11:07:14.7249606Z",
-  "lastCheckedUtc": "2026-04-25T11:07:14.7249606Z",
+  "firstSeenUtc": "2026-04-25T21:22:21.8591749Z",
+  "lastCheckedUtc": "2026-04-25T21:22:21.8591749Z",
   "lastUpdatedUtc": null,
   "wingetVersion": "v1.11.510",
   "packageVersion": null,
@@ -13,9 +13,9 @@
   "installerType": null,
   "alreadyInstalled": false,
   "installedByThisRun": true,
-  "installSeconds": 15,
+  "installSeconds": 18,
   "extractSeconds": 32,
-  "uninstallSeconds": 6,
+  "uninstallSeconds": 3,
   "durationSeconds": 54,
   "installExitCode": 0,
   "installTimedOut": false,
@@ -49,8 +49,8 @@
   },
   "icons": null,
   "run": {
-    "startedAtUtc": "2026-04-25T11:07:14.7249606Z",
-    "runId": "24908564742",
+    "startedAtUtc": "2026-04-25T21:22:21.8591749Z",
+    "runId": "24919615418",
     "runAttempt": "1",
     "repository": "awakecoding/winget-tools"
   }
