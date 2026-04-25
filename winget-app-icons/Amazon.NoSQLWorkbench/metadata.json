@@ -5,24 +5,24 @@
   "status": "HasIcon",
   "hasIcon": true,
   "firstSeenUtc": "2026-04-23T13:33:15.8079564Z",
-  "lastCheckedUtc": "2026-04-23T13:33:15.8079564Z",
-  "lastUpdatedUtc": "2026-04-23T13:33:15.8079564Z",
+  "lastCheckedUtc": "2026-04-25T00:03:33.4167653Z",
+  "lastUpdatedUtc": "2026-04-25T00:03:33.4167653Z",
   "wingetVersion": "v1.11.510",
   "packageVersion": null,
   "manifestSha": null,
   "installerType": null,
   "alreadyInstalled": false,
   "installedByThisRun": true,
-  "installSeconds": 23,
+  "installSeconds": 43,
   "extractSeconds": 0,
-  "uninstallSeconds": 3,
-  "durationSeconds": 27,
+  "uninstallSeconds": 2,
+  "durationSeconds": 46,
   "installExitCode": 0,
   "installTimedOut": false,
   "uninstallExitCode": 0,
   "uninstallTimedOut": false,
   "failureCategory": null,
-  "installAttemptTag": "install-machine",
+  "installAttemptTag": "install-default",
   "extractAttemptCount": 1,
   "extractAttemptScopes": "Both",
   "extractFailureCategory": null,
@@ -34,32 +34,22 @@
   "canonicalIconSha256": "baf565985fe17ef5872401e019d4d4c171f3ec2733ed6eaaf4e73d1013b79b83",
   "extractError": null,
   "installStdErr": null,
-  "installAttempts": [
-    {
-      "tag": "install-default",
-      "exitCode": -1978335226,
-      "exitHex": "0x8A150006",
-      "timedOut": false,
-      "errorName": null,
-      "failureCategory": "Install"
-    },
-    {
-      "tag": "install-machine",
-      "exitCode": 0,
-      "exitHex": "0x00000000",
-      "timedOut": false,
-      "errorName": null,
-      "failureCategory": null
-    }
-  ],
+  "installAttempts": {
+    "tag": "install-default",
+    "exitCode": 0,
+    "exitHex": "0x00000000",
+    "timedOut": false,
+    "errorName": null,
+    "failureCategory": null
+  },
   "icons": {
     "name": "NoSQL Workbench 3.20.2.ba571ed7-728f-56a6-9688-0d503cfff3d6.ico",
     "bytes": 17808,
     "sha256": "baf565985fe17ef5872401e019d4d4c171f3ec2733ed6eaaf4e73d1013b79b83"
   },
   "run": {
-    "startedAtUtc": "2026-04-23T13:33:15.8079564Z",
-    "runId": "24837321993",
+    "startedAtUtc": "2026-04-25T00:03:33.4167653Z",
+    "runId": "24908564742",
     "runAttempt": "1",
     "repository": "awakecoding/winget-tools"
   }
