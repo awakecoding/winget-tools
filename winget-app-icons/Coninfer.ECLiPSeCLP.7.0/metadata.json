@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "packageId": "Coninfer.ECLiPSeCLP.7.0",
+  "resolvedPackageId": null,
+  "status": "InstallFailed",
+  "hasIcon": false,
+  "firstSeenUtc": "2026-04-25T15:01:52.8798245Z",
+  "lastCheckedUtc": "2026-04-25T15:01:52.8798245Z",
+  "lastUpdatedUtc": null,
+  "wingetVersion": "v1.11.510",
+  "packageVersion": null,
+  "manifestSha": null,
+  "installerType": null,
+  "alreadyInstalled": false,
+  "installedByThisRun": false,
+  "installSeconds": 4,
+  "extractSeconds": 2,
+  "uninstallSeconds": 0,
+  "durationSeconds": 7,
+  "installExitCode": -2145844848,
+  "installTimedOut": false,
+  "uninstallExitCode": null,
+  "uninstallTimedOut": false,
+  "failureCategory": "Install",
+  "installAttemptTag": "install-machine",
+  "extractAttemptCount": 1,
+  "extractAttemptScopes": "Both",
+  "extractFailureCategory": "ManifestUnavailable",
+  "iconCount": 0,
+  "iconBytes": 0,
+  "appIconFile": null,
+  "canonicalIconSourceName": null,
+  "canonicalIconBytes": null,
+  "canonicalIconSha256": null,
+  "extractError": null,
+  "installStdErr": null,
+  "installAttempts": [
+    {
+      "tag": "install-default",
+      "exitCode": -2145844848,
+      "exitHex": "0x80190190",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    },
+    {
+      "tag": "install-machine",
+      "exitCode": -2145844848,
+      "exitHex": "0x80190190",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    }
+  ],
+  "icons": null,
+  "run": {
+    "startedAtUtc": "2026-04-25T15:01:52.8798245Z",
+    "runId": "24908564742",
+    "runAttempt": "1",
+    "repository": "awakecoding/winget-tools"
+  }
+}
