@@ -1,12 +1,12 @@
 {
   "schema": 1,
-  "packageId": "CubeSoft.CubeICE",
+  "packageId": "CyberTimon.RapidRAW",
   "resolvedPackageId": null,
   "status": "HasIcon",
   "hasIcon": true,
-  "firstSeenUtc": "2026-04-22T06:33:18.7581545Z",
-  "lastCheckedUtc": "2026-04-25T16:14:20.1964271Z",
-  "lastUpdatedUtc": "2026-04-25T16:14:20.1964271Z",
+  "firstSeenUtc": "2026-04-25T16:26:15.8140284Z",
+  "lastCheckedUtc": "2026-04-25T16:26:15.8140284Z",
+  "lastUpdatedUtc": "2026-04-25T16:26:15.8140284Z",
   "wingetVersion": "v1.11.510",
   "packageVersion": null,
   "manifestSha": null,
@@ -16,7 +16,7 @@
   "installSeconds": 7,
   "extractSeconds": 0,
   "uninstallSeconds": 2,
-  "durationSeconds": 11,
+  "durationSeconds": 10,
   "installExitCode": 0,
   "installTimedOut": false,
   "uninstallExitCode": 0,
@@ -27,11 +27,11 @@
   "extractAttemptScopes": "Both",
   "extractFailureCategory": null,
   "iconCount": 1,
-  "iconBytes": 27009.0,
+  "iconBytes": 38853.0,
   "appIconFile": "app-icon.ico",
-  "canonicalIconSourceName": "CubeICE 3.5.1 (x64).{C765184D-FE36-4C2C-95CE-9F0C05D61988}_is1.ico",
-  "canonicalIconBytes": 27009,
-  "canonicalIconSha256": "1cb81c4218d55148fd4811b6a9b55ae7006ec8a7c9bac56b0c7885bd079ce518",
+  "canonicalIconSourceName": "RapidRAW.RapidRAW.ico",
+  "canonicalIconBytes": 38853,
+  "canonicalIconSha256": "ad8755e734001d48b0b010edbffd5305300a6f595261c50d1052528bd4de232c",
   "extractError": null,
   "installStdErr": null,
   "installAttempts": {
@@ -43,12 +43,12 @@
     "failureCategory": null
   },
   "icons": {
-    "name": "CubeICE 3.5.1 (x64).{C765184D-FE36-4C2C-95CE-9F0C05D61988}_is1.ico",
-    "bytes": 27009,
-    "sha256": "1cb81c4218d55148fd4811b6a9b55ae7006ec8a7c9bac56b0c7885bd079ce518"
+    "name": "RapidRAW.RapidRAW.ico",
+    "bytes": 38853,
+    "sha256": "ad8755e734001d48b0b010edbffd5305300a6f595261c50d1052528bd4de232c"
   },
   "run": {
-    "startedAtUtc": "2026-04-25T16:14:20.1964271Z",
+    "startedAtUtc": "2026-04-25T16:26:15.8140284Z",
     "runId": "24908564742",
     "runAttempt": "1",
     "repository": "awakecoding/winget-tools"
