@@ -611,7 +611,11 @@ function Find-ArpEntries {
                         $publisher   = $sub.GetValue('Publisher')
                         $displayVer  = $sub.GetValue('DisplayVersion')
                         $displayIcon = $sub.GetValue('DisplayIcon')
+                        $installLocation = $sub.GetValue('InstallLocation')
                         $installDate = $sub.GetValue('InstallDate')
+                        $uninstallString = $sub.GetValue('UninstallString')
+                        $quietUninstallString = $sub.GetValue('QuietUninstallString')
+                        $modifyPath = $sub.GetValue('ModifyPath')
                         $winInst     = $sub.GetValue('WindowsInstaller')
                         $isMsi       = ($winInst -is [int] -and $winInst -eq 1)
 
@@ -687,6 +691,22 @@ function Find-ArpEntries {
                         if ($installDate) {
                             $resolvedInstallDate = [string]$installDate
                         }
+                        $resolvedInstallLocation = ''
+                        if ($installLocation) {
+                            $resolvedInstallLocation = [string]$installLocation
+                        }
+                        $resolvedUninstallString = ''
+                        if ($uninstallString) {
+                            $resolvedUninstallString = [string]$uninstallString
+                        }
+                        $resolvedQuietUninstallString = ''
+                        if ($quietUninstallString) {
+                            $resolvedQuietUninstallString = [string]$quietUninstallString
+                        }
+                        $resolvedModifyPath = ''
+                        if ($modifyPath) {
+                            $resolvedModifyPath = [string]$modifyPath
+                        }
 
                         $results.Add([pscustomobject]@{
                             Hive          = $hive.Label
@@ -695,7 +715,11 @@ function Find-ArpEntries {
                             Publisher     = $resolvedPublisher
                             DisplayVersion= $resolvedDisplayVersion
                             DisplayIcon   = $resolvedDisplayIcon
+                            InstallLocation = $resolvedInstallLocation
                             InstallDate   = $resolvedInstallDate
+                            UninstallString = $resolvedUninstallString
+                            QuietUninstallString = $resolvedQuietUninstallString
+                            ModifyPath    = $resolvedModifyPath
                             LastWriteTime = $lastWrite
                             IsMsi         = $isMsi
                             MatchKind     = $matchKind
@@ -722,6 +746,420 @@ function ConvertTo-SafeFileName {
     return $sb.ToString().Trim()
 }
 
+function Normalize-MatchText {
+    param([string] $Value)
+
+    if ([string]::IsNullOrWhiteSpace($Value)) { return '' }
+    return (($Value -replace '[^A-Za-z0-9]+', '').ToLowerInvariant())
+}
+
+function Get-SearchTokens {
+    param([Parameter(Mandatory)] $Hints)
+
+    $tokens = New-Object System.Collections.Generic.List[string]
+    foreach ($value in @($Hints.Names) + @($Hints.Publishers)) {
+        if ([string]::IsNullOrWhiteSpace($value)) { continue }
+        $normalized = Normalize-MatchText -Value $value
+        if ($normalized.Length -ge 3) {
+            [void]$tokens.Add($normalized)
+        }
+    }
+
+    $seen = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::OrdinalIgnoreCase)
+    $uniqueTokens = New-Object System.Collections.Generic.List[string]
+    foreach ($token in $tokens) {
+        if ($seen.Add($token)) {
+            [void]$uniqueTokens.Add($token)
+        }
+    }
+
+    return ,$uniqueTokens.ToArray()
+}
+
+function Add-UniqueCandidate {
+    param(
+        [System.Collections.Generic.List[object]] $Candidates,
+        [System.Collections.Generic.HashSet[string]] $Seen,
+        [string] $Path,
+        [int] $Index = 0,
+        [string] $Reason,
+        [int] $Priority = 0
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Path)) { return }
+    if (-not (Test-Path -LiteralPath $Path)) { return }
+
+    $fullPath = [IO.Path]::GetFullPath($Path)
+    $ext = [IO.Path]::GetExtension($fullPath).ToLowerInvariant()
+    if ($ext -notin @('.ico', '.exe', '.dll')) { return }
+
+    $key = ('{0}|{1}' -f $fullPath, $Index)
+    if (-not $Seen.Add($key)) { return }
+
+    $Candidates.Add([pscustomobject]@{
+        Path     = $fullPath
+        Index    = $Index
+        Reason   = $Reason
+        Priority = $Priority
+    }) | Out-Null
+}
+
+function Get-IconCandidateFromIconLocation {
+    param([string] $RawValue, [string] $Reason, [int] $Priority = 0)
+
+    if ([string]::IsNullOrWhiteSpace($RawValue)) { return $null }
+
+    $parsed = [WinGetIconTools.Native]::ParseIconLocation($RawValue)
+    $path = [WinGetIconTools.Native]::ExpandEnv($parsed.Path)
+    if ([string]::IsNullOrWhiteSpace($path)) { return $null }
+
+    return [pscustomobject]@{
+        Path     = $path
+        Index    = [int]$parsed.Index
+        Reason   = $Reason
+        Priority = $Priority
+    }
+}
+
+function Get-ExistingPathFromCommandLine {
+    param([string] $CommandLine)
+
+    if ([string]::IsNullOrWhiteSpace($CommandLine)) { return $null }
+    $expanded = [WinGetIconTools.Native]::ExpandEnv($CommandLine.Trim())
+    if ([string]::IsNullOrWhiteSpace($expanded)) { return $null }
+
+    $patterns = @(
+        '^\s*"(?<path>[^"]+\.(?:exe|dll|ico))"',
+        '^\s*(?<path>[A-Za-z]:\\.*?\.(?:exe|dll|ico))(?=\s|$)'
+    )
+
+    foreach ($pattern in $patterns) {
+        $match = [regex]::Match($expanded, $pattern, [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+        if ($match.Success) {
+            $candidatePath = $match.Groups['path'].Value.Trim()
+            if (Test-Path -LiteralPath $candidatePath) {
+                return [IO.Path]::GetFullPath($candidatePath)
+            }
+        }
+    }
+
+    return $null
+}
+
+function Get-InstallLocationIconCandidates {
+    param(
+        [string] $InstallLocation,
+        [string[]] $SearchTokens,
+        [string] $ReasonPrefix,
+        [int] $BasePriority
+    )
+
+    $results = New-Object System.Collections.Generic.List[object]
+    if ([string]::IsNullOrWhiteSpace($InstallLocation)) { return ,$results.ToArray() }
+
+    $expanded = [WinGetIconTools.Native]::ExpandEnv($InstallLocation)
+    if ([string]::IsNullOrWhiteSpace($expanded) -or -not (Test-Path -LiteralPath $expanded)) {
+        return ,$results.ToArray()
+    }
+
+    $files = @()
+    try {
+        $files = @(Get-ChildItem -LiteralPath $expanded -File -ErrorAction Stop |
+            Where-Object { $_.Extension.ToLowerInvariant() -in @('.ico', '.exe', '.dll') })
+        if ($files.Count -eq 0) {
+            $files = @(Get-ChildItem -LiteralPath $expanded -File -Recurse -Depth 1 -ErrorAction Stop |
+                Where-Object { $_.Extension.ToLowerInvariant() -in @('.ico', '.exe', '.dll') })
+        }
+    }
+    catch {
+        return ,$results.ToArray()
+    }
+
+    $ranked = $files | ForEach-Object {
+        $nameKey = Normalize-MatchText -Value $_.BaseName
+        $tokenScore = 0
+        foreach ($token in $SearchTokens) {
+            if ($nameKey.Contains($token)) {
+                $tokenScore += 10
+            }
+        }
+
+        if ($_.Extension -ieq '.ico') {
+            $tokenScore += 20
+        }
+        elseif ($_.Extension -ieq '.exe') {
+            $tokenScore += 10
+        }
+
+        if ($nameKey -match 'unins|uninstall|setup|update|repair|modify') {
+            $tokenScore -= 20
+        }
+
+        [pscustomobject]@{
+            File  = $_
+            Score = $tokenScore
+        }
+    } | Sort-Object -Property @{ Expression = 'Score'; Descending = $true }, @{ Expression = { $_.File.FullName.Length }; Descending = $false }
+
+    foreach ($item in $ranked | Select-Object -First 8) {
+        $results.Add([pscustomobject]@{
+            Path     = $item.File.FullName
+            Index    = 0
+            Reason   = $ReasonPrefix
+            Priority = $BasePriority + [Math]::Max(0, 30 - $item.Score)
+        }) | Out-Null
+    }
+
+    return ,$results.ToArray()
+}
+
+function Get-ShortcutIconCandidates {
+    param(
+        [string[]] $Names,
+        [string[]] $SearchTokens,
+        [int] $BasePriority
+    )
+
+    $results = New-Object System.Collections.Generic.List[object]
+    if (-not $Names -or $Names.Count -eq 0) { return ,$results.ToArray() }
+
+    $roots = @(@(
+        (Join-Path $env:ProgramData 'Microsoft\Windows\Start Menu\Programs'),
+        (Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs'),
+        $env:PUBLIC ? (Join-Path $env:PUBLIC 'Desktop') : $null,
+        [Environment]::GetFolderPath('Desktop')
+    ) | Where-Object { $_ -and (Test-Path -LiteralPath $_) })
+
+    if ($roots.Count -eq 0) { return ,$results.ToArray() }
+
+    $shell = $null
+    try {
+        $shell = New-Object -ComObject WScript.Shell
+    }
+    catch {
+        return ,$results.ToArray()
+    }
+
+    try {
+        foreach ($root in $roots) {
+            $links = @()
+            try {
+                $links = @(Get-ChildItem -LiteralPath $root -Filter *.lnk -File -Recurse -ErrorAction Stop)
+            }
+            catch {
+                continue
+            }
+
+            foreach ($link in $links) {
+                $linkKey = Normalize-MatchText -Value $link.BaseName
+                $matched = $false
+                foreach ($token in $SearchTokens) {
+                    if ($linkKey.Contains($token)) {
+                        $matched = $true
+                        break
+                    }
+                }
+                if (-not $matched) { continue }
+
+                try {
+                    $shortcut = $shell.CreateShortcut($link.FullName)
+                }
+                catch {
+                    continue
+                }
+
+                if (-not [string]::IsNullOrWhiteSpace($shortcut.IconLocation)) {
+                    $results.Add([pscustomobject]@{
+                        Path     = $shortcut.IconLocation
+                        Index    = 0
+                        Reason   = 'ShortcutIconLocation'
+                        Priority = $BasePriority
+                    }) | Out-Null
+                }
+
+                if (-not [string]::IsNullOrWhiteSpace($shortcut.TargetPath)) {
+                    $results.Add([pscustomobject]@{
+                        Path     = $shortcut.TargetPath
+                        Index    = 0
+                        Reason   = 'ShortcutTargetPath'
+                        Priority = $BasePriority + 5
+                    }) | Out-Null
+                }
+            }
+        }
+    }
+    finally {
+        if ($shell) {
+            [void][System.Runtime.InteropServices.Marshal]::FinalReleaseComObject($shell)
+        }
+    }
+
+    return ,$results.ToArray()
+}
+
+function Get-CommonInstallLocationCandidates {
+    param(
+        [Parameter(Mandatory)] $Hints,
+        [string[]] $SearchTokens
+    )
+
+    $results = New-Object System.Collections.Generic.List[object]
+    if (-not $SearchTokens -or $SearchTokens.Count -eq 0) { return ,$results.ToArray() }
+
+    $roots = @(@(
+        $env:ProgramFiles,
+        ${env:ProgramFiles(x86)},
+        (Join-Path $env:LOCALAPPDATA 'Programs')
+    ) | Where-Object { $_ -and (Test-Path -LiteralPath $_) })
+
+    foreach ($root in $roots) {
+        $directories = @()
+        try {
+            $directories = @(Get-ChildItem -LiteralPath $root -Directory -ErrorAction Stop)
+        }
+        catch {
+            continue
+        }
+
+        foreach ($dir in $directories) {
+            $dirKey = Normalize-MatchText -Value $dir.Name
+            $matched = $false
+            foreach ($token in $SearchTokens) {
+                if ($dirKey.Contains($token) -or $token.Contains($dirKey)) {
+                    $matched = $true
+                    break
+                }
+            }
+            if (-not $matched) { continue }
+
+            foreach ($candidate in (Get-InstallLocationIconCandidates -InstallLocation $dir.FullName -SearchTokens $SearchTokens -ReasonPrefix 'CommonInstallLocation' -BasePriority 40)) {
+                $results.Add($candidate) | Out-Null
+            }
+        }
+    }
+
+    return ,$results.ToArray()
+}
+
+function Resolve-IconBytesFromCandidates {
+    param(
+        [Parameter(Mandatory)] [object[]] $Candidates,
+        [Parameter(Mandatory)] [string] $MatchId
+    )
+
+    foreach ($candidate in ($Candidates | Sort-Object Priority, Reason, Path)) {
+        $iconCandidate = Get-IconCandidateFromIconLocation -RawValue $candidate.Path -Reason $candidate.Reason -Priority $candidate.Priority
+        if (-not $iconCandidate) { continue }
+
+        $iconPath = $iconCandidate.Path
+        $iconIndex = [int]$iconCandidate.Index
+        if ([string]::IsNullOrWhiteSpace($iconPath) -or -not (Test-Path -LiteralPath $iconPath)) { continue }
+
+        $ext = [IO.Path]::GetExtension($iconPath).ToLowerInvariant()
+        $bytes = $null
+        switch ($ext) {
+            '.ico' {
+                $bytes = [IO.File]::ReadAllBytes($iconPath)
+            }
+            { $_ -in '.exe', '.dll' } {
+                $bytes = [WinGetIconTools.Native]::ExtractIcoFromBinary($iconPath, $iconIndex)
+            }
+        }
+
+        if ($bytes -and $bytes.Length -gt 0) {
+            return [pscustomobject]@{
+                Bytes      = $bytes
+                IconPath   = $iconPath
+                IconIndex  = $iconIndex
+                Reason     = $candidate.Reason
+            }
+        }
+
+        Write-Verbose ("[{0}] Candidate '{1}' from {2} did not produce icon bytes." -f $MatchId, $iconPath, $candidate.Reason)
+    }
+
+    return $null
+}
+
+function Get-IconCandidatesForArpEntry {
+    param(
+        [Parameter(Mandatory)] $Entry,
+        [Parameter(Mandatory)] $Hints,
+        [Parameter(Mandatory)] [string[]] $SearchTokens
+    )
+
+    $candidates = New-Object System.Collections.Generic.List[object]
+    $seen = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::OrdinalIgnoreCase)
+
+    $primaryIcon = if ($Entry.IsMsi) {
+        [WinGetIconTools.Native]::GetMsiProductIcon($Entry.ProductCode)
+    }
+    else {
+        $Entry.DisplayIcon
+    }
+    if (-not [string]::IsNullOrWhiteSpace($primaryIcon)) {
+        $candidate = Get-IconCandidateFromIconLocation -RawValue $primaryIcon -Reason $(if ($Entry.IsMsi) { 'MsiProductIcon' } else { 'DisplayIcon' }) -Priority 0
+        if ($candidate) {
+            Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $candidate.Path -Index $candidate.Index -Reason $candidate.Reason -Priority $candidate.Priority
+        }
+    }
+
+    foreach ($field in @(
+        @{ Name = 'UninstallString'; Value = $Entry.UninstallString; Priority = 10 },
+        @{ Name = 'QuietUninstallString'; Value = $Entry.QuietUninstallString; Priority = 12 },
+        @{ Name = 'ModifyPath'; Value = $Entry.ModifyPath; Priority = 14 }
+    )) {
+        $commandPath = Get-ExistingPathFromCommandLine -CommandLine $field.Value
+        if ($commandPath) {
+            Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $commandPath -Index 0 -Reason $field.Name -Priority $field.Priority
+            $commandDir = Split-Path -Parent $commandPath
+            foreach ($candidate in (Get-InstallLocationIconCandidates -InstallLocation $commandDir -SearchTokens $SearchTokens -ReasonPrefix ($field.Name + 'Directory') -BasePriority ($field.Priority + 5))) {
+                Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $candidate.Path -Index $candidate.Index -Reason $candidate.Reason -Priority $candidate.Priority
+            }
+        }
+    }
+
+    foreach ($candidate in (Get-InstallLocationIconCandidates -InstallLocation $Entry.InstallLocation -SearchTokens $SearchTokens -ReasonPrefix 'InstallLocation' -BasePriority 20)) {
+        Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $candidate.Path -Index $candidate.Index -Reason $candidate.Reason -Priority $candidate.Priority
+    }
+
+    foreach ($candidate in (Get-ShortcutIconCandidates -Names $Hints.Names -SearchTokens $SearchTokens -BasePriority 30)) {
+        $resolved = Get-IconCandidateFromIconLocation -RawValue $candidate.Path -Reason $candidate.Reason -Priority $candidate.Priority
+        if ($resolved) {
+            Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $resolved.Path -Index $resolved.Index -Reason $resolved.Reason -Priority $resolved.Priority
+        }
+    }
+
+    foreach ($candidate in (Get-CommonInstallLocationCandidates -Hints $Hints -SearchTokens $SearchTokens)) {
+        Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $candidate.Path -Index $candidate.Index -Reason $candidate.Reason -Priority $candidate.Priority
+    }
+
+    return ,$candidates.ToArray()
+}
+
+function Get-HintOnlyIconCandidates {
+    param(
+        [Parameter(Mandatory)] $Hints,
+        [Parameter(Mandatory)] [string[]] $SearchTokens
+    )
+
+    $candidates = New-Object System.Collections.Generic.List[object]
+    $seen = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::OrdinalIgnoreCase)
+
+    foreach ($candidate in (Get-ShortcutIconCandidates -Names $Hints.Names -SearchTokens $SearchTokens -BasePriority 0)) {
+        $resolved = Get-IconCandidateFromIconLocation -RawValue $candidate.Path -Reason $candidate.Reason -Priority $candidate.Priority
+        if ($resolved) {
+            Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $resolved.Path -Index $resolved.Index -Reason $resolved.Reason -Priority $resolved.Priority
+        }
+    }
+
+    foreach ($candidate in (Get-CommonInstallLocationCandidates -Hints $Hints -SearchTokens $SearchTokens)) {
+        Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $candidate.Path -Index $candidate.Index -Reason $candidate.Reason -Priority $candidate.Priority
+    }
+
+    return ,$candidates.ToArray()
+}
+
 # =============================================================================
 # Main
 # =============================================================================
@@ -731,6 +1169,7 @@ Write-Verbose "Scope       : $Scope"
 Write-Verbose "OutDir      : $OutDir"
 
 $hints = Get-PackageHints -PackageId $PackageId
+$searchTokens = Get-SearchTokens -Hints $hints
 if (($hints.ProductCodes.Count -eq 0) -and (($hints.Names.Count -eq 0) -or ($hints.Publishers.Count -eq 0))) {
     throw "Manifest for '$PackageId' provides neither ProductCode nor a (PackageName, Publisher) pair to correlate against ARP. (MSIX/Store packages are not supported.)"
 }
@@ -738,10 +1177,18 @@ Write-Verbose ("Hints: ProductCodes=[{0}] Names=[{1}] Publishers=[{2}] Version={
     ($hints.ProductCodes -join ', '), ($hints.Names -join ', '), ($hints.Publishers -join ', '), $hints.Version)
 
 $arpMatches = Find-ArpEntries -Hints $hints -Scope $Scope
+$hintOnlyCandidates = @()
 if (-not $arpMatches -or $arpMatches.Count -eq 0) {
-    throw "No ARP entries matched in scope '$Scope' for '$PackageId'. Is the package actually installed?"
+    $hintOnlyCandidates = @(Get-HintOnlyIconCandidates -Hints $hints -SearchTokens $searchTokens)
+    if ($hintOnlyCandidates.Count -eq 0) {
+        throw "No ARP entries matched in scope '$Scope' for '$PackageId'. Is the package actually installed?"
+    }
+
+    Write-Verbose ("No ARP match for '{0}', but found {1} hint-only icon candidates." -f $PackageId, $hintOnlyCandidates.Count)
 }
-Write-Verbose ("ARP matches: {0}" -f $arpMatches.Count)
+else {
+    Write-Verbose ("ARP matches: {0}" -f $arpMatches.Count)
+}
 
 function Select-NewestArpEntry {
     param([object[]] $Entries)
@@ -790,51 +1237,25 @@ if (-not (Test-Path -LiteralPath $OutDir)) {
     [void](New-Item -ItemType Directory -Path $OutDir -Force)
 }
 
+if ($arpMatches -and $arpMatches.Count -gt 0) {
 foreach ($m in $arpMatches) {
     Write-Verbose ("Processing {0} [{1}] -> {2} (msi={3})" -f $m.ProductCode, $m.Hive, $m.DisplayName, $m.IsMsi)
 
-    # 1. Resolve raw icon path
-    $rawIcon = if ($m.IsMsi) {
-        [WinGetIconTools.Native]::GetMsiProductIcon($m.ProductCode)
-    } else {
-        $m.DisplayIcon
-    }
-
-    if ([string]::IsNullOrWhiteSpace($rawIcon)) {
-        Write-Warning ("[{0}] No icon source ({1})." -f $m.ProductCode, $(if ($m.IsMsi) { 'MSI ProductIcon empty' } else { 'DisplayIcon empty' }))
+    $candidates = @(Get-IconCandidatesForArpEntry -Entry $m -Hints $hints -SearchTokens $searchTokens)
+    if ($candidates.Count -eq 0) {
+        Write-Warning ("[{0}] No icon candidates were found from DisplayIcon, install location, uninstall metadata, or shortcuts." -f $m.ProductCode)
         continue
     }
 
-    # 2. Unquote + parse index + expand env vars
-    $parsed = [WinGetIconTools.Native]::ParseIconLocation($rawIcon)
-    $iconPath = [WinGetIconTools.Native]::ExpandEnv($parsed.Path)
-    $iconIndex = [int]$parsed.Index
-
-    if ([string]::IsNullOrWhiteSpace($iconPath) -or -not (Test-Path -LiteralPath $iconPath)) {
-        Write-Warning ("[{0}] Icon source not found on disk: '{1}'" -f $m.ProductCode, $iconPath)
+    $resolvedIcon = Resolve-IconBytesFromCandidates -Candidates $candidates -MatchId $m.ProductCode
+    if (-not $resolvedIcon) {
+        Write-Warning ("[{0}] Failed to extract icon bytes from {1} candidate(s)." -f $m.ProductCode, $candidates.Count)
         continue
     }
 
-    # 3. Extract bytes
-    $ext = [IO.Path]::GetExtension($iconPath).ToLowerInvariant()
-    $bytes = $null
-    switch ($ext) {
-        '.ico' {
-            $bytes = [IO.File]::ReadAllBytes($iconPath)
-        }
-        { $_ -in '.exe', '.dll' } {
-            $bytes = [WinGetIconTools.Native]::ExtractIcoFromBinary($iconPath, $iconIndex)
-        }
-        default {
-            Write-Warning ("[{0}] Unsupported icon source extension '{1}': {2}" -f $m.ProductCode, $ext, $iconPath)
-            continue
-        }
-    }
-
-    if (-not $bytes -or $bytes.Length -eq 0) {
-        Write-Warning ("[{0}] Failed to extract icon bytes from '{1}' (index {2})." -f $m.ProductCode, $iconPath, $iconIndex)
-        continue
-    }
+    $bytes = $resolvedIcon.Bytes
+    $iconPath = $resolvedIcon.IconPath
+    $iconIndex = $resolvedIcon.IconIndex
 
     # 4. Write file
     $safeName = ConvertTo-SafeFileName $m.DisplayName
@@ -861,5 +1282,35 @@ foreach ($m in $arpMatches) {
         IconIndex     = $iconIndex
         IconPath      = $outFile
         SizeBytes     = $bytes.Length
+        SourceReason  = $resolvedIcon.Reason
+    }
+}
+}
+
+if ($hintOnlyCandidates.Count -gt 0) {
+    $resolvedIcon = Resolve-IconBytesFromCandidates -Candidates $hintOnlyCandidates -MatchId $PackageId
+    if (-not $resolvedIcon) {
+        throw "No ARP entries matched in scope '$Scope' for '$PackageId', and hint-only candidates did not produce icon bytes."
+    }
+
+    $safeName = ConvertTo-SafeFileName $(if ($hints.Names.Count -gt 0) { $hints.Names[0] } else { $PackageId })
+    $outFile = Join-Path $OutDir ("{0}.{1}.ico" -f $safeName, (ConvertTo-SafeFileName $PackageId))
+    [IO.File]::WriteAllBytes($outFile, $resolvedIcon.Bytes)
+
+    [pscustomobject]@{
+        PackageId      = $PackageId
+        ProductCode    = ''
+        DisplayName    = $(if ($hints.Names.Count -gt 0) { $hints.Names[0] } else { $PackageId })
+        Publisher      = $(if ($hints.Publishers.Count -gt 0) { $hints.Publishers[0] } else { '' })
+        DisplayVersion = $hints.Version
+        InstallDate    = ''
+        LastWriteTime  = $null
+        Hive           = ''
+        MatchKind      = 'HintOnly'
+        Source         = $resolvedIcon.IconPath
+        IconIndex      = $resolvedIcon.IconIndex
+        IconPath       = $outFile
+        SizeBytes      = $resolvedIcon.Bytes.Length
+        SourceReason   = $resolvedIcon.Reason
     }
 }

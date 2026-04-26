@@ -931,9 +931,7 @@ foreach ($pkg in $todo) {
             $shouldVerifyInstallFailure = (
                 ($record.Status -eq 'InstallFailed') -and
                 (-not $install.TimedOut) -and
-                (-not (Test-WinGetSourceError -ExitCode $install.ExitCode)) -and
-                (-not $install.StdErr) -and
-                (($install.ExitCode -eq -1) -or ($probe.FailureCategory -eq 'ArpNotFound'))
+                (-not (Test-WinGetSourceError -ExitCode $install.ExitCode))
             )
 
             if ($shouldVerifyInstallFailure) {
