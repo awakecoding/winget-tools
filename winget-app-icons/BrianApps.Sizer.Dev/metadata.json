@@ -5,7 +5,7 @@
   "status": "ExtractError",
   "hasIcon": false,
   "firstSeenUtc": "2026-04-25T20:21:08.5294263Z",
-  "lastCheckedUtc": "2026-04-25T20:21:08.5294263Z",
+  "lastCheckedUtc": "2026-04-26T09:36:18.4180113Z",
   "lastUpdatedUtc": null,
   "wingetVersion": "v1.11.510",
   "packageVersion": null,
@@ -49,8 +49,8 @@
   },
   "icons": null,
   "run": {
-    "startedAtUtc": "2026-04-25T20:21:08.5294263Z",
-    "runId": "24919615418",
+    "startedAtUtc": "2026-04-26T09:36:18.4180113Z",
+    "runId": "24943755544",
     "runAttempt": "1",
     "repository": "awakecoding/winget-tools"
   }
