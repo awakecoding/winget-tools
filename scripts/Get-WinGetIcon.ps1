@@ -67,7 +67,10 @@ param(
     [string] $OutDir,
 
     [Parameter(HelpMessage = 'Overwrite existing .ico files.')]
-    [switch] $Force
+    [switch] $Force,
+
+    [Parameter(HelpMessage = 'Disable broader common-install-location and shortcut fallback. Use this for strict ARP-centric probing.')]
+    [switch] $DisableHeuristicFallback
 )
 
 Set-StrictMode -Version Latest
@@ -1090,7 +1093,8 @@ function Get-IconCandidatesForArpEntry {
     param(
         [Parameter(Mandatory)] $Entry,
         [Parameter(Mandatory)] $Hints,
-        [Parameter(Mandatory)] [string[]] $SearchTokens
+        [Parameter(Mandatory)] [string[]] $SearchTokens,
+        [switch] $DisableHeuristicFallback
     )
 
     $candidates = New-Object System.Collections.Generic.List[object]
@@ -1128,14 +1132,16 @@ function Get-IconCandidatesForArpEntry {
         Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $candidate.Path -Index $candidate.Index -Reason $candidate.Reason -Priority $candidate.Priority
     }
 
-    foreach ($candidate in (Get-CommonInstallLocationCandidates -Hints $Hints -SearchTokens $SearchTokens)) {
-        Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $candidate.Path -Index $candidate.Index -Reason $candidate.Reason -Priority $candidate.Priority
-    }
+    if (-not $DisableHeuristicFallback) {
+        foreach ($candidate in (Get-CommonInstallLocationCandidates -Hints $Hints -SearchTokens $SearchTokens)) {
+            Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $candidate.Path -Index $candidate.Index -Reason $candidate.Reason -Priority $candidate.Priority
+        }
 
-    foreach ($candidate in (Get-ShortcutIconCandidates -Names $Hints.Names -SearchTokens $SearchTokens -BasePriority 50)) {
-        $resolved = Get-IconCandidateFromIconLocation -RawValue $candidate.Path -Reason $candidate.Reason -Priority $candidate.Priority
-        if ($resolved) {
-            Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $resolved.Path -Index $resolved.Index -Reason $resolved.Reason -Priority $resolved.Priority
+        foreach ($candidate in (Get-ShortcutIconCandidates -Names $Hints.Names -SearchTokens $SearchTokens -BasePriority 50)) {
+            $resolved = Get-IconCandidateFromIconLocation -RawValue $candidate.Path -Reason $candidate.Reason -Priority $candidate.Priority
+            if ($resolved) {
+                Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $resolved.Path -Index $resolved.Index -Reason $resolved.Reason -Priority $resolved.Priority
+            }
         }
     }
 
@@ -1145,11 +1151,16 @@ function Get-IconCandidatesForArpEntry {
 function Get-HintOnlyIconCandidates {
     param(
         [Parameter(Mandatory)] $Hints,
-        [Parameter(Mandatory)] [string[]] $SearchTokens
+        [Parameter(Mandatory)] [string[]] $SearchTokens,
+        [switch] $DisableHeuristicFallback
     )
 
     $candidates = New-Object System.Collections.Generic.List[object]
     $seen = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::OrdinalIgnoreCase)
+
+    if ($DisableHeuristicFallback) {
+        return ,$candidates.ToArray()
+    }
 
     foreach ($candidate in (Get-CommonInstallLocationCandidates -Hints $Hints -SearchTokens $SearchTokens)) {
         Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $candidate.Path -Index $candidate.Index -Reason $candidate.Reason -Priority $candidate.Priority
@@ -1184,7 +1195,7 @@ Write-Verbose ("Hints: ProductCodes=[{0}] Names=[{1}] Publishers=[{2}] Version={
 $arpMatches = Find-ArpEntries -Hints $hints -Scope $Scope
 $hintOnlyCandidates = @()
 if (-not $arpMatches -or $arpMatches.Count -eq 0) {
-    $hintOnlyCandidates = @(Get-HintOnlyIconCandidates -Hints $hints -SearchTokens $searchTokens)
+    $hintOnlyCandidates = @(Get-HintOnlyIconCandidates -Hints $hints -SearchTokens $searchTokens -DisableHeuristicFallback:$DisableHeuristicFallback)
     if ($hintOnlyCandidates.Count -eq 0) {
         throw "No ARP entries matched in scope '$Scope' for '$PackageId'. Is the package actually installed?"
     }
@@ -1246,7 +1257,7 @@ if ($arpMatches -and $arpMatches.Count -gt 0) {
 foreach ($m in $arpMatches) {
     Write-Verbose ("Processing {0} [{1}] -> {2} (msi={3})" -f $m.ProductCode, $m.Hive, $m.DisplayName, $m.IsMsi)
 
-    $candidates = @(Get-IconCandidatesForArpEntry -Entry $m -Hints $hints -SearchTokens $searchTokens)
+    $candidates = @(Get-IconCandidatesForArpEntry -Entry $m -Hints $hints -SearchTokens $searchTokens -DisableHeuristicFallback:$DisableHeuristicFallback)
     if ($candidates.Count -eq 0) {
         Write-Warning ("[{0}] No icon candidates were found from DisplayIcon, install location, uninstall metadata, or shortcuts." -f $m.ProductCode)
         continue

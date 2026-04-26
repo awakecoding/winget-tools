@@ -214,7 +214,8 @@ function Invoke-IconExtraction {
         [ValidateSet('User', 'Machine', 'Both')]
         [string] $Scope = 'Both',
         [switch] $RefreshManifest,
-        [switch] $Force
+        [switch] $Force,
+        [switch] $DisableHeuristicFallback
     )
 
     # Returns @{ Files = FileInfo[]; Error = string }.
@@ -231,7 +232,7 @@ function Invoke-IconExtraction {
     }
 
     try {
-        $null = & $script:iconScript -PackageId $PackageId -OutDir $PkgOutDir -Scope $Scope -Force:$Force 2>&1
+        $null = & $script:iconScript -PackageId $PackageId -OutDir $PkgOutDir -Scope $Scope -Force:$Force -DisableHeuristicFallback:$DisableHeuristicFallback 2>&1
     }
     catch {
         $err = Format-ExceptionDetails -ErrorRecord $_
@@ -283,7 +284,8 @@ function Invoke-IconExtractionWithRetry {
         [Parameter(Mandatory)] [string] $PackageId,
         [Parameter(Mandatory)] [string] $PkgOutDir,
         [switch] $Force,
-        [switch] $AfterInstall
+        [switch] $AfterInstall,
+        [switch] $DisableHeuristicFallback
     )
 
     $attemptPlan = @(
@@ -307,7 +309,7 @@ function Invoke-IconExtractionWithRetry {
                 Start-Sleep -Seconds $attempt.DelaySeconds
             }
 
-            $result = Invoke-IconExtraction -PackageId $PackageId -PkgOutDir $PkgOutDir -Scope $attempt.Scope -RefreshManifest:$attempt.RefreshManifest -Force:$Force
+            $result = Invoke-IconExtraction -PackageId $PackageId -PkgOutDir $PkgOutDir -Scope $attempt.Scope -RefreshManifest:$attempt.RefreshManifest -Force:$Force -DisableHeuristicFallback:$DisableHeuristicFallback
             $last = $result
             $attemptError = $null
             if ($result.Error) {
@@ -861,7 +863,7 @@ foreach ($pkg in $todo) {
         # installed locally (e.g. dev box, preinstalled on runner).
         Write-Host "  Probing for existing icon..." -ForegroundColor Gray
         $extStart = Get-Date
-        $probe = Invoke-IconExtractionWithRetry -PackageId $resolvedPackageId -PkgOutDir $pkgOutDir -Force:$Force
+        $probe = Invoke-IconExtractionWithRetry -PackageId $resolvedPackageId -PkgOutDir $pkgOutDir -Force:$Force -DisableHeuristicFallback
         $record.ExtractSeconds = [int]((Get-Date) - $extStart).TotalSeconds
         $record.ExtractAttemptCount = @($probe.Attempts).Count
         $record.ExtractAttemptScopes = @($probe.Attempts | ForEach-Object { $_.scope })
