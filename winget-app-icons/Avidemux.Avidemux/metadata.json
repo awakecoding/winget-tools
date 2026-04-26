@@ -5,7 +5,7 @@
   "status": "InstallTimeout",
   "hasIcon": false,
   "firstSeenUtc": "2026-04-25T04:34:33.7547334Z",
-  "lastCheckedUtc": "2026-04-25T04:34:33.7547334Z",
+  "lastCheckedUtc": "2026-04-26T05:55:05.8088080Z",
   "lastUpdatedUtc": null,
   "wingetVersion": "v1.11.510",
   "packageVersion": null,
@@ -44,8 +44,8 @@
   },
   "icons": null,
   "run": {
-    "startedAtUtc": "2026-04-25T04:34:33.7547334Z",
-    "runId": "24908564742",
+    "startedAtUtc": "2026-04-26T05:55:05.8088080Z",
+    "runId": "24943755544",
     "runAttempt": "1",
     "repository": "awakecoding/winget-tools"
   }
