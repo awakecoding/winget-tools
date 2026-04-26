@@ -1049,6 +1049,54 @@ function Get-CommonInstallLocationCandidates {
     return ,$results.ToArray()
 }
 
+function Get-WinGetPackageLocationCandidates {
+    param(
+        [Parameter(Mandatory)] [string] $PackageId,
+        [string[]] $SearchTokens,
+        [int] $BasePriority
+    )
+
+    $results = New-Object System.Collections.Generic.List[object]
+    $packageIdToken = Normalize-MatchText -Value $PackageId
+    if ([string]::IsNullOrWhiteSpace($packageIdToken)) { return ,$results.ToArray() }
+
+    $roots = @(@(
+        (Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Packages'),
+        $env:ProgramFiles ? (Join-Path $env:ProgramFiles 'WinGet\Packages') : $null,
+        ${env:ProgramFiles(x86)} ? (Join-Path ${env:ProgramFiles(x86)} 'WinGet\Packages') : $null
+    ) | Where-Object { $_ -and (Test-Path -LiteralPath $_) })
+
+    foreach ($root in $roots) {
+        $directories = @()
+        try {
+            $directories = @(Get-ChildItem -LiteralPath $root -Directory -ErrorAction Stop)
+        }
+        catch {
+            continue
+        }
+
+        foreach ($dir in $directories) {
+            $dirKey = Normalize-MatchText -Value $dir.Name
+            $matched = $dirKey.Contains($packageIdToken)
+            if (-not $matched -and $SearchTokens) {
+                foreach ($token in $SearchTokens) {
+                    if ($dirKey.Contains($token)) {
+                        $matched = $true
+                        break
+                    }
+                }
+            }
+            if (-not $matched) { continue }
+
+            foreach ($candidate in (Get-InstallLocationIconCandidates -InstallLocation $dir.FullName -SearchTokens $SearchTokens -ReasonPrefix 'WinGetPackageRoot' -BasePriority $BasePriority)) {
+                $results.Add($candidate) | Out-Null
+            }
+        }
+    }
+
+    return ,$results.ToArray()
+}
+
 function Resolve-IconBytesFromCandidates {
     param(
         [Parameter(Mandatory)] [object[]] $Candidates,
@@ -1091,6 +1139,7 @@ function Resolve-IconBytesFromCandidates {
 
 function Get-IconCandidatesForArpEntry {
     param(
+        [Parameter(Mandatory)] [string] $PackageId,
         [Parameter(Mandatory)] $Entry,
         [Parameter(Mandatory)] $Hints,
         [Parameter(Mandatory)] [string[]] $SearchTokens
@@ -1135,6 +1184,10 @@ function Get-IconCandidatesForArpEntry {
         Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $candidate.Path -Index $candidate.Index -Reason $candidate.Reason -Priority $candidate.Priority
     }
 
+    foreach ($candidate in (Get-WinGetPackageLocationCandidates -PackageId $PackageId -SearchTokens $SearchTokens -BasePriority 45)) {
+        Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $candidate.Path -Index $candidate.Index -Reason $candidate.Reason -Priority $candidate.Priority
+    }
+
     foreach ($candidate in (Get-ShortcutIconCandidates -Names $Hints.Names -SearchTokens $SearchTokens -BasePriority 50)) {
         $resolved = Get-IconCandidateFromIconLocation -RawValue $candidate.Path -Reason $candidate.Reason -Priority $candidate.Priority
         if ($resolved) {
@@ -1147,6 +1200,7 @@ function Get-IconCandidatesForArpEntry {
 
 function Get-HintOnlyIconCandidates {
     param(
+        [Parameter(Mandatory)] [string] $PackageId,
         [Parameter(Mandatory)] $Hints,
         [Parameter(Mandatory)] [string[]] $SearchTokens,
         [switch] $DisableHeuristicFallback
@@ -1160,6 +1214,10 @@ function Get-HintOnlyIconCandidates {
     }
 
     foreach ($candidate in (Get-CommonInstallLocationCandidates -Hints $Hints -SearchTokens $SearchTokens)) {
+        Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $candidate.Path -Index $candidate.Index -Reason $candidate.Reason -Priority $candidate.Priority
+    }
+
+    foreach ($candidate in (Get-WinGetPackageLocationCandidates -PackageId $PackageId -SearchTokens $SearchTokens -BasePriority 20)) {
         Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $candidate.Path -Index $candidate.Index -Reason $candidate.Reason -Priority $candidate.Priority
     }
 
@@ -1192,7 +1250,7 @@ Write-Verbose ("Hints: ProductCodes=[{0}] Names=[{1}] Publishers=[{2}] Version={
 $arpMatches = Find-ArpEntries -Hints $hints -Scope $Scope
 $hintOnlyCandidates = @()
 if (-not $arpMatches -or $arpMatches.Count -eq 0) {
-    $hintOnlyCandidates = @(Get-HintOnlyIconCandidates -Hints $hints -SearchTokens $searchTokens -DisableHeuristicFallback:$DisableHeuristicFallback)
+    $hintOnlyCandidates = @(Get-HintOnlyIconCandidates -PackageId $PackageId -Hints $hints -SearchTokens $searchTokens -DisableHeuristicFallback:$DisableHeuristicFallback)
     if ($hintOnlyCandidates.Count -eq 0) {
         throw "No ARP entries matched in scope '$Scope' for '$PackageId'. Is the package actually installed?"
     }
@@ -1254,7 +1312,7 @@ if ($arpMatches -and $arpMatches.Count -gt 0) {
 foreach ($m in $arpMatches) {
     Write-Verbose ("Processing {0} [{1}] -> {2} (msi={3})" -f $m.ProductCode, $m.Hive, $m.DisplayName, $m.IsMsi)
 
-    $candidates = @(Get-IconCandidatesForArpEntry -Entry $m -Hints $hints -SearchTokens $searchTokens)
+    $candidates = @(Get-IconCandidatesForArpEntry -PackageId $PackageId -Entry $m -Hints $hints -SearchTokens $searchTokens)
     if ($candidates.Count -eq 0) {
         Write-Warning ("[{0}] No icon candidates were found from DisplayIcon, install location, uninstall metadata, or shortcuts." -f $m.ProductCode)
         continue
