@@ -1093,8 +1093,7 @@ function Get-IconCandidatesForArpEntry {
     param(
         [Parameter(Mandatory)] $Entry,
         [Parameter(Mandatory)] $Hints,
-        [Parameter(Mandatory)] [string[]] $SearchTokens,
-        [switch] $DisableHeuristicFallback
+        [Parameter(Mandatory)] [string[]] $SearchTokens
     )
 
     $candidates = New-Object System.Collections.Generic.List[object]
@@ -1132,16 +1131,14 @@ function Get-IconCandidatesForArpEntry {
         Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $candidate.Path -Index $candidate.Index -Reason $candidate.Reason -Priority $candidate.Priority
     }
 
-    if (-not $DisableHeuristicFallback) {
-        foreach ($candidate in (Get-CommonInstallLocationCandidates -Hints $Hints -SearchTokens $SearchTokens)) {
-            Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $candidate.Path -Index $candidate.Index -Reason $candidate.Reason -Priority $candidate.Priority
-        }
+    foreach ($candidate in (Get-CommonInstallLocationCandidates -Hints $Hints -SearchTokens $SearchTokens)) {
+        Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $candidate.Path -Index $candidate.Index -Reason $candidate.Reason -Priority $candidate.Priority
+    }
 
-        foreach ($candidate in (Get-ShortcutIconCandidates -Names $Hints.Names -SearchTokens $SearchTokens -BasePriority 50)) {
-            $resolved = Get-IconCandidateFromIconLocation -RawValue $candidate.Path -Reason $candidate.Reason -Priority $candidate.Priority
-            if ($resolved) {
-                Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $resolved.Path -Index $resolved.Index -Reason $resolved.Reason -Priority $resolved.Priority
-            }
+    foreach ($candidate in (Get-ShortcutIconCandidates -Names $Hints.Names -SearchTokens $SearchTokens -BasePriority 50)) {
+        $resolved = Get-IconCandidateFromIconLocation -RawValue $candidate.Path -Reason $candidate.Reason -Priority $candidate.Priority
+        if ($resolved) {
+            Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $resolved.Path -Index $resolved.Index -Reason $resolved.Reason -Priority $resolved.Priority
         }
     }
 
@@ -1257,7 +1254,7 @@ if ($arpMatches -and $arpMatches.Count -gt 0) {
 foreach ($m in $arpMatches) {
     Write-Verbose ("Processing {0} [{1}] -> {2} (msi={3})" -f $m.ProductCode, $m.Hive, $m.DisplayName, $m.IsMsi)
 
-    $candidates = @(Get-IconCandidatesForArpEntry -Entry $m -Hints $hints -SearchTokens $searchTokens -DisableHeuristicFallback:$DisableHeuristicFallback)
+    $candidates = @(Get-IconCandidatesForArpEntry -Entry $m -Hints $hints -SearchTokens $searchTokens)
     if ($candidates.Count -eq 0) {
         Write-Warning ("[{0}] No icon candidates were found from DisplayIcon, install location, uninstall metadata, or shortcuts." -f $m.ProductCode)
         continue
