@@ -757,7 +757,12 @@ function Get-SearchTokens {
     param([Parameter(Mandatory)] $Hints)
 
     $tokens = New-Object System.Collections.Generic.List[string]
-    foreach ($value in @($Hints.Names) + @($Hints.Publishers)) {
+    $primaryValues = @($Hints.Names | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+    if ($primaryValues.Count -eq 0) {
+        $primaryValues = @($Hints.Publishers | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+    }
+
+    foreach ($value in $primaryValues) {
         if ([string]::IsNullOrWhiteSpace($value)) { continue }
         $normalized = Normalize-MatchText -Value $value
         if ($normalized.Length -ge 3) {
