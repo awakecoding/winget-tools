@@ -872,12 +872,17 @@ function Get-InstallLocationIconCandidates {
 
     $files = @()
     try {
-        $files = @(Get-ChildItem -LiteralPath $expanded -File -ErrorAction Stop |
+        $directFiles = @(Get-ChildItem -LiteralPath $expanded -File -ErrorAction Stop |
             Where-Object { $_.Extension.ToLowerInvariant() -in @('.ico', '.exe', '.dll') })
-        if ($files.Count -eq 0) {
-            $files = @(Get-ChildItem -LiteralPath $expanded -File -Recurse -Depth 1 -ErrorAction Stop |
-                Where-Object { $_.Extension.ToLowerInvariant() -in @('.ico', '.exe', '.dll') })
-        }
+        $recursiveDepth = if ($ReasonPrefix -eq 'WinGetPackageRoot') { 2 } else { 1 }
+        $recursiveFiles = @(Get-ChildItem -LiteralPath $expanded -File -Recurse -Depth $recursiveDepth -ErrorAction Stop |
+            Where-Object { $_.Extension.ToLowerInvariant() -in @('.ico', '.exe', '.dll') })
+
+        $seenPaths = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::OrdinalIgnoreCase)
+        $files = @(
+            @($directFiles) + @($recursiveFiles) |
+                Where-Object { $seenPaths.Add($_.FullName) }
+        )
     }
     catch {
         return ,$results.ToArray()
