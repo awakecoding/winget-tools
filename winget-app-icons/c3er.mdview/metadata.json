@@ -5,7 +5,7 @@
   "status": "ExtractError",
   "hasIcon": false,
   "firstSeenUtc": "2026-04-25T21:09:12.2198085Z",
-  "lastCheckedUtc": "2026-04-25T21:09:12.2198085Z",
+  "lastCheckedUtc": "2026-04-26T10:00:12.4521463Z",
   "lastUpdatedUtc": null,
   "wingetVersion": "v1.11.510",
   "packageVersion": null,
@@ -13,16 +13,16 @@
   "installerType": null,
   "alreadyInstalled": false,
   "installedByThisRun": true,
-  "installSeconds": 15,
+  "installSeconds": 21,
   "extractSeconds": 32,
   "uninstallSeconds": 2,
-  "durationSeconds": 50,
+  "durationSeconds": 55,
   "installExitCode": 0,
   "installTimedOut": false,
   "uninstallExitCode": 0,
   "uninstallTimedOut": false,
   "failureCategory": "Extraction",
-  "installAttemptTag": "install-default",
+  "installAttemptTag": "install-machine",
   "extractAttemptCount": 4,
   "extractAttemptScopes": [
     "Both",
@@ -39,18 +39,28 @@
   "canonicalIconSha256": null,
   "extractError": "No ARP entries matched in scope 'Both' for 'c3er.mdview'. Is the package actually installed?; Script=D:\\a\\winget-tools\\winget-tools\\scripts\\Get-WinGetIcon.ps1:742; Line=throw \"No ARP entries matched in scope '$Scope' for '$PackageId'. Is the package actually installed?\"; Stack=at <ScriptBlock>, D:\\a\\winget-tools\\winget-tools\\scripts\\Get-WinGetIcon.ps1: line 742 | at Invoke-IconExtraction, D:\\a\\winget-tools\\winget-tools\\scripts\\Invoke-BulkIconExtraction.ps1: line 234 | at Invoke-IconExtractionWithRetry, D:\\a",
   "installStdErr": null,
-  "installAttempts": {
-    "tag": "install-default",
-    "exitCode": 0,
-    "exitHex": "0x00000000",
-    "timedOut": false,
-    "errorName": null,
-    "failureCategory": null
-  },
+  "installAttempts": [
+    {
+      "tag": "install-default",
+      "exitCode": -1978335226,
+      "exitHex": "0x8A150006",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    },
+    {
+      "tag": "install-machine",
+      "exitCode": 0,
+      "exitHex": "0x00000000",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": null
+    }
+  ],
   "icons": null,
   "run": {
-    "startedAtUtc": "2026-04-25T21:09:12.2198085Z",
-    "runId": "24919615418",
+    "startedAtUtc": "2026-04-26T10:00:12.4521463Z",
+    "runId": "24943755544",
     "runAttempt": "1",
     "repository": "awakecoding/winget-tools"
   }
