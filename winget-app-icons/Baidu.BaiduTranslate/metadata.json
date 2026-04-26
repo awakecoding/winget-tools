@@ -5,7 +5,7 @@
   "status": "InstallTimeout",
   "hasIcon": false,
   "firstSeenUtc": "2026-04-25T06:22:52.4247549Z",
-  "lastCheckedUtc": "2026-04-25T06:22:52.4247549Z",
+  "lastCheckedUtc": "2026-04-26T07:30:31.5226802Z",
   "lastUpdatedUtc": null,
   "wingetVersion": "v1.11.510",
   "packageVersion": null,
@@ -13,16 +13,16 @@
   "installerType": null,
   "alreadyInstalled": false,
   "installedByThisRun": false,
-  "installSeconds": 900,
+  "installSeconds": 1064,
   "extractSeconds": 0,
   "uninstallSeconds": 0,
-  "durationSeconds": 901,
+  "durationSeconds": 1065,
   "installExitCode": -1,
   "installTimedOut": true,
   "uninstallExitCode": null,
   "uninstallTimedOut": false,
   "failureCategory": "Timeout",
-  "installAttemptTag": "install-default",
+  "installAttemptTag": "install-machine",
   "extractAttemptCount": 1,
   "extractAttemptScopes": "Both",
   "extractFailureCategory": "ArpNotFound",
@@ -34,18 +34,28 @@
   "canonicalIconSha256": null,
   "extractError": null,
   "installStdErr": null,
-  "installAttempts": {
-    "tag": "install-default",
-    "exitCode": -1,
-    "exitHex": null,
-    "timedOut": true,
-    "errorName": null,
-    "failureCategory": "Timeout"
-  },
+  "installAttempts": [
+    {
+      "tag": "install-default",
+      "exitCode": -2147012867,
+      "exitHex": "0x80072EFD",
+      "timedOut": false,
+      "errorName": null,
+      "failureCategory": "Install"
+    },
+    {
+      "tag": "install-machine",
+      "exitCode": -1,
+      "exitHex": null,
+      "timedOut": true,
+      "errorName": null,
+      "failureCategory": "Timeout"
+    }
+  ],
   "icons": null,
   "run": {
-    "startedAtUtc": "2026-04-25T06:22:52.4247549Z",
-    "runId": "24908564742",
+    "startedAtUtc": "2026-04-26T07:30:31.5226802Z",
+    "runId": "24943755544",
     "runAttempt": "1",
     "repository": "awakecoding/winget-tools"
   }
