@@ -6,8 +6,8 @@
 .DESCRIPTION
     For every PackageId in the provided list:
 
-      1. Probe for an existing ARP icon via Get-WinGetIcon.ps1. If it yields
-         at least one .ico, mark AlreadyInstalled + IconExtracted and skip
+        1. Probe for an existing icon via Get-WinGetIcon.ps1. If it yields
+            at least one icon file, mark AlreadyInstalled + IconExtracted and skip
          installation entirely. This avoids a slow 'winget list' preflight.
       2. Otherwise: winget install --silent --accept-package-agreements
                                    --accept-source-agreements
@@ -26,7 +26,7 @@
       Installed         - install completed (exit code 0)
       InstallFailed     - install exited non-zero
       InstallTimeout    - install exceeded -PerPackageTimeoutSeconds
-      IconExtracted     - extractor produced at least one .ico file
+    IconExtracted     - extractor produced at least one icon file
       NoIcon            - extractor ran but produced 0 files (e.g., MSI with no
                           ProductIcon, or DisplayIcon pointed at a missing file)
       ExtractError      - extractor threw an exception
@@ -66,10 +66,11 @@
 .PARAMETER PackageStateRoot
     Root directory for the git-backed per-package output layout.
     Each processed package gets a folder at <PackageStateRoot>\<PackageId>\
-    containing metadata.json and, when extraction succeeds, app-icon.ico.
+    containing metadata.json and, when extraction succeeds, app-icon.ico or
+    appx-icon.png.
 
 .PARAMETER Force
-    Forwarded to Get-WinGetIcon.ps1 to overwrite existing .ico files.
+    Forwarded to Get-WinGetIcon.ps1 to overwrite existing icon files.
 
 .EXAMPLE
     .\scripts\Invoke-BulkIconExtraction.ps1 `
@@ -237,8 +238,28 @@ function Invoke-IconExtraction {
     catch {
         $err = Format-ExceptionDetails -ErrorRecord $_
     }
-    $files = @(Get-ChildItem -LiteralPath $PkgOutDir -Filter '*.ico' -File -ErrorAction SilentlyContinue)
+    $files = @(Get-ExtractedIconFiles -PkgOutDir $PkgOutDir)
     return [pscustomobject]@{ Files = $files; Error = $err; Scope = $Scope }
+}
+
+function Get-ExtractedIconFiles {
+    param([Parameter(Mandatory)] [string] $PkgOutDir)
+
+    if (-not (Test-Path -LiteralPath $PkgOutDir)) {
+        return @()
+    }
+
+    $files = New-Object System.Collections.Generic.List[object]
+    $appxIconPath = Join-Path $PkgOutDir 'appx-icon.png'
+    if (Test-Path -LiteralPath $appxIconPath) {
+        $files.Add((Get-Item -LiteralPath $appxIconPath)) | Out-Null
+    }
+
+    foreach ($file in @(Get-ChildItem -LiteralPath $PkgOutDir -Filter '*.ico' -File -ErrorAction SilentlyContinue)) {
+        $files.Add($file) | Out-Null
+    }
+
+    return ,$files.ToArray()
 }
 
 function Resolve-WinGetPackageId {
@@ -710,21 +731,32 @@ function Write-PackageState {
     [void](New-Item -ItemType Directory -Path $pkgStateDir -Force)
 
     $metadataPath = Join-Path $pkgStateDir 'metadata.json'
-    $canonicalIconPath = Join-Path $pkgStateDir 'app-icon.ico'
+    $canonicalIcoPath = Join-Path $pkgStateDir 'app-icon.ico'
+    $canonicalAppxPath = Join-Path $pkgStateDir 'appx-icon.png'
     $currentIcons = @()
     if (Test-Path -LiteralPath $PkgOutDir) {
-        $currentIcons = @(
-            Get-ChildItem -LiteralPath $PkgOutDir -Filter '*.ico' -File -ErrorAction SilentlyContinue |
-                Sort-Object -Property @{ Expression = 'Length'; Descending = $true }, @{ Expression = 'Name'; Descending = $false }
-        )
+        $currentIcons = @(Get-ExtractedIconFiles -PkgOutDir $PkgOutDir)
     }
 
-    $canonicalIcon = if ($currentIcons.Count -gt 0) { $currentIcons[0] } else { $null }
+    $canonicalIcon = @($currentIcons | Where-Object { $_.Name -ieq 'appx-icon.png' } | Select-Object -First 1)
+    if (-not $canonicalIcon) {
+        $canonicalIcon = @($currentIcons | Where-Object { $_.Extension -ieq '.ico' } | Sort-Object -Property @{ Expression = 'Length'; Descending = $true }, @{ Expression = 'Name'; Descending = $false } | Select-Object -First 1)
+    }
+    $canonicalIconPath = if ($canonicalIcon -and $canonicalIcon.Extension -ieq '.png') { $canonicalAppxPath } else { $canonicalIcoPath }
     if ($canonicalIcon) {
         Copy-Item -LiteralPath $canonicalIcon.FullName -Destination $canonicalIconPath -Force
+        foreach ($stalePath in @($canonicalIcoPath, $canonicalAppxPath)) {
+            if (($stalePath -ne $canonicalIconPath) -and (Test-Path -LiteralPath $stalePath)) {
+                Remove-Item -LiteralPath $stalePath -Force
+            }
+        }
     }
-    elseif (Test-Path -LiteralPath $canonicalIconPath) {
-        Remove-Item -LiteralPath $canonicalIconPath -Force
+    else {
+        foreach ($stalePath in @($canonicalIcoPath, $canonicalAppxPath)) {
+            if (Test-Path -LiteralPath $stalePath) {
+                Remove-Item -LiteralPath $stalePath -Force
+            }
+        }
     }
 
     $hasIcon = Test-Path -LiteralPath $canonicalIconPath
@@ -758,7 +790,7 @@ function Write-PackageState {
         extractFailureCategory  = if ($Record.ExtractFailureCategory) { $Record.ExtractFailureCategory } else { $null }
         iconCount               = (Get-EntryField -Entry $Entry -Field 'iconCount')
         iconBytes               = (Get-EntryField -Entry $Entry -Field 'iconBytes')
-        appIconFile             = if ($hasIcon) { 'app-icon.ico' } else { $null }
+        appIconFile             = if ($hasIcon) { [IO.Path]::GetFileName($canonicalIconPath) } else { $null }
         canonicalIconSourceName = if ($canonicalIcon) { $canonicalIcon.Name } else { $null }
         canonicalIconBytes      = if ($canonicalIcon) { $canonicalIcon.Length } else { $null }
         canonicalIconSha256     = if ($hasIcon) { Get-FileSha256 -Path $canonicalIconPath } else { $null }
@@ -969,7 +1001,7 @@ foreach ($pkg in $todo) {
                 }
                 elseif (-not $shouldVerifyInstallFailure) {
                     $record.Status = 'NoIcon'
-                    Write-Warning "  Extractor produced no .ico files."
+                    Write-Warning "  Extractor produced no icon files."
                 }
             }
         }

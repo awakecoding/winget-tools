@@ -202,6 +202,94 @@ namespace WinGetIconTools
             return sb.ToString();
         }
 
+        private static bool TryGetPngSize(byte[] pngBytes, out int width, out int height)
+        {
+            width = 0;
+            height = 0;
+            if (pngBytes == null || pngBytes.Length < 24) return false;
+
+            byte[] sig = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 };
+            for (int i = 0; i < sig.Length; i++)
+            {
+                if (pngBytes[i] != sig[i]) return false;
+            }
+
+            width = (pngBytes[16] << 24) | (pngBytes[17] << 16) | (pngBytes[18] << 8) | pngBytes[19];
+            height = (pngBytes[20] << 24) | (pngBytes[21] << 16) | (pngBytes[22] << 8) | pngBytes[23];
+            return width > 0 && height > 0;
+        }
+
+        public static byte[] CreateIcoFromPng(byte[] pngBytes)
+        {
+            int width, height;
+            if (!TryGetPngSize(pngBytes, out width, out height)) return null;
+
+            using (var ms = new MemoryStream())
+            using (var bw = new BinaryWriter(ms))
+            {
+                bw.Write((ushort)0);
+                bw.Write((ushort)1);
+                bw.Write((ushort)1);
+
+                bw.Write((byte)(width >= 256 ? 0 : width));
+                bw.Write((byte)(height >= 256 ? 0 : height));
+                bw.Write((byte)0);
+                bw.Write((byte)0);
+                bw.Write((ushort)1);
+                bw.Write((ushort)32);
+                bw.Write((uint)pngBytes.Length);
+                bw.Write((uint)22);
+                bw.Write(pngBytes);
+                bw.Flush();
+                return ms.ToArray();
+            }
+        }
+
+        public static byte[] CreateIcoFromPngs(byte[][] pngImages)
+        {
+            if (pngImages == null || pngImages.Length == 0) return null;
+
+            var entries = new List<Tuple<byte[], int, int>>();
+            foreach (var pngBytes in pngImages)
+            {
+                int width, height;
+                if (!TryGetPngSize(pngBytes, out width, out height)) continue;
+                entries.Add(Tuple.Create(pngBytes, width, height));
+            }
+
+            if (entries.Count == 0) return null;
+
+            using (var ms = new MemoryStream())
+            using (var bw = new BinaryWriter(ms))
+            {
+                bw.Write((ushort)0);
+                bw.Write((ushort)1);
+                bw.Write((ushort)entries.Count);
+
+                uint imageOffset = (uint)(6 + (entries.Count * 16));
+                foreach (var entry in entries)
+                {
+                    bw.Write((byte)(entry.Item2 >= 256 ? 0 : entry.Item2));
+                    bw.Write((byte)(entry.Item3 >= 256 ? 0 : entry.Item3));
+                    bw.Write((byte)0);
+                    bw.Write((byte)0);
+                    bw.Write((ushort)1);
+                    bw.Write((ushort)32);
+                    bw.Write((uint)entry.Item1.Length);
+                    bw.Write(imageOffset);
+                    imageOffset += (uint)entry.Item1.Length;
+                }
+
+                foreach (var entry in entries)
+                {
+                    bw.Write(entry.Item1);
+                }
+
+                bw.Flush();
+                return ms.ToArray();
+            }
+        }
+
         public static string GetMsiProductIcon(string productCode)
         {
             if (string.IsNullOrEmpty(productCode)) return null;
@@ -441,6 +529,82 @@ namespace WinGetIconTools
 '@
 }
 
+if (-not ('WinGetIconTools.AppxNative' -as [type])) {
+    Add-Type -TypeDefinition @'
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+namespace WinGetIconTools
+{
+    public static class AppxNative
+    {
+        private static bool TryGetPngSize(byte[] pngBytes, out int width, out int height)
+        {
+            width = 0;
+            height = 0;
+            if (pngBytes == null || pngBytes.Length < 24) return false;
+
+            byte[] sig = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 };
+            for (int i = 0; i < sig.Length; i++)
+            {
+                if (pngBytes[i] != sig[i]) return false;
+            }
+
+            width = (pngBytes[16] << 24) | (pngBytes[17] << 16) | (pngBytes[18] << 8) | pngBytes[19];
+            height = (pngBytes[20] << 24) | (pngBytes[21] << 16) | (pngBytes[22] << 8) | pngBytes[23];
+            return width > 0 && height > 0;
+        }
+
+        public static byte[] CreateIcoFromPngs(byte[][] pngImages)
+        {
+            if (pngImages == null || pngImages.Length == 0) return null;
+
+            var entries = new List<Tuple<byte[], int, int>>();
+            foreach (var pngBytes in pngImages)
+            {
+                int width, height;
+                if (!TryGetPngSize(pngBytes, out width, out height)) continue;
+                entries.Add(Tuple.Create(pngBytes, width, height));
+            }
+
+            if (entries.Count == 0) return null;
+
+            using (var ms = new MemoryStream())
+            using (var bw = new BinaryWriter(ms))
+            {
+                bw.Write((ushort)0);
+                bw.Write((ushort)1);
+                bw.Write((ushort)entries.Count);
+
+                uint imageOffset = (uint)(6 + (entries.Count * 16));
+                foreach (var entry in entries)
+                {
+                    bw.Write((byte)(entry.Item2 >= 256 ? 0 : entry.Item2));
+                    bw.Write((byte)(entry.Item3 >= 256 ? 0 : entry.Item3));
+                    bw.Write((byte)0);
+                    bw.Write((byte)0);
+                    bw.Write((ushort)1);
+                    bw.Write((ushort)32);
+                    bw.Write((uint)entry.Item1.Length);
+                    bw.Write(imageOffset);
+                    imageOffset += (uint)entry.Item1.Length;
+                }
+
+                foreach (var entry in entries)
+                {
+                    bw.Write(entry.Item1);
+                }
+
+                bw.Flush();
+                return ms.ToArray();
+            }
+        }
+    }
+}
+'@
+}
+
 # =============================================================================
 # Helpers
 # =============================================================================
@@ -493,9 +657,21 @@ function Get-PackageHints {
     $codes      = New-Object System.Collections.Generic.List[string]
     $names      = New-Object System.Collections.Generic.List[string]
     $publishers = New-Object System.Collections.Generic.List[string]
+    $packageFamilyName = $null
+    $installerType = $null
+
+    if ($manifest.PSObject.Properties.Name -contains 'PackageFamilyName' -and $manifest.PackageFamilyName) {
+        $packageFamilyName = [string]$manifest.PackageFamilyName
+    }
+    if ($manifest.PSObject.Properties.Name -contains 'InstallerType' -and $manifest.InstallerType) {
+        $installerType = [string]$manifest.InstallerType
+    }
 
     if ($manifest.PSObject.Properties.Name -contains 'Installers' -and $manifest.Installers) {
         foreach ($inst in $manifest.Installers) {
+            if ((-not $installerType) -and ($inst.PSObject.Properties.Name -contains 'InstallerType') -and $inst.InstallerType) {
+                $installerType = [string]$inst.InstallerType
+            }
             if ($inst.PSObject.Properties.Name -contains 'ProductCode' -and $inst.ProductCode) {
                 [void]$codes.Add([string]$inst.ProductCode)
             }
@@ -549,6 +725,8 @@ function Get-PackageHints {
         Names        = (Get-Unique-Ci $names)
         Publishers   = (Get-Unique-Ci $publishers)
         Version      = $version
+        PackageFamilyName = $packageFamilyName
+        InstallerType = $installerType
     }
 }
 
@@ -735,7 +913,7 @@ function Find-ArpEntries {
         }
         finally { $hive.Root.Dispose() }
     }
-    return ,$results.ToArray()
+    return @($results.ToArray())
 }
 
 function ConvertTo-SafeFileName {
@@ -747,6 +925,335 @@ function ConvertTo-SafeFileName {
         if ($invalid -contains $c) { [void]$sb.Append('_') } else { [void]$sb.Append($c) }
     }
     return $sb.ToString().Trim()
+}
+
+function Get-MsixManifestLogoReferences {
+    param([Parameter(Mandatory)] [xml] $Xml)
+
+    $results = New-Object System.Collections.Generic.List[object]
+    $seenPaths = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::OrdinalIgnoreCase)
+    $attributePriority = @{
+        Square44x44Logo = 0
+        Square150x150Logo = 10
+        StoreLogo = 20
+        Wide310x150Logo = 30
+        Square310x310Logo = 40
+        Square71x71Logo = 50
+    }
+
+    $applicationIndex = 0
+    foreach ($applicationNode in @($Xml.SelectNodes("//*[local-name()='Application']"))) {
+        $visualNode = $applicationNode.ChildNodes | Where-Object { $_.LocalName -eq 'VisualElements' } | Select-Object -First 1
+        if (-not $visualNode) {
+            $applicationIndex++
+            continue
+        }
+
+        foreach ($attribute in @($visualNode.Attributes | Where-Object { $_.LocalName -match 'Logo$' })) {
+            if ([string]::IsNullOrWhiteSpace($attribute.Value)) {
+                continue
+            }
+
+            if ($attribute.Value -match '^ms-resource:') {
+                continue
+            }
+
+            $relativePath = $attribute.Value -replace '/', '\\'
+            if (-not $seenPaths.Add($relativePath)) {
+                continue
+            }
+
+            $priority = if ($attributePriority.ContainsKey($attribute.LocalName)) {
+                [int]$attributePriority[$attribute.LocalName]
+            }
+            else {
+                1000
+            }
+
+            $results.Add([pscustomobject]@{
+                Attribute = $attribute.LocalName
+                RelativePath = $relativePath
+                Priority = $priority
+                ApplicationIndex = $applicationIndex
+            }) | Out-Null
+        }
+
+        $applicationIndex++
+    }
+
+    return @(
+        $results |
+            Sort-Object -Property @{ Expression = 'Priority'; Descending = $false }, @{ Expression = 'ApplicationIndex'; Descending = $false }, @{ Expression = 'RelativePath'; Descending = $false }
+    )
+}
+
+function Get-MsixAssetScore {
+    param(
+        [Parameter(Mandatory)] [string] $BaseName,
+        [Parameter(Mandatory)] [string] $CandidateName
+    )
+
+    $score = 0
+    if ($CandidateName -ieq $BaseName) {
+        $score += 5000
+    }
+
+    $targetSizeMatch = [regex]::Match($CandidateName, 'targetsize-(\d+)', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+    if ($targetSizeMatch.Success) {
+        $score += 10000 + [int]$targetSizeMatch.Groups[1].Value
+    }
+
+    $scaleMatch = [regex]::Match($CandidateName, 'scale-(\d+)', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+    if ($scaleMatch.Success) {
+        $score += [int]$scaleMatch.Groups[1].Value
+    }
+
+    if ($CandidateName -match 'contrast-black|contrast-white') {
+        $score -= 2000
+    }
+
+    if ($CandidateName -match 'altform|unplated') {
+        $score -= 250
+    }
+
+    return $score
+}
+
+function Get-MsixManifestLogoAssetCandidates {
+    param(
+        [Parameter(Mandatory)] [string] $InstallLocation,
+        [Parameter(Mandatory)] $LogoReference
+    )
+
+    $results = New-Object System.Collections.Generic.List[object]
+    $expandedInstallLocation = [WinGetIconTools.Native]::ExpandEnv($InstallLocation)
+    if ([string]::IsNullOrWhiteSpace($expandedInstallLocation) -or -not (Test-Path -LiteralPath $expandedInstallLocation)) {
+        return @($results.ToArray())
+    }
+
+    $normalizedRelativeLogoPath = $LogoReference.RelativePath -replace '/', '\\'
+    $basePath = Join-Path $expandedInstallLocation $normalizedRelativeLogoPath
+    $baseDir = Split-Path -Parent $basePath
+    $baseName = [IO.Path]::GetFileName($basePath)
+    $baseStem = [IO.Path]::GetFileNameWithoutExtension($basePath)
+    $baseExt = [IO.Path]::GetExtension($basePath)
+    if ([string]::IsNullOrWhiteSpace($baseDir) -or -not (Test-Path -LiteralPath $baseDir)) {
+        return @($results.ToArray())
+    }
+
+    $files = @()
+    try {
+        $files = @(Get-ChildItem -LiteralPath $baseDir -File -Filter ($baseStem + '*' + $baseExt) -ErrorAction Stop)
+    }
+    catch {
+        return ,$results.ToArray()
+    }
+
+    foreach ($file in ($files | Sort-Object @{ Expression = { Get-MsixAssetScore -BaseName $baseName -CandidateName $_.Name } ; Descending = $true }, @{ Expression = 'Length'; Descending = $true }, @{ Expression = 'Name'; Descending = $false })) {
+        $results.Add([pscustomobject]@{
+            Path = $file.FullName
+            Score = Get-MsixAssetScore -BaseName $baseName -CandidateName $file.Name
+            Priority = $LogoReference.Priority
+            Attribute = $LogoReference.Attribute
+            RelativePath = $LogoReference.RelativePath
+        }) | Out-Null
+    }
+
+    return @($results.ToArray())
+}
+
+function Get-PngDimensions {
+    param([Parameter(Mandatory)] [byte[]] $Bytes)
+
+    if ($Bytes.Length -lt 24) { return $null }
+
+    $signature = 137, 80, 78, 71, 13, 10, 26, 10
+    for ($index = 0; $index -lt $signature.Count; $index++) {
+        if ($Bytes[$index] -ne $signature[$index]) {
+            return $null
+        }
+    }
+
+    $width = ((([int]$Bytes[16]) -shl 24) -bor (([int]$Bytes[17]) -shl 16) -bor (([int]$Bytes[18]) -shl 8) -bor ([int]$Bytes[19]))
+    $height = ((([int]$Bytes[20]) -shl 24) -bor (([int]$Bytes[21]) -shl 16) -bor (([int]$Bytes[22]) -shl 8) -bor ([int]$Bytes[23]))
+    if (($width -le 0) -or ($height -le 0)) { return $null }
+
+    return [pscustomobject]@{
+        Width = $width
+        Height = $height
+    }
+}
+
+function Get-InstalledMsixIcon {
+    param(
+        [Parameter(Mandatory)] [string] $PackageId,
+        [Parameter(Mandatory)] $Hints,
+        [Parameter(Mandatory)] [string] $OutDir,
+        [switch] $Force
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Hints.PackageFamilyName)) { return $null }
+    if (-not (Get-Command -Name Get-AppxPackage -ErrorAction SilentlyContinue)) { return $null }
+
+    $package = Get-AppxPackage | Where-Object { $_.PackageFamilyName -eq $Hints.PackageFamilyName } | Select-Object -First 1
+    if (-not $package) { return $null }
+
+    $installLocation = $package.InstallLocation
+    if ([string]::IsNullOrWhiteSpace($installLocation) -or -not (Test-Path -LiteralPath $installLocation)) { return $null }
+
+    $manifestPath = Join-Path $installLocation 'AppxManifest.xml'
+    if (-not (Test-Path -LiteralPath $manifestPath)) { return $null }
+
+    [xml]$xml = Get-Content -LiteralPath $manifestPath -Raw -Encoding UTF8
+    $manifestLogoReferences = Get-MsixManifestLogoReferences -Xml $xml
+    $applicationNodes = @($xml.SelectNodes("//*[local-name()='Application']"))
+    $executableRelativePath = $null
+    foreach ($applicationNode in $applicationNodes) {
+        if (-not $executableRelativePath) {
+            $executableRelativePath = $applicationNode.GetAttribute('Executable')
+        }
+    }
+
+    $resolvedBytes = $null
+    $resolvedSource = $null
+    $resolvedReason = $null
+    $resolvedOutFileName = $null
+    $resolvedIconIndex = 0
+    $multiImageIcoBytes = $null
+    if ($manifestLogoReferences.Count -gt 0) {
+        $pngBundleEntries = New-Object System.Collections.Generic.List[object]
+        $preferredPngEntry = $null
+        $seenDimensions = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::OrdinalIgnoreCase)
+        foreach ($logoReference in $manifestLogoReferences) {
+            $logoCandidates = @(Get-MsixManifestLogoAssetCandidates -InstallLocation $installLocation -LogoReference $logoReference)
+            if ($logoCandidates.Count -eq 0) {
+                Write-Verbose ("MSIX manifest logo reference '{0}' did not resolve to any qualified sibling assets: {1}" -f $logoReference.Attribute, $logoReference.RelativePath)
+                continue
+            }
+
+            foreach ($candidate in $logoCandidates) {
+                if ([IO.Path]::GetExtension($candidate.Path) -inotmatch '^\.png$') {
+                    Write-Verbose ("MSIX logo candidate is not a PNG file: {0}" -f $candidate.Path)
+                    continue
+                }
+
+                try {
+                    $pngBytes = [IO.File]::ReadAllBytes($candidate.Path)
+                    if ($pngBytes -and $pngBytes.Length -gt 0) {
+                        $dimensions = Get-PngDimensions -Bytes $pngBytes
+                        if (-not $dimensions) {
+                            continue
+                        }
+
+                        if (-not $preferredPngEntry) {
+                            $preferredPngEntry = [pscustomobject]@{
+                                Path = $candidate.Path
+                                Bytes = $pngBytes
+                                Width = $dimensions.Width
+                                Height = $dimensions.Height
+                                Score = $candidate.Score
+                                Priority = $candidate.Priority
+                            }
+                        }
+
+                        $dimensionKey = '{0}x{1}' -f $dimensions.Width, $dimensions.Height
+                        if ($seenDimensions.Add($dimensionKey)) {
+                            $pngBundleEntries.Add([pscustomobject]@{
+                                Path = $candidate.Path
+                                Bytes = $pngBytes
+                                Width = $dimensions.Width
+                                Height = $dimensions.Height
+                                Score = $candidate.Score
+                                Priority = $candidate.Priority
+                            }) | Out-Null
+                        }
+                    }
+                }
+                catch {
+                    Write-Verbose ("MSIX manifest logo candidate could not be processed: {0} ({1})" -f $candidate.Path, $_.Exception.Message)
+                }
+            }
+        }
+
+        if ($pngBundleEntries.Count -gt 0) {
+            $orderedBundleEntries = @(
+                $pngBundleEntries |
+                    Sort-Object -Property @{ Expression = 'Width'; Descending = $false }, @{ Expression = 'Height'; Descending = $false }, @{ Expression = 'Priority'; Descending = $false }, @{ Expression = 'Score'; Descending = $true }, @{ Expression = 'Path'; Descending = $false }
+            )
+
+            $primaryBundleEntry = if ($preferredPngEntry) { $preferredPngEntry } else { $orderedBundleEntries[-1] }
+            $resolvedBytes = $primaryBundleEntry.Bytes
+            $resolvedSource = $primaryBundleEntry.Path
+            $resolvedReason = 'AppxManifestLogo'
+            $resolvedOutFileName = 'appx-icon.png'
+
+            $bundlePngs = New-Object 'System.Collections.Generic.List[byte[]]'
+            foreach ($entry in $orderedBundleEntries) {
+                $bundlePngs.Add($entry.Bytes) | Out-Null
+            }
+
+            $multiImageIcoBytes = [WinGetIconTools.AppxNative]::CreateIcoFromPngs($bundlePngs.ToArray())
+        }
+    }
+
+    if ((-not $resolvedBytes) -and $executableRelativePath) {
+        $executablePath = Join-Path $installLocation ($executableRelativePath -replace '/', '\\')
+        if (Test-Path -LiteralPath $executablePath) {
+            $candidate = Resolve-IconBytesFromCandidates -Candidates @([pscustomobject]@{ Path = $executablePath; Index = 0; Reason = 'MsixExecutable'; Priority = 0 }) -MatchId $Hints.PackageFamilyName
+            if ($candidate) {
+                $resolvedBytes = $candidate.Bytes
+                $resolvedSource = $candidate.IconPath
+                $resolvedReason = $candidate.Reason
+                $resolvedOutFileName = "{0}.{1}.ico" -f (ConvertTo-SafeFileName $(if ($Hints.Names.Count -gt 0) { $Hints.Names[0] } else { $PackageId })), (ConvertTo-SafeFileName $Hints.PackageFamilyName)
+                $resolvedIconIndex = $candidate.IconIndex
+            }
+        }
+    }
+
+    if (-not $resolvedBytes) { return $null }
+
+    if (-not (Test-Path -LiteralPath $OutDir)) {
+        [void](New-Item -ItemType Directory -Path $OutDir -Force)
+    }
+
+    $displayName = if ($Hints.Names.Count -gt 0) { $Hints.Names[0] } else { $PackageId }
+    if (-not $resolvedOutFileName) {
+        $resolvedOutFileName = "{0}.{1}.ico" -f (ConvertTo-SafeFileName $displayName), (ConvertTo-SafeFileName $Hints.PackageFamilyName)
+    }
+    $outFile = Join-Path $OutDir $resolvedOutFileName
+    if ((Test-Path -LiteralPath $outFile) -and -not $Force) {
+        Write-Warning ("[{0}] Output file exists, skipping (use -Force to overwrite): {1}" -f $Hints.PackageFamilyName, $outFile)
+    }
+    else {
+        [IO.File]::WriteAllBytes($outFile, $resolvedBytes)
+    }
+
+    if ($multiImageIcoBytes -and $multiImageIcoBytes.Length -gt 0) {
+        $multiImageIcoPath = Join-Path $OutDir 'app-icon.ico'
+        if ((Test-Path -LiteralPath $multiImageIcoPath) -and -not $Force) {
+            Write-Warning ("[{0}] Multi-image ICO exists, skipping (use -Force to overwrite): {1}" -f $Hints.PackageFamilyName, $multiImageIcoPath)
+        }
+        else {
+            [IO.File]::WriteAllBytes($multiImageIcoPath, $multiImageIcoBytes)
+        }
+    }
+
+    return [pscustomobject]@{
+        PackageId      = $PackageId
+        ProductCode    = $Hints.PackageFamilyName
+        DisplayName    = $displayName
+        Publisher      = $(if ($Hints.Publishers.Count -gt 0) { $Hints.Publishers[0] } else { '' })
+        DisplayVersion = $Hints.Version
+        InstallDate    = ''
+        LastWriteTime  = $null
+        Hive           = 'MSIX'
+        MatchKind      = 'MsixPackageFamilyName'
+        Source         = $resolvedSource
+        IconIndex      = $resolvedIconIndex
+        IconPath       = $outFile
+        SizeBytes      = $resolvedBytes.Length
+        SourceReason   = $resolvedReason
+    }
 }
 
 function Normalize-MatchText {
@@ -1245,9 +1752,21 @@ Write-Verbose "Scope       : $Scope"
 Write-Verbose "OutDir      : $OutDir"
 
 $hints = Get-PackageHints -PackageId $PackageId
+$msixResult = $null
+if (($hints.InstallerType -ieq 'msix') -or (-not [string]::IsNullOrWhiteSpace($hints.PackageFamilyName))) {
+    Write-Verbose ("Attempting installed MSIX icon extraction for PackageFamilyName '{0}'." -f $hints.PackageFamilyName)
+    $msixResult = Get-InstalledMsixIcon -PackageId $PackageId -Hints $hints -OutDir $OutDir -Force:$Force
+    if ($msixResult) {
+        $msixResult
+        return
+    }
+
+    Write-Verbose ("Installed MSIX icon extraction did not produce an icon for '{0}', falling back to ARP/hint-based logic." -f $PackageId)
+}
+
 $searchTokens = Get-SearchTokens -Hints $hints
 if (($hints.ProductCodes.Count -eq 0) -and (($hints.Names.Count -eq 0) -or ($hints.Publishers.Count -eq 0))) {
-    throw "Manifest for '$PackageId' provides neither ProductCode nor a (PackageName, Publisher) pair to correlate against ARP. (MSIX/Store packages are not supported.)"
+    throw "Manifest for '$PackageId' provides neither ProductCode nor a (PackageName, Publisher) pair to correlate against ARP, and no installed MSIX package icon path was resolved."
 }
 Write-Verbose ("Hints: ProductCodes=[{0}] Names=[{1}] Publishers=[{2}] Version={3}" -f `
     ($hints.ProductCodes -join ', '), ($hints.Names -join ', '), ($hints.Publishers -join ', '), $hints.Version)
