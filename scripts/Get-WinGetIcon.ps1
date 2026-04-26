@@ -1128,15 +1128,15 @@ function Get-IconCandidatesForArpEntry {
         Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $candidate.Path -Index $candidate.Index -Reason $candidate.Reason -Priority $candidate.Priority
     }
 
-    foreach ($candidate in (Get-ShortcutIconCandidates -Names $Hints.Names -SearchTokens $SearchTokens -BasePriority 30)) {
+    foreach ($candidate in (Get-CommonInstallLocationCandidates -Hints $Hints -SearchTokens $SearchTokens)) {
+        Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $candidate.Path -Index $candidate.Index -Reason $candidate.Reason -Priority $candidate.Priority
+    }
+
+    foreach ($candidate in (Get-ShortcutIconCandidates -Names $Hints.Names -SearchTokens $SearchTokens -BasePriority 50)) {
         $resolved = Get-IconCandidateFromIconLocation -RawValue $candidate.Path -Reason $candidate.Reason -Priority $candidate.Priority
         if ($resolved) {
             Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $resolved.Path -Index $resolved.Index -Reason $resolved.Reason -Priority $resolved.Priority
         }
-    }
-
-    foreach ($candidate in (Get-CommonInstallLocationCandidates -Hints $Hints -SearchTokens $SearchTokens)) {
-        Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $candidate.Path -Index $candidate.Index -Reason $candidate.Reason -Priority $candidate.Priority
     }
 
     return ,$candidates.ToArray()
@@ -1151,15 +1151,15 @@ function Get-HintOnlyIconCandidates {
     $candidates = New-Object System.Collections.Generic.List[object]
     $seen = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::OrdinalIgnoreCase)
 
-    foreach ($candidate in (Get-ShortcutIconCandidates -Names $Hints.Names -SearchTokens $SearchTokens -BasePriority 0)) {
+    foreach ($candidate in (Get-CommonInstallLocationCandidates -Hints $Hints -SearchTokens $SearchTokens)) {
+        Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $candidate.Path -Index $candidate.Index -Reason $candidate.Reason -Priority $candidate.Priority
+    }
+
+    foreach ($candidate in (Get-ShortcutIconCandidates -Names $Hints.Names -SearchTokens $SearchTokens -BasePriority 30)) {
         $resolved = Get-IconCandidateFromIconLocation -RawValue $candidate.Path -Reason $candidate.Reason -Priority $candidate.Priority
         if ($resolved) {
             Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $resolved.Path -Index $resolved.Index -Reason $resolved.Reason -Priority $resolved.Priority
         }
-    }
-
-    foreach ($candidate in (Get-CommonInstallLocationCandidates -Hints $Hints -SearchTokens $SearchTokens)) {
-        Add-UniqueCandidate -Candidates $candidates -Seen $seen -Path $candidate.Path -Index $candidate.Index -Reason $candidate.Reason -Priority $candidate.Priority
     }
 
     return ,$candidates.ToArray()
